@@ -1,0 +1,137 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/view_action"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/header"
+    android:weightSum="10"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
+    android:orientation="vertical"
+    tools:context="com.rikenmaharjan.y2yc.fragments.ViewActionFragment">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2.2">
+        <TextView
+            android:id="@+id/story_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="34sp"
+            android:text="@string/events_schedule"
+            android:layout_centerInParent="true"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="7.8"
+        card_view:cardCornerRadius="3dp"
+        android:padding="16dp"
+        android:elevation="1dp">
+        <LinearLayout
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp">
+            <TextView
+                android:textColor="@color/black_blue"
+                android:id="@+id/txtView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="7dp"
+                android:textAlignment="viewStart"
+                android:layout_marginTop="10dp"
+                android:textSize="12sp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="50" />
+                <TextView
+                    android:id="@+id/txtcomplete"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Complete" />
+                <TextView
+                    android:id="@+id/txtdrop"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Drop"
+                    android:textSize="15sp"/>
+            </LinearLayout>
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="170dp"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+                        <ExpandableListView
+                            android:id="@+id/actions"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.5">
+                        </ExpandableListView>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="170dp"
+                        android:orientation="vertical">
+                        <ProgressBar
+                            android:id="@+id/loadingPanel"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_gravity="center"
+                            android:indeterminate="true" />
+                        <EditText
+                            android:id="@+id/action_reason"
+                            android:layout_width="match_parent"
+                            android:layout_height="85dp"
+                            android:layout_weight="0.7"
+                            android:background="@android:drawable/editbox_background"
+                            android:hint="Why?"
+                            android:paddingLeft="@dimen/activity_horizontal_margin"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                            android:textSize="18sp"
+                            android:gravity="left"/>
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:layout_marginTop="10dp">
+                            <Button
+                                android:id="@+id/btnreason"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerInParent="true"
+                                android:text="@string/save"
+                                android:textColor="@color/white"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Medium.Inverse"
+                                android:background="@drawable/btn_accent_round_corner"/>
+                        </RelativeLayout>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </ScrollView>
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>

@@ -1,0 +1,53 @@
+<resources>
+    <string name="app_name">Y2YC</string>
+    <string name="title_activity_main2">Main2Activity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="LongTermText">Long-term (morning) Lottery, for</string>>
+    <string name="eBadText">E-bed (evening) Lottery, for</string>
+    <string name="feedBackSubmitText">Tell us what you like about Y2Y, or if you have suggestions for how we can be better.</string>
+
+
+    <string name="sign_in">SIGN IN</string>
+    <string name="password">Password</string>
+    <string name="username">Username</string>
+
+    <string name="grating">How are you feeling right now?</string>
+    <string name="any_comments">Do you have any comments today?</string>
+
+
+    <string name="Lottery">Lottery</string>
+    <string name="Feedback">Feedback</string>
+    <string name="Your_stay">Your Stay</string>
+    <string name="Action_items">Action Items</string>
+    <string name="Log_Out">Log Out</string>
+    <string name="soft_keyboard">SoftKeyboard</string>
+
+    <string name="events_schedule">Your Events Schedule</string>
+    <string name="save">SAVE</string>
+    <string name="submit_feedback">Submit Feedback</string>
+    <string name="submit">Submit</string>
+
+    <string name="bed">Bed: </string>
+    <string name="last_day_of_stay">Last Day of Stay: </string>
+    <string name="warnings">Warnings: </string>
+    <string name="locker_combo">Locker Combo: </string>
+    <string name="nit">NIT: </string>
+
+    <string name="lottery_results">Lottery Results</string>
+
+
+
+    <string name="about_your_stay">About Your Stay</string>
+
+
+
+
+
+
+
+
+</resources>

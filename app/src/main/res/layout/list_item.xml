@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/list_item"
+    android:layout_width="match_parent"
+    android:layout_height="55dip"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/myListItem"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="10"
+        android:paddingBottom="5dp"
+        android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft"
+        android:drawableLeft="@drawable/bullet"
+        android:drawablePadding="8dp"
+        android:paddingTop="5dp"
+        android:textSize="17dip" />
+
+</LinearLayout>
