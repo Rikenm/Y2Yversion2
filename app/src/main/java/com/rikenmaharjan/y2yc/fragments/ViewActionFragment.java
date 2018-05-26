@@ -111,6 +111,7 @@ public class ViewActionFragment extends BaseFragment {
 
         rootView = inflater.inflate(R.layout.fragment_view_action,container,false);
         txtview = rootView.findViewById(R.id.txtView);
+
         txtview.setText("Here are your ongoing goals and action items. We would love to hear any updates or progress!");
         actions = rootView.findViewById(R.id.actions);
         reason = rootView.findViewById(R.id.action_reason);
@@ -326,6 +327,9 @@ class MyCustomAdapter extends BaseExpandableListAdapter {
     }
 
 
+
+
+    // here
     @Override
     public View getGroupView(final int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
         if (frag.no_action_item()) {

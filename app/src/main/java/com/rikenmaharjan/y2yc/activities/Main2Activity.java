@@ -24,6 +24,7 @@ import com.rikenmaharjan.y2yc.R;
 import com.rikenmaharjan.y2yc.fragments.FeedBackSubmitFragment;
 import com.rikenmaharjan.y2yc.fragments.HomeFragment;
 import com.rikenmaharjan.y2yc.fragments.StoryFragment;
+import com.rikenmaharjan.y2yc.fragments.UpComingEventFragment;
 import com.rikenmaharjan.y2yc.fragments.ViewActionFragment;
 import com.rikenmaharjan.y2yc.fragments.ViewLotteryResultFragment;
 import com.rikenmaharjan.y2yc.utils.SessionManager;
@@ -45,6 +46,7 @@ public class Main2Activity extends AppCompatActivity
     public String sender;
     public SessionManager session;
     public ViewActionFragment ac;
+    public UpComingEventFragment up;
 
 
     @Override
@@ -93,6 +95,7 @@ public class Main2Activity extends AppCompatActivity
         sf = new StoryFragment();
         hm = new HomeFragment();
         ac = new ViewActionFragment();
+        up = new UpComingEventFragment();
 
 
         fm = getFragmentManager();
@@ -175,6 +178,17 @@ public class Main2Activity extends AppCompatActivity
                 ac = new ViewActionFragment();
             FragmentTransaction ft = fm.beginTransaction ();  //Create a reference to a fragment transaction.
             ft.replace(R.id.constraintLayout, ac);
+            ft.addToBackStack ("myFrag2");  //why do we do this?
+            ft.commit();
+        }
+
+        // add new fragment
+
+        else if (id == R.id.nav_event) {
+            if (up == null)
+                up = new UpComingEventFragment();
+            FragmentTransaction ft = fm.beginTransaction ();  //Create a reference to a fragment transaction.
+            ft.replace(R.id.constraintLayout, up);
             ft.addToBackStack ("myFrag2");  //why do we do this?
             ft.commit();
         }

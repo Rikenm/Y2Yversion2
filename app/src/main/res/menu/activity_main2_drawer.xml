@@ -7,6 +7,12 @@
             android:id="@+id/nav_lotteryResult"
             android:icon = "@drawable/lottery"
             android:title="@string/Lottery" />
+
+        <item
+            android:id="@+id/nav_event"
+            android:icon = "@drawable/lottery"
+            android:title="@string/Event" />
+
         <item
             android:id="@+id/nav_sendFeedback"
             android:icon = "@drawable/feedback"

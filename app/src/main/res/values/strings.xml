@@ -36,18 +36,15 @@
     <string name="warnings">Warnings: </string>
     <string name="locker_combo">Locker Combo: </string>
     <string name="nit">NIT: </string>
+    <string name="Event">Event</string>
 
     <string name="lottery_results">Lottery Results</string>
 
 
-
     <string name="about_your_stay">About Your Stay</string>
 
-
-
-
-
-
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>
