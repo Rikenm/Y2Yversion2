@@ -4,28 +4,43 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Layout;
+import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.rikenmaharjan.y2yc.R;
 import com.rikenmaharjan.y2yc.activities.RecyclerViewAdapter;
 import com.rikenmaharjan.y2yc.utils.Events;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link UpComingEventFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link UpComingEventFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.net.URL;
+import java.text.BreakIterator;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static com.android.volley.Request.*;
+
 public class UpComingEventFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -35,11 +50,13 @@ public class UpComingEventFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    RecyclerViewAdapter recyclerViewAdapter;
 
     // custom variable
     View v;
     private RecyclerView newRecycleView;
     private List<Events> lstEvents;
+    private Context context;
 
 
 
@@ -50,14 +67,7 @@ public class UpComingEventFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment UpComingEventFragment.
-     */
+
     // TODO: Rename and change types and number of parameters
     public static UpComingEventFragment newInstance(String param1, String param2) {
         UpComingEventFragment fragment = new UpComingEventFragment();
@@ -69,21 +79,95 @@ public class UpComingEventFragment extends Fragment {
     }
 
 
-    // data here
+    //
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
 
-        // dummy data
-
+        // dummy data for the recycleView
         lstEvents = new ArrayList<>();
         lstEvents.add(new Events("Y2Y demo","Boston","12:00-3:00pm"));
         lstEvents.add(new Events("Y2Y demo","Boston","12:00-3:00pm"));
 
 
+        // MARK:- gets data from the server
+        //======================
+        // Instantiate the RequestQueue.
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
+
+        // change the url 
+        String url ="http://192.168.0.11:3000/events";
+
+        JsonObjectRequest jsonRequest = new JsonObjectRequest( Request.Method.GET,
+                url,
+                null,
+                new Response.Listener<JSONObject>(){
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        try {
+
+                             int size = response.getInt("size");
+                            JSONArray jsonArray = response.getJSONArray("records");
+
+
+                            for (int i = 0 ; i < jsonArray.length();i++){
+
+                                JSONObject friends = jsonArray.getJSONObject(i);
+                                String eventName = friends.getString("eventName");
+                                String Location = friends.getString("Location");
+                                lstEvents.add(new Events(eventName,Location,"12:00-3:00pm"));
+                                // works
+                                recyclerViewAdapter.notifyDataSetChanged();
+                            }
+
+
+
+
+                        }catch(JSONException e){
+
+                            Log.i("Error", String.valueOf(e));
+                        }
+
+                    }
+                },new Response.ErrorListener() {
+                  @Override
+                    public void onErrorResponse(VolleyError error) {
+                     Log.e("Volley", ""+error);
+            }
+        }){
+
+            // header
+            @Override
+            public Map <String,String> getHeaders() throws AuthFailureError {
+                HashMap <String,String> headers = new HashMap<>();
+
+                String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiMDAzVzAwMDAwMG5nYWNGSUFRIiwibmFtZSI6IlJpa2VuIE1haGFyamFuIn0sImlhdCI6MTUyNzI0ODU0N30.awXGHSUYB8afroEB7hrc4Yh08QuQ1K4--U4UurivXng";
+                String auth = "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiMDAzVzAwMDAwMG5nYWNGSUFRIiwibmFtZSI6IlJpa2VuIE1haGFyamFuIn0sImlhdCI6MTUyNzI0ODU0N30.awXGHSUYB8afroEB7hrc4Yh08QuQ1K4--U4UurivXng";
+                headers.put("Content-Type", "application/json");
+                headers.remove("Authorization");
+                headers.put("Authorization", auth);
+
+                return headers;
+            }
+        };
+
+        queue.add(jsonRequest);
+
+        Log.i("Record", "Goes in ");
+
+        //======================
+
+
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+    }
 
     // TODO: Update here
     @Override
@@ -94,10 +178,12 @@ public class UpComingEventFragment extends Fragment {
         /*YOUR CODE HERE*/
 
         newRecycleView = (RecyclerView) v.findViewById(R.id.events_recycleView);
-
-        RecyclerViewAdapter recyclerViewAdapter= new RecyclerViewAdapter(getContext(),lstEvents);
+        Context context = container.getContext();
+        // here
+        recyclerViewAdapter = new RecyclerViewAdapter(container.getContext(),lstEvents);
         newRecycleView.setLayoutManager(new LinearLayoutManager(getActivity()));
         newRecycleView.setAdapter(recyclerViewAdapter);
+
         return v;
 
     }
@@ -116,16 +202,8 @@ public class UpComingEventFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
+
+
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
