@@ -96,7 +96,7 @@ public class UpComingEventFragment extends Fragment {
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(getActivity());
 
-        // change the url 
+        // change the url
         String url ="http://192.168.0.11:3000/events";
 
         JsonObjectRequest jsonRequest = new JsonObjectRequest( Request.Method.GET,

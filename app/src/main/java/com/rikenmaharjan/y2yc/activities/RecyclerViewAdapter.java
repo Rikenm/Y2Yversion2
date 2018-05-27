@@ -76,6 +76,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             tv_location = (TextView) itemView.findViewById(R.id.location);
             tv_time = (TextView) itemView.findViewById(R.id.time);
 
+
+
         }
 
     }
