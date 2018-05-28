@@ -9,10 +9,13 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.rikenmaharjan.y2yc.R;
@@ -24,6 +27,7 @@ import org.json.JSONObject;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.ButterKnife;
 
@@ -43,6 +47,8 @@ public class StoryFragment extends BaseFragment {
     private String id;
     private String name;
 
+    private String Jwt_Token;
+
     public static StoryFragment newInstance(){
         return new StoryFragment();
     }
@@ -52,10 +58,10 @@ public class StoryFragment extends BaseFragment {
         super.onCreate(savedInstanceState);
     }
 
-    @Nullable
+
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_story,container,false);
+    public void onResume() {
+        super.onResume();
 
         SessionManager session = new SessionManager(getActivity());
 
@@ -67,8 +73,22 @@ public class StoryFragment extends BaseFragment {
         // name
         name = user.get(SessionManager.KEY_NAME);
 
-        // email
+        // id
         id = user.get(SessionManager.KEY_ID);
+
+
+        // token
+        Jwt_Token = user.get(SessionManager.JWT_Token);
+
+
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+        final View view = inflater.inflate(R.layout.fragment_story,container,false);
+
+
 
         txtBedR = (TextView) view.findViewById(R.id.txtBedR);
         txtDayR = (TextView) view.findViewById(R.id.txtDayR);
@@ -79,7 +99,7 @@ public class StoryFragment extends BaseFragment {
         txtNITR = (TextView) view.findViewById(R.id.txtNITR);
 
         RequestQueue queue = Volley.newRequestQueue(getActivity());
-        String url = "https://y2y.herokuapp.com/detailuser/"+id;
+        String url = "https://y2y.herokuapp.com/detailuser/";
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
@@ -138,7 +158,24 @@ public class StoryFragment extends BaseFragment {
             public void onErrorResponse(VolleyError error){
                 Log.i("request failed", "failed");
             }
-        });
+        }){
+
+            @Override
+            public Map<String,String> getHeaders() throws AuthFailureError {
+                HashMap <String,String> headers = new HashMap<>();
+
+                String token = Jwt_Token;
+                String auth = "bearer "+ token;
+                headers.put("Content-Type", "application/json");
+                headers.remove("Authorization");
+                headers.put("Authorization", auth);
+
+                return headers;
+            }
+
+
+        };
+
 
         queue.add(stringRequest);
         Log.i("result",queue.toString());

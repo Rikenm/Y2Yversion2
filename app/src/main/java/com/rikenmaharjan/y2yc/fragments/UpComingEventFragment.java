@@ -27,6 +27,7 @@ import com.android.volley.toolbox.Volley;
 import com.rikenmaharjan.y2yc.R;
 import com.rikenmaharjan.y2yc.activities.RecyclerViewAdapter;
 import com.rikenmaharjan.y2yc.utils.Events;
+import com.rikenmaharjan.y2yc.utils.SessionManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -59,6 +60,13 @@ public class UpComingEventFragment extends Fragment {
     private Context context;
 
 
+    public SessionManager session;
+    String id;
+    String name;
+
+    String Jwt_Token = new String();
+
+
 
 
     private OnFragmentInteractionListener mListener;
@@ -78,6 +86,28 @@ public class UpComingEventFragment extends Fragment {
         return fragment;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        session = new SessionManager(getActivity());
+
+        session.checkLogin();
+
+        // get user data from session
+        HashMap<String, String> user = session.getUserDetails();
+
+        // Get logged in user's user name
+        name = user.get(SessionManager.KEY_NAME);
+
+        // Get looged in user's user id
+        id = user.get(SessionManager.KEY_ID);
+
+        Jwt_Token = user.get(SessionManager.JWT_Token);
+
+
+
+    }
 
     //
     @Override
@@ -97,7 +127,7 @@ public class UpComingEventFragment extends Fragment {
         RequestQueue queue = Volley.newRequestQueue(getActivity());
 
         // change the url
-        String url ="http://192.168.0.11:3000/events";
+        String url ="https://y2y.herokuapp.com/events";
 
         JsonObjectRequest jsonRequest = new JsonObjectRequest( Request.Method.GET,
                 url,
@@ -144,8 +174,8 @@ public class UpComingEventFragment extends Fragment {
             public Map <String,String> getHeaders() throws AuthFailureError {
                 HashMap <String,String> headers = new HashMap<>();
 
-                String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiMDAzVzAwMDAwMG5nYWNGSUFRIiwibmFtZSI6IlJpa2VuIE1haGFyamFuIn0sImlhdCI6MTUyNzI0ODU0N30.awXGHSUYB8afroEB7hrc4Yh08QuQ1K4--U4UurivXng";
-                String auth = "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiMDAzVzAwMDAwMG5nYWNGSUFRIiwibmFtZSI6IlJpa2VuIE1haGFyamFuIn0sImlhdCI6MTUyNzI0ODU0N30.awXGHSUYB8afroEB7hrc4Yh08QuQ1K4--U4UurivXng";
+                String token = Jwt_Token;
+                String auth = "bearer "+token;
                 headers.put("Content-Type", "application/json");
                 headers.remove("Authorization");
                 headers.put("Authorization", auth);
