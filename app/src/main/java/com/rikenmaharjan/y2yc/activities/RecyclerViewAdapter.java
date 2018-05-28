@@ -1,25 +1,56 @@
 package com.rikenmaharjan.y2yc.activities;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.HttpHeaderParser;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.rikenmaharjan.y2yc.R;
 import com.rikenmaharjan.y2yc.utils.Events;
+import com.rikenmaharjan.y2yc.utils.SessionManager;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by bikenmaharjan on 5/25/18.
  */
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder>{
+public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder> {
 
 
     Context nContext;
     List<Events> data;
+    Dialog eventDialog;
+
+    public SessionManager session;
+    String id;
+    String name;
+    String Jwt_Token = new String();
 
     public RecyclerViewAdapter(Context context, List<Events> lstEvents) {
 
@@ -37,8 +68,86 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         View v;
 
-        v = LayoutInflater.from(nContext).inflate(R.layout.event_cell,parent,false);
+
+        v = LayoutInflater.from(nContext).inflate(R.layout.event_cell, parent, false);
         MyViewHolder vHolder = new MyViewHolder(v);
+
+
+        eventDialog = new Dialog(nContext);
+        eventDialog.setContentView(R.layout.dialog_eventdetail);
+
+        vHolder.cb_rsvp.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+
+                // if clicked on event then
+                if (b) {
+                    try {
+                        post("addUser");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+                else{
+                    // change this
+                    try {
+                        post("removeUser");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+            }
+        });
+
+        //
+        vHolder.event_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                // input here for dialog
+
+
+                Button dialog_btn_rsvp = (Button) eventDialog.findViewById(R.id.btn_rsvp);
+                Button dialog_btn_cancel = (Button) eventDialog.findViewById(R.id.btn_cancel);
+
+
+                eventDialog.show();
+
+                //////
+                dialog_btn_rsvp.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Log.i("tag", "rsvp");
+                        // post method here [done]
+                        // also checkbox true
+                        try {
+                            post("addUser");
+
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        eventDialog.dismiss();
+                    }
+                });
+
+                dialog_btn_cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Log.i("tag", "cancel");
+                        eventDialog.dismiss();
+                    }
+                });
+                //////
+
+            }
+        });
+
         return vHolder;
 
     }
@@ -49,6 +158,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.tv_location.setText(data.get(position).getLocation());
         holder.tv_time.setText(data.get(position).getTime());
         holder.tv_title.setText(data.get(position).getTitle());
+
+        // particular cells
+
+
 
     }
 
@@ -64,22 +177,119 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
 
-
         private TextView tv_title;
         private TextView tv_location;
         private TextView tv_time;
+        private CheckBox cb_rsvp;
+        private LinearLayout event_layout;
 
-        public MyViewHolder(View itemView){
+        public MyViewHolder(View itemView) {
             super(itemView);
 
             tv_title = (TextView) itemView.findViewById(R.id.title);
             tv_location = (TextView) itemView.findViewById(R.id.location);
             tv_time = (TextView) itemView.findViewById(R.id.time);
 
+            cb_rsvp = (CheckBox) itemView.findViewById(R.id.cb);
 
+            event_layout = (LinearLayout) itemView.findViewById(R.id.ll_event_cell);
 
         }
 
+
     }
 
+
+    // TODO:- change this to post json body
+    public void post(String flag) throws JSONException {
+
+        session = new SessionManager(nContext);
+
+        session.checkLogin();
+
+        // get user data from session
+        HashMap<String, String> user = session.getUserDetails();
+
+        // Get logged in user's user name
+        name = user.get(SessionManager.KEY_NAME);
+
+        // Get loged in user's user id
+        id = user.get(SessionManager.KEY_ID);
+
+        Jwt_Token = user.get(SessionManager.JWT_Token);
+
+        //===================
+        RequestQueue requestQueue = Volley.newRequestQueue(nContext);
+        String url = "https://y2y.herokuapp.com/events";
+
+
+        // find the structure
+        JSONObject jsonBody = new JSONObject();
+        // set event in the data model
+        jsonBody.put("eventId", "00UW0000002eqXFMAY");
+        jsonBody.put("flag", flag);
+        final String requestBody = jsonBody.toString();
+
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.i("VOLLEY", response);
+                Toast.makeText(nContext, "Feedback Sent!!", Toast.LENGTH_LONG).show();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("VOLLEY", error.toString());
+                Toast.makeText(nContext, "There is a problem, Please check your internet", Toast.LENGTH_LONG).show();
+            }
+        }) {
+            @Override
+            public String getBodyContentType() {
+                return "application/json; charset=utf-8";
+            }
+
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<>();
+
+                String token = Jwt_Token;
+                String auth = "bearer " + token;
+                headers.put("Content-Type", "application/json");
+                headers.remove("Authorization");
+                headers.put("Authorization", auth);
+
+                return headers;
+            }
+
+            // Change the JSON to list of string and send it out.
+            @Override
+            public byte[] getBody() throws AuthFailureError {
+                try {
+                    return requestBody == null ? null : requestBody.getBytes("utf-8");
+                } catch (UnsupportedEncodingException uee) {
+                    VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
+                    return null;
+                }
+            }
+
+            @Override
+            protected Response<String> parseNetworkResponse(NetworkResponse response) {
+                String responseString = "";
+                if (response != null) {
+                    responseString = String.valueOf(response.statusCode);
+                    // can get more details such as response.headers
+                    Log.i("response", response.toString());
+                }
+                return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
+            }
+        };
+
+
+        requestQueue.add(stringRequest);
+
+//===================
+
+    }
 }
