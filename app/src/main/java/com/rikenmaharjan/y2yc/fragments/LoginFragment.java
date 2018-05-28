@@ -230,11 +230,13 @@ public class LoginFragment extends BaseFragment {
             String isvalid = null;
             String id = null;
             String name = null;
+            String token = null;
             try {
                 reader = new JSONObject(result2);
                 isvalid = reader.getString("isValid");
                 id = reader.getString("id");
                 name = reader.getString("name");
+                token = reader.getString("token");
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -242,7 +244,7 @@ public class LoginFragment extends BaseFragment {
 
 
             //creating session
-            session.createLoginSession(name, id);
+            session.createLoginSession(name, id,token);
 
 
 

@@ -33,6 +33,7 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by wangdayuan on 4/7/18.
@@ -48,6 +49,8 @@ public class FeedBackSubmitFragment extends Fragment {
     public SessionManager session;
     String id;
     String name;
+
+    String Jwt_Token = new String();
 
     public FeedBackSubmitFragment(){}
 
@@ -67,6 +70,8 @@ public class FeedBackSubmitFragment extends Fragment {
 
         // Get looged in user's user id
         id = user.get(SessionManager.KEY_ID);
+
+        Jwt_Token = user.get(SessionManager.JWT_Token);
 
     }
 
@@ -126,6 +131,20 @@ public class FeedBackSubmitFragment extends Fragment {
                             return "application/json; charset=utf-8";
                         }
 
+
+                        @Override
+                        public Map<String,String> getHeaders() throws AuthFailureError {
+                            HashMap <String,String> headers = new HashMap<>();
+
+                            String token = Jwt_Token;
+                            String auth = "bearer "+ token;
+                            headers.put("Content-Type", "application/json");
+                            headers.remove("Authorization");
+                            headers.put("Authorization", auth);
+
+                            return headers;
+                        }
+
                         // Change the JSON to list of string and send it out.
                         @Override
                         public byte[] getBody() throws AuthFailureError {
@@ -148,6 +167,7 @@ public class FeedBackSubmitFragment extends Fragment {
                             return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
                         }
                     };
+
 
                     requestQueue.add(stringRequest);
 

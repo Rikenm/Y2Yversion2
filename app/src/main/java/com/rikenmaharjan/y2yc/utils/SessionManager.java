@@ -44,6 +44,8 @@ public class SessionManager {
     // Email address (make variable public to access from outside)
     public static final String KEY_ID = "id";
 
+    public static final String JWT_Token = "";
+
     // Constructor
     public SessionManager(Context context){
         this._context = context;
@@ -54,7 +56,7 @@ public class SessionManager {
     /**
      * Create login session
      * */
-    public void createLoginSession(String name, String id){
+    public void createLoginSession(String name, String id, String token){
         // Storing login value as TRUE
         editor.putBoolean(IS_LOGIN, true);
 
@@ -63,6 +65,8 @@ public class SessionManager {
 
         // Storing id in pref
         editor.putString(KEY_ID, id);
+
+        editor.putString(JWT_Token,token);
 
         // commit changes
         editor.commit();
@@ -102,6 +106,9 @@ public class SessionManager {
 
         // user id
         user.put(KEY_ID, pref.getString(KEY_ID, null));
+
+        // get jwt token
+        user.put(JWT_Token, pref.getString(JWT_Token, null));
 
         // return user
         return user;

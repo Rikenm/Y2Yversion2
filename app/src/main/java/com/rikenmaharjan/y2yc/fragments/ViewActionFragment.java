@@ -32,6 +32,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
+
 import com.rikenmaharjan.y2yc.R;
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
@@ -68,6 +70,8 @@ public class ViewActionFragment extends BaseFragment {
     HashMap<String, List<String>> Child;
     TextView txtview;
 
+    public static String Jwt_Token;
+
     public View rootView;
     public static List<String> action_item_ids = new ArrayList<>();
     public static List<String[]> action_item_step_ids = new ArrayList<>();
@@ -96,8 +100,12 @@ public class ViewActionFragment extends BaseFragment {
         // name
         name = user.get(SessionManager.KEY_NAME);
 
-        // email
+        // id
         id = user.get(SessionManager.KEY_ID);
+
+
+
+        Jwt_Token = user.get(SessionManager.JWT_Token);
 
        // this makes user that every fragment gets id and name of the user
 
@@ -173,7 +181,7 @@ public class ViewActionFragment extends BaseFragment {
         // email
         id = user.get(SessionManager.KEY_ID);
 
-        String url = "https://y2y.herokuapp.com/actionitems/"+id;
+        String url = "https://y2y.herokuapp.com/actionitems/";
 
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
@@ -231,7 +239,24 @@ public class ViewActionFragment extends BaseFragment {
             public void onErrorResponse(VolleyError error){
                 Log.i("request failed", "failed");
             }
-        });
+        }){
+
+
+            @Override
+            public Map<String,String> getHeaders() throws AuthFailureError {
+                HashMap <String,String> headers = new HashMap<>();
+
+                String token = Jwt_Token;
+                String auth = "bearer "+ token;
+                headers.put("Content-Type", "application/json");
+                headers.remove("Authorization");
+                headers.put("Authorization", auth);
+
+                return headers;
+            }
+
+
+        };
 
         queue.add(stringRequest);
         Log.i("result",queue.toString());
@@ -392,6 +417,19 @@ class MyCustomAdapter extends BaseExpandableListAdapter {
                                         }
 
                                         @Override
+                                        public Map<String,String> getHeaders() throws AuthFailureError {
+                                            HashMap <String,String> headers = new HashMap<>();
+
+                                            String token = frag.Jwt_Token;
+                                            String auth = "bearer "+ token;
+                                            headers.put("Content-Type", "application/json");
+                                            headers.remove("Authorization");
+                                            headers.put("Authorization", auth);
+
+                                            return headers;
+                                        }
+
+                                        @Override
                                         public byte[] getBody() throws AuthFailureError {
                                             try {
                                                 return requestBody == null ? null : requestBody.getBytes("utf-8");
@@ -481,6 +519,19 @@ class MyCustomAdapter extends BaseExpandableListAdapter {
                                                 VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
                                                 return null;
                                             }
+                                        }
+
+                                        @Override
+                                        public Map<String,String> getHeaders() throws AuthFailureError {
+                                            HashMap <String,String> headers = new HashMap<>();
+
+                                            String token = frag.Jwt_Token;
+                                            String auth = "bearer "+ token;
+                                            headers.put("Content-Type", "application/json");
+                                            headers.remove("Authorization");
+                                            headers.put("Authorization", auth);
+
+                                            return headers;
                                         }
 
                                         @Override

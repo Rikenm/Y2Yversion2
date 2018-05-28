@@ -76,6 +76,8 @@ public class HomeFragment extends BaseFragment {
     String name;
     SessionManager session;
 
+    String Jwt_Token;
+
 
 
     @Nullable
@@ -153,6 +155,10 @@ public class HomeFragment extends BaseFragment {
 
         // email
         id = user.get(SessionManager.KEY_ID);
+
+        Jwt_Token = user.get(SessionManager.JWT_Token);
+
+
 
         introTxt.setText("Hello, "+name);
 
@@ -236,6 +242,10 @@ public class HomeFragment extends BaseFragment {
                 URL url = new URL("https://y2y.herokuapp.com/edituser");
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("POST");
+
+                urlConnection.setRequestProperty("Authorization", "bearer "+ Jwt_Token);
+
+
                 urlConnection.setRequestProperty("Content-Type","application/json");
 
                 if (json != null) {

@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -33,6 +34,7 @@ import java.net.URL;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by wangdayuan on 4/7/18.
@@ -47,6 +49,7 @@ public class ViewLotteryResultFragment extends Fragment {
     public SessionManager session;
     String id;
     String name;
+    String Jwt_Token;
 
 
     public ViewLotteryResultFragment(){}
@@ -65,6 +68,10 @@ public class ViewLotteryResultFragment extends Fragment {
 
         // Get logged in users user id
         id = user.get(SessionManager.KEY_ID);
+
+
+        //
+        Jwt_Token = user.get(SessionManager.JWT_Token);
     }
 
     @Override
@@ -111,7 +118,23 @@ public class ViewLotteryResultFragment extends Fragment {
                 Log.i("request failed", "failed");
                 Toast.makeText(getActivity(), "There is a problem, Please check your internet", Toast.LENGTH_LONG).show();
             }
-        });
+        }){
+
+            @Override
+            public Map<String,String> getHeaders() throws AuthFailureError {
+                HashMap <String,String> headers = new HashMap<>();
+
+                String token = Jwt_Token;
+                String auth = "bearer "+ token;
+                headers.put("Content-Type", "application/json");
+                headers.remove("Authorization");
+                headers.put("Authorization", auth);
+
+                return headers;
+            }
+
+
+        };
 
         queue.add(stringRequest);
         Log.i("result",queue.toString());
