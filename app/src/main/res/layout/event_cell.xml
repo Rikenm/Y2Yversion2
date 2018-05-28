@@ -87,12 +87,10 @@
                 android:layout_marginRight="18dp"
                 android:gravity="right|center_vertical"
                 android:layout_gravity="right|center_vertical"
-
                 android:orientation="vertical"
                 android:textDirection="ltr"
                 android:layoutDirection="rtl"
-
-                android:checked="true"
+                android:checked="false"
                 android:text="Rsvp" />
 
 

@@ -67,7 +67,6 @@ public class UpComingEventFragment extends Fragment {
     public SessionManager session;
     String id;
     String name;
-
     String Jwt_Token = new String();
 
 
@@ -193,7 +192,7 @@ public class UpComingEventFragment extends Fragment {
         Log.i("Record", "Goes in ");
 
         //======================
-        // MARK :- POST (static)
+
 
 
     }
@@ -208,9 +207,12 @@ public class UpComingEventFragment extends Fragment {
 
         // find the structure
         JSONObject jsonBody = new JSONObject();
-        jsonBody.put("id", "s");
-        jsonBody.put("comment", "comment");
+
+         jsonBody.put("eventId", "00UW0000002eqXFMAY");
+         jsonBody.put("flag", "addUser");
+
         final String requestBody = jsonBody.toString();
+
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
