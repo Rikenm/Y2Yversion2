@@ -120,8 +120,8 @@ public class UpComingEventFragment extends Fragment {
 
         // dummy data for the recycleView
         lstEvents = new ArrayList<>();
-        lstEvents.add(new Events("Y2Y demo","Boston","12:00-3:00pm"));
-        lstEvents.add(new Events("Y2Y demo","Boston","12:00-3:00pm"));
+        //lstEvents.add(new Events("Y2Y demo","Boston","12:00-3:00pm"));
+        //lstEvents.add(new Events("Y2Y demo","Boston","12:00-3:00pm"));
 
 
         // MARK:- gets data from the server
@@ -148,10 +148,14 @@ public class UpComingEventFragment extends Fragment {
 
                             for (int i = 0 ; i < jsonArray.length();i++){
 
-                                JSONObject friends = jsonArray.getJSONObject(i);
-                                String eventName = friends.getString("eventName");
-                                String Location = friends.getString("Location");
-                                lstEvents.add(new Events(eventName,Location,"12:00-3:00pm"));
+                                JSONObject event = jsonArray.getJSONObject(i);
+                                String eventName = event.getString("eventName");
+                                String Location = event.getString("Location");
+
+                                String ID = event.getString("ID");
+                                boolean rsvp = event.getBoolean("isRsvp'd");
+                                String description = event.getString("Description");
+                                lstEvents.add(new Events(eventName,Location,"12:00-3:00pm",ID,description,rsvp));
                                 // works
                                 recyclerViewAdapter.notifyDataSetChanged();
                             }
@@ -192,8 +196,6 @@ public class UpComingEventFragment extends Fragment {
         Log.i("Record", "Goes in ");
 
         //======================
-
-
 
     }
 

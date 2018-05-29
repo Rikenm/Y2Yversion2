@@ -54,9 +54,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     public RecyclerViewAdapter(Context context, List<Events> lstEvents) {
 
-
         this.data = lstEvents;
         this.nContext = context;
+
     }
 
     ////////// Generic class ////////////////////
@@ -70,11 +70,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
 
         v = LayoutInflater.from(nContext).inflate(R.layout.event_cell, parent, false);
-        MyViewHolder vHolder = new MyViewHolder(v);
+        final MyViewHolder vHolder = new MyViewHolder(v);
 
 
         eventDialog = new Dialog(nContext);
         eventDialog.setContentView(R.layout.dialog_eventdetail);
+
 
         vHolder.cb_rsvp.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -85,6 +86,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 if (b) {
                     try {
                         post("addUser");
+
+                        // this works
+                        // reload the stuff
+                        data.get((vHolder.getAdapterPosition())).setRSVP(true);
+                        notifyDataSetChanged();
+
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -94,6 +102,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     // change this
                     try {
                         post("removeUser");
+                        data.get((vHolder.getAdapterPosition())).setRSVP(false);
+                        notifyDataSetChanged();
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -113,8 +124,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
                 Button dialog_btn_rsvp = (Button) eventDialog.findViewById(R.id.btn_rsvp);
                 Button dialog_btn_cancel = (Button) eventDialog.findViewById(R.id.btn_cancel);
+                TextView tv_description = (TextView) eventDialog.findViewById(R.id.tv_description);
 
-
+                tv_description.setText((CharSequence) data.get(vHolder.getAdapterPosition()).getDescription());
                 eventDialog.show();
 
                 //////
@@ -125,8 +137,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                         // post method here [done]
                         // also checkbox true
                         try {
+                            // reload the stuff
                             post("addUser");
+                            data.get((vHolder.getAdapterPosition())).setRSVP(true);
+                            vHolder.cb_rsvp.setChecked(true);
 
+                            notifyDataSetChanged();
 
 
                         } catch (JSONException e) {
@@ -153,13 +169,56 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(MyViewHolder holder, final int position) {
 
         holder.tv_location.setText(data.get(position).getLocation());
         holder.tv_time.setText(data.get(position).getTime());
         holder.tv_title.setText(data.get(position).getTitle());
 
         // particular cells
+
+        holder.cb_rsvp.setOnCheckedChangeListener(null);
+        holder.cb_rsvp.setChecked(data.get(position).getRSVP());
+
+        holder.cb_rsvp.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                //set your object's last status
+                // if clicked on event then
+                if (isChecked) {
+                    try {
+                        post("addUser");
+
+                        // this works
+                        // reload the stuff
+                        data.get(position).setRSVP(true);
+                        notifyDataSetChanged();
+
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+                else{
+                    // change this
+                    try {
+                        post("removeUser");
+                        data.get(position).setRSVP(false);
+                        notifyDataSetChanged();
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+            }
+        });
+
+        //vHolder.cb_rsvp.setChecked(true);
+        Log.i("Info","goes");
+
 
 
 
@@ -189,9 +248,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             tv_title = (TextView) itemView.findViewById(R.id.title);
             tv_location = (TextView) itemView.findViewById(R.id.location);
             tv_time = (TextView) itemView.findViewById(R.id.time);
-
             cb_rsvp = (CheckBox) itemView.findViewById(R.id.cb);
-
             event_layout = (LinearLayout) itemView.findViewById(R.id.ll_event_cell);
 
         }

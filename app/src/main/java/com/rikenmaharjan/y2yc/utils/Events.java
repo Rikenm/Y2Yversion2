@@ -9,16 +9,23 @@ public class Events {
     String title;
     String location;
     String time;
+    String ID;
+    String description;
+    Boolean isRSVP;
+
 
     public Events(){
 
     }
 
-    public Events(String title, String location, String time){
+    public Events(String title, String location, String time,String ID,String description, Boolean RSVP){
 
         this.location = location;
         this.time = time;
         this.title = title;
+        this.ID = ID;
+        this.description = description;
+        this.isRSVP = RSVP;
 
 
     }
@@ -37,6 +44,18 @@ public class Events {
         return time;
     }
 
+    public String getID() {
+        return ID;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public Boolean getRSVP() {
+        return isRSVP;
+    }
+
     //setter
 
     public void setTitle(String title) {
@@ -50,4 +69,17 @@ public class Events {
     public void setTime(String time) {
         this.time = time;
     }
+
+    public void setID(String ID) {
+        this.ID = ID;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setRSVP(Boolean RSVP) {
+        isRSVP = RSVP;
+    }
+
 }
