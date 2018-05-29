@@ -111,6 +111,12 @@ public class StayFragment extends BaseFragment {
 
         data = new ArrayList<>();
         data.add(new StayModel("bed","Pod A lower"));
+        data.add(new StayModel("bed1","Pod A lower"));
+        data.add(new StayModel("bed2","Pod A lower"));
+        data.add(new StayModel("bed3","Pod A lower"));
+        data.add(new StayModel("bed4","Pod A lower"));
+
+
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
@@ -160,6 +166,11 @@ public class StayFragment extends BaseFragment {
 //                    txtNITR.setText(nit);
 
                     data.add(new StayModel("bed","Pod A lower"));
+                    data.add(new StayModel("bed1","Pod A lower"));
+                    data.add(new StayModel("bed2","Pod A lower"));
+                    data.add(new StayModel("bed3","Pod A lower"));
+                    data.add(new StayModel("bed4","Pod A lower"));
+
                     homeRecyclerAdapter.notifyDataSetChanged();
                 }
                 catch (JSONException e) {
