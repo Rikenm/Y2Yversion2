@@ -34,6 +34,12 @@
 
 
         <item
+            android:id="@+id/nav_weblottery"
+            android:icon = "@drawable/feedback"
+            android:title="Web Lottery" />
+
+
+        <item
             android:id="@+id/nav_sendFeedback"
             android:icon = "@drawable/feedback"
             android:title="@string/Feedback" />

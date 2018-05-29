@@ -17,6 +17,7 @@ import com.github.barteksc.pdfviewer.listener.OnPageChangeListener;
 import com.github.barteksc.pdfviewer.scroll.DefaultScrollHandle;
 import com.rikenmaharjan.y2yc.R;
 import com.rikenmaharjan.y2yc.activities.Main2Activity;
+import com.rikenmaharjan.y2yc.utils.SessionManager;
 import com.shockwave.pdfium.PdfDocument;
 
 import java.util.List;
@@ -27,6 +28,18 @@ public class HandBookFragment extends Fragment implements OnPageChangeListener,O
     PDFView pdfView;
     Integer pageNumber = 0;
     String pdfFileName;
+    public SessionManager session;
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+
+        session = new SessionManager(getActivity());
+
+        session.checkLogin();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
