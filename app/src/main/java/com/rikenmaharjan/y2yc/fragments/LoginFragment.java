@@ -111,12 +111,12 @@ public class LoginFragment extends BaseFragment {
             new MyAsyncTaskgetNews().execute("hello", "hello", "hello");
         }
         else if (mUSerNameEt.getText().toString().equals("")){
-            mUSerNameEt.setError("Enter FirstName");
+            mUSerNameEt.setError("Enter your username");
 
         }
         else if(mUSerPasswordEt.getText().toString().equals("")){
 
-            mUSerPasswordEt.setError("This Field Cannot be Empty");
+            mUSerPasswordEt.setError("This field cannot be empty");
 
         }
 

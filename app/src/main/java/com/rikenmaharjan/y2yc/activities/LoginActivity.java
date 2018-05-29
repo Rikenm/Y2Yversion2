@@ -2,6 +2,7 @@ package com.rikenmaharjan.y2yc.activities;
 
 import android.app.ActionBar;
 import android.app.Fragment;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
@@ -24,7 +25,11 @@ public class LoginActivity extends BaseFragmentActivity {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
         super.onCreate(savedInstanceState, persistentState);
-        // hiding action abr
+
+
+
+
+
 
     }
 
