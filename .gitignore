@@ -1,2 +1,4 @@
 auth.json
 .bin
+.idea
+.gradle
