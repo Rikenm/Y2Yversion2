@@ -22,11 +22,13 @@ import android.widget.TextView;
 
 import com.rikenmaharjan.y2yc.R;
 import com.rikenmaharjan.y2yc.fragments.FeedBackSubmitFragment;
+import com.rikenmaharjan.y2yc.fragments.HandBookFragment;
 import com.rikenmaharjan.y2yc.fragments.HomeFragment;
 import com.rikenmaharjan.y2yc.fragments.StoryFragment;
 import com.rikenmaharjan.y2yc.fragments.UpComingEventFragment;
 import com.rikenmaharjan.y2yc.fragments.ViewActionFragment;
 import com.rikenmaharjan.y2yc.fragments.ViewLotteryResultFragment;
+import com.rikenmaharjan.y2yc.fragments.WebLotteryFragment;
 import com.rikenmaharjan.y2yc.utils.SessionManager;
 
 import java.util.HashMap;
@@ -47,6 +49,8 @@ public class Main2Activity extends AppCompatActivity
     public SessionManager session;
     public ViewActionFragment ac;
     public UpComingEventFragment up;
+    public HandBookFragment hb;
+    public WebLotteryFragment wf;
 
 
     @Override
@@ -96,6 +100,8 @@ public class Main2Activity extends AppCompatActivity
         hm = new HomeFragment();
         ac = new ViewActionFragment();
         up = new UpComingEventFragment();
+        hb = new HandBookFragment();
+        wf = new WebLotteryFragment();
 
 
         fm = getFragmentManager();
@@ -192,6 +198,29 @@ public class Main2Activity extends AppCompatActivity
             ft.addToBackStack ("myFrag2");  //why do we do this?
             ft.commit();
         }
+
+
+        else if (id == R.id.nav_handbook) {
+            if (hb == null)
+                hb = new HandBookFragment();
+            FragmentTransaction ft = fm.beginTransaction ();  //Create a reference to a fragment transaction.
+            ft.replace(R.id.constraintLayout, hb);
+            ft.addToBackStack ("myFrag2");  //why do we do this?
+            ft.commit();
+        }
+
+        else if (id == R.id.nav_weblottery) {
+            if (wf == null)
+                wf = new WebLotteryFragment();
+            FragmentTransaction ft = fm.beginTransaction ();  //Create a reference to a fragment transaction.
+            ft.replace(R.id.constraintLayout, wf);
+            ft.addToBackStack ("myFrag2");  //why do we do this?
+            ft.commit();
+        }
+
+
+
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
