@@ -24,6 +24,7 @@ import com.rikenmaharjan.y2yc.R;
 import com.rikenmaharjan.y2yc.fragments.FeedBackSubmitFragment;
 import com.rikenmaharjan.y2yc.fragments.HandBookFragment;
 import com.rikenmaharjan.y2yc.fragments.HomeFragment;
+import com.rikenmaharjan.y2yc.fragments.StayFragment;
 import com.rikenmaharjan.y2yc.fragments.StoryFragment;
 import com.rikenmaharjan.y2yc.fragments.UpComingEventFragment;
 import com.rikenmaharjan.y2yc.fragments.ViewActionFragment;
@@ -51,6 +52,7 @@ public class Main2Activity extends AppCompatActivity
     public UpComingEventFragment up;
     public HandBookFragment hb;
     public WebLotteryFragment wf;
+    public StayFragment stf;
 
 
     @Override
@@ -164,11 +166,11 @@ public class Main2Activity extends AppCompatActivity
 
         // This will replace the fragment to the user info page
         else if (id == R.id.nav_stayInfo) {
-            if (sf == null)
-                sf = new StoryFragment();
+            if (stf == null)
+                stf = new StayFragment();
             hideKeyboard(this);
             FragmentTransaction ft = fm.beginTransaction ();  //Create a reference to a fragment transaction.
-            ft.replace(R.id.constraintLayout, sf);
+            ft.replace(R.id.constraintLayout, stf);
             ft.addToBackStack ("myFrag2");  //why do we do this?
             ft.commit();
         }

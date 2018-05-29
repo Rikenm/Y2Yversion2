@@ -242,6 +242,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         private CheckBox cb_rsvp;
         private LinearLayout event_layout;
 
+
         public MyViewHolder(View itemView) {
             super(itemView);
 
