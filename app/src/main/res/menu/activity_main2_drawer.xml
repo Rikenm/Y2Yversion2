@@ -3,6 +3,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
     <group android:checkableBehavior="single">
+
+
+        <item
+            android:id="@+id/nav_stayInfo"
+            android:icon = "@drawable/stay"
+            android:title="@string/Your_stay" />
+
+        <item
+            android:id="@+id/nav_action"
+            android:icon = "@drawable/activity"
+            android:title="@string/Action_items" />
+
+
         <item
             android:id="@+id/nav_lotteryResult"
             android:icon = "@drawable/lottery"
@@ -13,21 +26,26 @@
             android:icon = "@drawable/lottery"
             android:title="@string/Event" />
 
+
+        <item
+            android:id="@+id/nav_handbook"
+            android:icon = "@drawable/logout"
+            android:title="Handbook" />
+
+
         <item
             android:id="@+id/nav_sendFeedback"
             android:icon = "@drawable/feedback"
             android:title="@string/Feedback" />
-        <item
-            android:id="@+id/nav_stayInfo"
-            android:icon = "@drawable/stay"
-            android:title="@string/Your_stay" />
-        <item
-            android:id="@+id/nav_action"
-            android:icon = "@drawable/activity"
-            android:title="@string/Action_items" />
+
+
         <item
             android:id="@+id/nav_manage"
             android:icon = "@drawable/logout"
             android:title="@string/Log_Out" />
+
+
+
+
     </group>
 </menu>
