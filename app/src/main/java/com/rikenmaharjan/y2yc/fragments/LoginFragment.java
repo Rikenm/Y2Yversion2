@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -73,6 +74,9 @@ public class LoginFragment extends BaseFragment {
 
     String response;
 
+    TextInputLayout inputLayoutName;
+    TextInputLayout inputLayoutusernameName;
+
 
 
     public static LoginFragment newInstance(){
@@ -98,6 +102,10 @@ public class LoginFragment extends BaseFragment {
         session = new SessionManager(getActivity());
         View rootView = inflater.inflate(R.layout.fragment_login,container,false);
         mUnbinder = ButterKnife.bind(this,rootView);
+
+        inputLayoutName = (TextInputLayout) rootView.findViewById(R.id.input_layout_name);
+
+        inputLayoutusernameName = (TextInputLayout) rootView.findViewById(R.id.input_layout_username);
 
         return rootView;
     }
