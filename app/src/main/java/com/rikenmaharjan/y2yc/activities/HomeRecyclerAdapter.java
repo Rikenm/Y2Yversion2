@@ -1,9 +1,11 @@
 package com.rikenmaharjan.y2yc.activities;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.provider.ContactsContract;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,11 +37,11 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
         this.data = lstStay;
         this.nContext = context;
         colors = new String[5];
-        colors[0] = "56CEFF";
-        colors[1] = "FF8C09";
-        colors[2] = "F4D938";
-        colors[3] = "13A89D";
-        colors[4] = "FF7C3B";
+        colors[0] = "#56CEFF";
+        colors[1] = "#FF8C09";
+        colors[2] = "#F4D938";
+        colors[3] = "#13A89D";
+        colors[4] = "#FF7C3B";
 
 
     }
@@ -66,7 +68,10 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
 
         holder.tv_subtitle.setText(data.get(position).getSubtitle());
         holder.tv_title.setText(data.get(position).getTitle());
-        
+        holder.cv_stay.setCardBackgroundColor(Color.parseColor(colors[position]));
+
+        Log.i("color",""+colors[position]);
+
         
         //holder.cv_stay.setBackgroundColor(colors.length);
         //holder.imageView.set
