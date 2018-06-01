@@ -85,7 +85,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 // if clicked on event then
                 if (b) {
                     try {
-                        post("addUser");
+                        post("addUser",data.get(vHolder.getAdapterPosition()).getID());
 
                         // this works
                         // reload the stuff
@@ -101,7 +101,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 else{
                     // change this
                     try {
-                        post("removeUser");
+                        post("removeUser",data.get(vHolder.getAdapterPosition()).getID());
                         data.get((vHolder.getAdapterPosition())).setRSVP(false);
                         notifyDataSetChanged();
 
@@ -138,7 +138,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                         // also checkbox true
                         try {
                             // reload the stuff
-                            post("addUser");
+                            post("addUser",data.get(vHolder.getAdapterPosition()).getID());
                             data.get((vHolder.getAdapterPosition())).setRSVP(true);
                             vHolder.cb_rsvp.setChecked(true);
 
@@ -187,7 +187,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 // if clicked on event then
                 if (isChecked) {
                     try {
-                        post("addUser");
+                        post("addUser",data.get(position).getID());
 
                         // this works
                         // reload the stuff
@@ -203,7 +203,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 else{
                     // change this
                     try {
-                        post("removeUser");
+                        post("removeUser",data.get(position).getID());
                         data.get(position).setRSVP(false);
                         notifyDataSetChanged();
 
@@ -259,7 +259,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
 
     // TODO:- change this to post json body
-    public void post(String flag) throws JSONException {
+    public void post(String flag, String ID) throws JSONException {
 
         session = new SessionManager(nContext);
 
@@ -284,7 +284,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         // find the structure
         JSONObject jsonBody = new JSONObject();
         // set event in the data model
-        jsonBody.put("eventId", "00UW0000002eqXFMAY");
+        jsonBody.put("eventId", ID);
         jsonBody.put("flag", flag);
         final String requestBody = jsonBody.toString();
 
