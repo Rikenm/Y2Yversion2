@@ -124,9 +124,6 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
         holder.tv_subtitle.setText(data.get(position).getSubtitle());
         holder.tv_title.setText(data.get(position).getTitle());
         holder.cv_stay.setCardBackgroundColor(Color.parseColor(colors[position]));
-
-
-
         holder.imageView.setImageResource(myImageList[position]);
         Log.i("color",""+colors[position]);
 

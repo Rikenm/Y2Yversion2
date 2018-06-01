@@ -227,8 +227,6 @@ public class StayFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v =  inflater.inflate(R.layout.fragment_stay, container, false);
-
-
         myRecycleView = (RecyclerView) v.findViewById(R.id.rc_stay);
         homeRecyclerAdapter = new HomeRecyclerAdapter(container.getContext(),data);
         myRecycleView.setLayoutManager(new LinearLayoutManager(getActivity()));

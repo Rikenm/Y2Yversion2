@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 
@@ -62,6 +63,7 @@ public class UpComingEventFragment extends Fragment {
     private RecyclerView newRecycleView;
     private List<Events> lstEvents;
     private Context context;
+    private ProgressBar spinner;
 
 
     public SessionManager session;
@@ -124,78 +126,8 @@ public class UpComingEventFragment extends Fragment {
         //lstEvents.add(new Events("Y2Y demo","Boston","12:00-3:00pm"));
 
 
-        // MARK:- gets data from the server
-        //======================
-        // Instantiate the RequestQueue.
-        RequestQueue queue = Volley.newRequestQueue(getActivity());
-
-        // change the url
-        String url ="https://y2y.herokuapp.com/events";
-
-        JsonObjectRequest jsonRequest = new JsonObjectRequest( Request.Method.GET,
-                url,
-                null,
-                new Response.Listener<JSONObject>(){
-
-                    @Override
-                    public void onResponse(JSONObject response) {
-
-                        try {
-
-                             int size = response.getInt("size");
-                            JSONArray jsonArray = response.getJSONArray("records");
 
 
-                            for (int i = 0 ; i < jsonArray.length();i++){
-
-                                JSONObject event = jsonArray.getJSONObject(i);
-                                String eventName = event.getString("eventName");
-                                String Location = event.getString("Location");
-
-                                String ID = event.getString("ID");
-                                boolean rsvp = event.getBoolean("isRsvp'd");
-                                String description = event.getString("Description");
-                                lstEvents.add(new Events(eventName,Location,"12:00-3:00pm",ID,description,rsvp));
-                                // works
-                                recyclerViewAdapter.notifyDataSetChanged();
-                            }
-
-
-
-
-                        }catch(JSONException e){
-
-                            Log.i("Error", String.valueOf(e));
-                        }
-
-                    }
-                },new Response.ErrorListener() {
-                  @Override
-                    public void onErrorResponse(VolleyError error) {
-                     Log.e("Volley", ""+error);
-            }
-        }){
-
-            // header
-            @Override
-            public Map <String,String> getHeaders() throws AuthFailureError {
-                HashMap <String,String> headers = new HashMap<>();
-
-                String token = Jwt_Token;
-                String auth = "bearer "+token;
-                headers.put("Content-Type", "application/json");
-                headers.remove("Authorization");
-                headers.put("Authorization", auth);
-
-                return headers;
-            }
-        };
-
-        queue.add(jsonRequest);
-
-        Log.i("Record", "Goes in ");
-
-        //======================
 
     }
 
@@ -285,7 +217,7 @@ public class UpComingEventFragment extends Fragment {
 
     }
 
-    // TODO: Update here
+    // TODO: Update here, Change time format
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -293,12 +225,104 @@ public class UpComingEventFragment extends Fragment {
         v =  inflater.inflate(R.layout.fragment_up_coming_event, container, false);
         /*YOUR CODE HERE*/
 
+        spinner = (ProgressBar)  v.findViewById(R.id.progressBar);
         newRecycleView = (RecyclerView) v.findViewById(R.id.events_recycleView);
         Context context = container.getContext();
+        spinner = (ProgressBar)  v.findViewById(R.id.progressBar);
+
+
+
         // here
+        lstEvents.clear();
+
+        // MARK:- gets data from the server
+        //======================
+        // Instantiate the RequestQueue.
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
+
+        spinner.setVisibility(View.VISIBLE);
+        // change the url
+        String url ="https://y2y.herokuapp.com/events";
+
+        JsonObjectRequest jsonRequest = new JsonObjectRequest( Request.Method.GET,
+                url,
+                null,
+                new Response.Listener<JSONObject>(){
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        try {
+
+                            int size = response.getInt("size");
+                            JSONArray jsonArray = response.getJSONArray("records");
+
+
+                            for (int i = 0 ; i < jsonArray.length();i++){
+
+                                JSONObject event = jsonArray.getJSONObject(i);
+                                String eventName = event.getString("eventName");
+                                String Location = event.getString("Location");
+
+                                String ID = event.getString("ID");
+                                boolean rsvp = event.getBoolean("isRsvp'd");
+                                String description = event.getString("Description");
+
+                                // change time
+                                lstEvents.add(new Events(eventName,Location,"12:00-3:00pm",ID,description,rsvp));
+                                // works
+
+                                recyclerViewAdapter.notifyDataSetChanged();
+                            }
+
+
+
+                            // hide there progress bar
+                            spinner.setVisibility(View.GONE);
+
+                        }catch(JSONException e){
+
+                            // hide there progress bar
+                            Log.i("Error", String.valueOf(e));
+                        }
+
+                    }
+                },new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("Volley", ""+error);
+                spinner.setVisibility(View.GONE);
+
+            }
+        }){
+
+            // header
+            @Override
+            public Map <String,String> getHeaders() throws AuthFailureError {
+                HashMap <String,String> headers = new HashMap<>();
+
+                String token = Jwt_Token;
+                String auth = "bearer "+token;
+                headers.put("Content-Type", "application/json");
+                headers.remove("Authorization");
+                headers.put("Authorization", auth);
+
+                return headers;
+            }
+        };
+
+        queue.add(jsonRequest);
+
+        Log.i("Record", "Goes in ");
+
+        //======================
+
+
+
         recyclerViewAdapter = new RecyclerViewAdapter(container.getContext(),lstEvents);
         newRecycleView.setLayoutManager(new LinearLayoutManager(getActivity()));
         newRecycleView.setAdapter(recyclerViewAdapter);
+
 
         return v;
 
