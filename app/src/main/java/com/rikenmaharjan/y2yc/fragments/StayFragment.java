@@ -109,12 +109,16 @@ public class StayFragment extends BaseFragment {
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         String url = "https://y2y.herokuapp.com/detailuser/";
 
+
         data = new ArrayList<>();
-        data.add(new StayModel("bed","Pod A lower"));
-        data.add(new StayModel("bed1","Pod A lower"));
-        data.add(new StayModel("bed2","Pod A lower"));
-        data.add(new StayModel("bed3","Pod A lower"));
-        data.add(new StayModel("bed4","Pod A lower"));
+
+        // dummy data
+//        data.add(new StayModel("bed","Pod A lower"));
+//        data.add(new StayModel("bed1","Pod A lower"));
+//        data.add(new StayModel("bed2","Pod A lower"));
+//        data.add(new StayModel("bed3","Pod A lower"));
+//        data.add(new StayModel("bed4","Pod A lower"));
+
 
 
 
@@ -124,6 +128,7 @@ public class StayFragment extends BaseFragment {
                 Log.i("request sucessful", response );
                 try{
                     JSONObject apiResult = new JSONObject(response);
+
 //                    view.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
 //                    // get bed assignment
 //                    txtBedR.setText(apiResult.getString("Bed_name"));
@@ -165,11 +170,18 @@ public class StayFragment extends BaseFragment {
 //                        nit = "Yes";
 //                    txtNITR.setText(nit);
 
-                    data.add(new StayModel("bed","Pod A lower"));
-                    data.add(new StayModel("bed1","Pod A lower"));
-                    data.add(new StayModel("bed2","Pod A lower"));
-                    data.add(new StayModel("bed3","Pod A lower"));
-                    data.add(new StayModel("bed4","Pod A lower"));
+                    Log.i("StayFrag","Volley loop");
+
+
+
+                    // check for null value
+                    data.add(new StayModel("Bed",apiResult.getString("Bed_name")));
+                    data.add(new StayModel("Last day of Stay",apiResult.getString("Last_Day_Of_Stay")));
+                    data.add(new StayModel("Locker Combination",apiResult.getString("Locker")));
+
+                    // control nil condition for warnings
+                    data.add(new StayModel("Warning","Nil"));
+                    data.add(new StayModel("NIT",apiResult.getString("NIT")));
 
                     homeRecyclerAdapter.notifyDataSetChanged();
                 }
@@ -200,6 +212,10 @@ public class StayFragment extends BaseFragment {
 
 
         };
+
+
+
+        queue.add(stringRequest);
 
 
 
