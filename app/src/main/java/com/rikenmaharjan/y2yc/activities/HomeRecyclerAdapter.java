@@ -74,6 +74,8 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
 
 
 
+
+        // ADAPTER HERE
         vHolder.ll_yourstay.setOnClickListener(
                 new View.OnClickListener() {
                     @Override

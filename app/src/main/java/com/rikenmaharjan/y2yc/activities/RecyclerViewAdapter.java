@@ -344,7 +344,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             }
         };
 
-
         requestQueue.add(stringRequest);
 
 //===================
