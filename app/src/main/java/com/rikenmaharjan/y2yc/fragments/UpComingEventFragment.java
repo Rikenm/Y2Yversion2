@@ -122,13 +122,6 @@ public class UpComingEventFragment extends Fragment {
 
         // dummy data for the recycleView
         lstEvents = new ArrayList<>();
-        //lstEvents.add(new Events("Y2Y demo","Boston","12:00-3:00pm"));
-        //lstEvents.add(new Events("Y2Y demo","Boston","12:00-3:00pm"));
-
-
-
-
-
     }
 
     // TODO:- change this to post json body
