@@ -1,7 +1,10 @@
 package com.rikenmaharjan.y2yc.activities;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.provider.ContactsContract;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -9,7 +12,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.rikenmaharjan.y2yc.R;
@@ -30,6 +35,12 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
     Context nContext;
     String []colors;
 
+    int[] myImageList = new int[]{R.drawable.bed, R.drawable.calendar,R.drawable.locker,R.drawable.warning,R.drawable.nit};
+
+    Drawable []image;
+
+    Dialog warningDialog;
+
 
     public HomeRecyclerAdapter(Context context, List<StayModel> lstStay) {
 
@@ -44,6 +55,8 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
         colors[4] = "#FF7C3B";
 
 
+
+
     }
 
     // creates once
@@ -54,6 +67,48 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
 
         v = LayoutInflater.from(nContext).inflate(R.layout.yourstay_cell,parent,false);
         final MyViewHolder vHolder = new MyViewHolder(v);
+
+
+        warningDialog = new Dialog(nContext);
+        warningDialog.setContentView(R.layout.dialog_warning);
+
+
+
+        vHolder.ll_yourstay.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        Button btn_warning_cancel = (Button) warningDialog.findViewById(R.id.btn_warning_cancel);
+                        // set data here
+
+
+                        int position = vHolder.getAdapterPosition();
+                        if (position == 3){
+
+
+                                warningDialog.show();
+                            btn_warning_cancel.setOnClickListener(
+
+                                    new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            warningDialog.dismiss();
+                                        }
+                                    }
+
+                            );
+
+                        }
+
+                    }
+                }
+        );
+
+
+
+
+
 
         return vHolder;
     }
@@ -70,9 +125,12 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
         holder.tv_title.setText(data.get(position).getTitle());
         holder.cv_stay.setCardBackgroundColor(Color.parseColor(colors[position]));
 
+
+
+        holder.imageView.setImageResource(myImageList[position]);
         Log.i("color",""+colors[position]);
 
-        
+
         //holder.cv_stay.setBackgroundColor(colors.length);
         //holder.imageView.set
     }
@@ -93,6 +151,7 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
         private TextView tv_subtitle;
         private ImageView imageView;
         private CardView cv_stay;
+        private LinearLayout ll_yourstay;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -101,6 +160,7 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
             tv_subtitle = (TextView) itemView.findViewById(R.id.tv_subtitle);
             imageView = (ImageView) itemView.findViewById(R.id.img);
             cv_stay = (CardView) itemView.findViewById(R.id.cv_stay);
+            ll_yourstay = (LinearLayout) itemView.findViewById(R.id.ll_yourstay_cell);
 
 
         }
