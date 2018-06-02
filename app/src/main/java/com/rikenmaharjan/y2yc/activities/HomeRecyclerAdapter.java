@@ -35,7 +35,7 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
     Context nContext;
     String []colors;
 
-    int[] myImageList = new int[]{R.drawable.bed, R.drawable.calendar,R.drawable.locker,R.drawable.warning,R.drawable.nit};
+    int[] myImageList = new int[]{R.drawable.bed,R.drawable.bed, R.drawable.calendar,R.drawable.locker,R.drawable.nit};
 
     Drawable []image;
 
@@ -48,15 +48,17 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
         this.data = lstStay;
         this.nContext = context;
         colors = new String[5];
-        colors[0] = "#56CEFF";
+        colors[2] = "#56CEFF";
         colors[1] = "#FF8C09";
-        colors[2] = "#F4D938";
-        colors[3] = "#13A89D";
+        colors[3] = "#F4D938";
+        colors[0] = "#13A89D";
         colors[4] = "#FF7C3B";
+    }
 
-
-
-
+    // returns postion for onCreateViewHolder
+    @Override
+    public int getItemViewType(int position) {
+        return position;
     }
 
     // creates once
@@ -65,54 +67,59 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
 
         View v;
 
-        v = LayoutInflater.from(nContext).inflate(R.layout.yourstay_cell,parent,false);
-        final MyViewHolder vHolder = new MyViewHolder(v);
+        ///////
+        if (viewType !=0) {
+            v = LayoutInflater.from(nContext).inflate(R.layout.yourstay_cell, parent, false);
+            final MyViewHolder vHolder = new MyViewHolder(v);
 
 
-        warningDialog = new Dialog(nContext);
-        warningDialog.setContentView(R.layout.dialog_warning);
+            warningDialog = new Dialog(nContext);
+            warningDialog.setContentView(R.layout.dialog_warning);
 
 
+            // ADAPTER HERE
+//            vHolder.ll_yourstay.setOnClickListener(
+//                    new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View view) {
+//
+//                            Button btn_warning_cancel = (Button) warningDialog.findViewById(R.id.btn_warning_cancel);
+//                            // set data here
+//
+//
+//                            int position = vHolder.getAdapterPosition();
+//                            if (position == 3) {
+//
+//
+//                                warningDialog.show();
+//                                btn_warning_cancel.setOnClickListener(
+//
+//                                        new View.OnClickListener() {
+//                                            @Override
+//                                            public void onClick(View view) {
+//                                                warningDialog.dismiss();
+//                                            }
+//                                        }
+//
+//                                );
+//
+//                            }
+//
+//                        }
+//                    }
+//            );
+            return vHolder;
+        }
+        else {
+            v = LayoutInflater.from(nContext).inflate(R.layout.warning_cell, parent, false);
+            final MyViewHolder vHolder = new MyViewHolder(v);
 
+            warningDialog = new Dialog(nContext);
+            warningDialog.setContentView(R.layout.dialog_warning);
 
-        // ADAPTER HERE
-        vHolder.ll_yourstay.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
+            return vHolder;
 
-                        Button btn_warning_cancel = (Button) warningDialog.findViewById(R.id.btn_warning_cancel);
-                        // set data here
-
-
-                        int position = vHolder.getAdapterPosition();
-                        if (position == 3){
-
-
-                                warningDialog.show();
-                            btn_warning_cancel.setOnClickListener(
-
-                                    new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-                                            warningDialog.dismiss();
-                                        }
-                                    }
-
-                            );
-
-                        }
-
-                    }
-                }
-        );
-
-
-
-
-
-
-        return vHolder;
+        }
     }
 
 
@@ -123,11 +130,14 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
 
-        holder.tv_subtitle.setText(data.get(position).getSubtitle());
-        holder.tv_title.setText(data.get(position).getTitle());
-        holder.cv_stay.setCardBackgroundColor(Color.parseColor(colors[position]));
-        holder.imageView.setImageResource(myImageList[position]);
-        Log.i("color",""+colors[position]);
+
+        if (position !=0) {
+            holder.tv_subtitle.setText(data.get(position).getSubtitle());
+            holder.tv_title.setText(data.get(position).getTitle());
+            holder.cv_stay.setCardBackgroundColor(Color.parseColor(colors[position]));
+            holder.imageView.setImageResource(myImageList[position]);
+            Log.i("color", "" + colors[position]);
+        }
 
 
         //holder.cv_stay.setBackgroundColor(colors.length);
@@ -162,9 +172,10 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
             ll_yourstay = (LinearLayout) itemView.findViewById(R.id.ll_yourstay_cell);
 
 
+            // for warning cell 
+
+
         }
     }
-
-
 
 }

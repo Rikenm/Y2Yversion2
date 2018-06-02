@@ -186,14 +186,13 @@ public class StayFragment extends BaseFragment {
 
 
                     // check for null value
+                    data.add(new StayModel("Warning","Nil"));
                     data.add(new StayModel("Bed",apiResult.getString("Bed_name")));
                     data.add(new StayModel("Last day of Stay",apiResult.getString("Last_Day_Of_Stay")));
                     data.add(new StayModel("Locker Combination",apiResult.getString("Locker")));
 
                     // control nil condition for warnings
-                    data.add(new StayModel("Warning","Nil"));
                     data.add(new StayModel("NIT",apiResult.getString("NIT")));
-
                     homeRecyclerAdapter.notifyDataSetChanged();
 
                     spinner.setVisibility(View.GONE);
