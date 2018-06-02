@@ -23,7 +23,9 @@ import com.rikenmaharjan.y2yc.R;
 import com.rikenmaharjan.y2yc.activities.HomeRecyclerAdapter;
 import com.rikenmaharjan.y2yc.utils.SessionManager;
 import com.rikenmaharjan.y2yc.utils.StayModel;
+import com.rikenmaharjan.y2yc.utils.WarningModel;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -49,7 +51,9 @@ public class StayFragment extends BaseFragment {
 
     private RecyclerView myRecycleView;
     private List<StayModel> data;
+    private List<WarningModel> warnings;
     HomeRecyclerAdapter homeRecyclerAdapter;
+    HomeRecyclerAdapter homeRecyclerAdapter2;
 
 
     private String id;
@@ -110,6 +114,7 @@ public class StayFragment extends BaseFragment {
         // data here
 
         data = new ArrayList<>();
+        warnings = new ArrayList<>();
 
 
 
@@ -128,6 +133,7 @@ public class StayFragment extends BaseFragment {
         spinner = (ProgressBar)  v.findViewById(R.id.progressBarStay);
 
         data.clear();
+        warnings.clear();
 
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         String url = "https://y2y.herokuapp.com/detailuser/";
@@ -190,11 +196,40 @@ public class StayFragment extends BaseFragment {
                     data.add(new StayModel("Bed",apiResult.getString("Bed_name")));
                     data.add(new StayModel("Last day of Stay",apiResult.getString("Last_Day_Of_Stay")));
                     data.add(new StayModel("Locker Combination",apiResult.getString("Locker")));
-
-                    // control nil condition for warnings
                     data.add(new StayModel("NIT",apiResult.getString("NIT")));
-                    homeRecyclerAdapter.notifyDataSetChanged();
 
+
+                    // warning
+                    int majorWarning = apiResult.getInt("Major_warning");
+                    int minorWarning = apiResult.getInt("Minor_warning");
+                    int suspensionWarning = 0;
+                    //int suspensionWarning = apiResult.getInt("Suspension_warning");
+
+                    JSONArray warningDetail = apiResult.getJSONArray("Warnings");
+
+                    int i = 0;
+                    for (i = 0; i<warningDetail.length();i++){
+
+                        JSONObject warning = warningDetail.getJSONObject(i);
+
+                        // variables from the warning
+                        String warningType = warning.getString("warningType");
+                        String suspensionStart = warning.getString("suspensionStartDate");
+                        String suspensionEnd = warning.getString("suspensionEndDate");
+
+                        JSONObject warningDate = warning.getJSONObject("warningDate");
+                        String date = warningDate.getString("date");
+                        String warningDescription = warning.getString("warningDescription");
+                        warnings.add(new WarningModel(warningDescription,warningType,date,suspensionStart,suspensionEnd,majorWarning,minorWarning,suspensionWarning));
+
+
+                    }
+
+
+
+
+
+                    homeRecyclerAdapter.notifyDataSetChanged();
                     spinner.setVisibility(View.GONE);
                 }
                 catch (JSONException e) {
@@ -228,7 +263,7 @@ public class StayFragment extends BaseFragment {
 
         queue.add(stringRequest);
 
-        homeRecyclerAdapter = new HomeRecyclerAdapter(container.getContext(),data);
+        homeRecyclerAdapter = new HomeRecyclerAdapter(container.getContext(),data,warnings);
         myRecycleView.setLayoutManager(new LinearLayoutManager(getActivity()));
         myRecycleView.setAdapter(homeRecyclerAdapter);
 

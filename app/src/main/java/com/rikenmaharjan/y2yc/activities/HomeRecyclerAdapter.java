@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.rikenmaharjan.y2yc.R;
 import com.rikenmaharjan.y2yc.utils.Events;
 import com.rikenmaharjan.y2yc.utils.StayModel;
+import com.rikenmaharjan.y2yc.utils.WarningModel;
 
 import java.util.List;
 
@@ -31,6 +32,7 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
 
     // change event
     List<StayModel>data;
+    List<WarningModel>warningData;
 
     Context nContext;
     String []colors;
@@ -42,11 +44,14 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
     Dialog warningDialog;
 
 
-    public HomeRecyclerAdapter(Context context, List<StayModel> lstStay) {
+    public HomeRecyclerAdapter(Context context, List<StayModel> lstStay, List<WarningModel>warningData) {
 
 
         this.data = lstStay;
         this.nContext = context;
+
+        this.warningData = warningData;
+
         colors = new String[5];
         colors[2] = "#56CEFF";
         colors[1] = "#FF8C09";
@@ -117,6 +122,46 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
             warningDialog = new Dialog(nContext);
             warningDialog.setContentView(R.layout.dialog_warning);
 
+
+            vHolder.btn_minor.setOnClickListener(
+
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            Log.i("homeAdapter","minor");
+
+                        }
+                    }
+            );
+
+            vHolder.btn_major.setOnClickListener(
+
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+
+                            Log.i("homeAdapter","major");
+                        }
+                    }
+            );
+
+            vHolder.btn_susp.setOnClickListener(
+
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            Log.i("homeAdapter","susp");
+
+                        }
+                    }
+            );
+
+
+
+
             return vHolder;
 
         }
@@ -138,10 +183,19 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
             holder.imageView.setImageResource(myImageList[position]);
             Log.i("color", "" + colors[position]);
         }
+        else{
+
+            String minorNum = conversion((warningData.get(position).getMinorWarning()));
+            String majorNum = conversion((warningData.get(position).getMajorWarning()));
+            String suspNum = conversion((warningData.get(position).getSuspensionWarning()));
+
+            holder.tv_warning_minor.setText(minorNum);
+            holder.tv_warning_major.setText(majorNum);
+            holder.tv_warning_susp.setText(suspNum);
+
+        }
 
 
-        //holder.cv_stay.setBackgroundColor(colors.length);
-        //holder.imageView.set
     }
 
     @Override
@@ -162,6 +216,16 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
         private CardView cv_stay;
         private LinearLayout ll_yourstay;
 
+
+        private TextView tv_warning_minor;
+        private TextView tv_warning_major;
+        private TextView tv_warning_susp;
+        private LinearLayout ll_warning;
+        private Button btn_minor;
+        private Button btn_major;
+        private Button btn_susp;
+
+
         public MyViewHolder(View itemView) {
             super(itemView);
 
@@ -172,10 +236,29 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
             ll_yourstay = (LinearLayout) itemView.findViewById(R.id.ll_yourstay_cell);
 
 
-            // for warning cell 
+            // for warning cell
+
+            tv_warning_minor = itemView.findViewById(R.id.txt_warning_minor);
+            tv_warning_major = itemView.findViewById(R.id.txt_warning_major);
+            tv_warning_susp = itemView.findViewById(R.id.txt_warning_susp);
+            ll_warning = itemView.findViewById(R.id.ll_warning_cell);
+            btn_minor = itemView.findViewById(R.id.btn_warning_minor);
+            btn_major = itemView.findViewById(R.id.btn_warning_major);
+            btn_susp = itemView.findViewById(R.id.btn_warning_susp);
 
 
         }
+    }
+
+    public String conversion(int original){
+
+        if (original < 10 ){
+            return "0"+original;
+        }
+        else{
+            return ""+original;
+        }
+
     }
 
 }
