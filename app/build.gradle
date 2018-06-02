@@ -46,6 +46,7 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:26.1.0'
     compile 'com.android.support:design:26.1.0'
+    compile 'com.stepstone.apprating:app-rating:2.2.0'
 }
 
 apply plugin: 'com.jakewharton.butterknife'

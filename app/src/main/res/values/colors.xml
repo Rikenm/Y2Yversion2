@@ -15,6 +15,15 @@
     <color name="lavender">#80e6e6fa</color>
     <color name="black_blue">#99001a66</color>
     <color name="red">#FF0000</color>
+    <color name="starColor">#047bb1</color>
+    <color name="noteDescriptionTextColor">#fff</color>
+    <color name="titleTextColor">#000</color>
+    <color name="hintTextColor">#cccccc</color>
+    <color name="commentTextColor">#000000</color>
+    <color name="contentTextColor">#D3D3D3</color>
+    <color name="commentBackgroundColor">#EFEFEF</color>
+
+
 
 
 

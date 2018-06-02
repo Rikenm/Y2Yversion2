@@ -1,13 +1,19 @@
 package com.rikenmaharjan.y2yc.activities;
 
 import android.app.Activity;
+
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Calendar;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -32,11 +38,16 @@ import com.rikenmaharjan.y2yc.fragments.ViewActionFragment;
 import com.rikenmaharjan.y2yc.fragments.ViewLotteryResultFragment;
 import com.rikenmaharjan.y2yc.fragments.WebLotteryFragment;
 import com.rikenmaharjan.y2yc.utils.SessionManager;
+import com.rikenmaharjan.y2yc.utils.Survey;
+import com.stepstone.apprating.AppRatingDialog;
+import com.stepstone.apprating.listener.RatingDialogListener;
 
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 
 public class Main2Activity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, RatingDialogListener {
 
     private DrawerLayout drawer;
     private ConstraintLayout constraintLayout;
@@ -46,7 +57,7 @@ public class Main2Activity extends AppCompatActivity
     private FragmentManager fm;
     private HomeFragment hm;
     private TextView navUsername;
-    public String name;
+    public String name,id;
     public String sender;
     public SessionManager session;
     public ViewActionFragment ac;
@@ -54,6 +65,7 @@ public class Main2Activity extends AppCompatActivity
     public HandBookFragment hb;
     public WebLotteryFragment wf;
     public StayFragment stf;
+    public String Jwt_token;
 
 
     @Override
@@ -110,16 +122,20 @@ public class Main2Activity extends AppCompatActivity
         up = new UpComingEventFragment();
         hb = new HandBookFragment();
         wf = new WebLotteryFragment();
+        stf = new StayFragment();
 
 
         fm = getFragmentManager();
 
         FragmentTransaction ft = fm.beginTransaction ();
-        ft.add(R.id.constraintLayout, hm, "tag1");
+        ft.add(R.id.constraintLayout, stf, "tag1");
         ft.addToBackStack ("myFrag1");
         ft.commit ();
 
     }
+
+
+
 
     @Override
     public void onBackPressed() {
@@ -237,5 +253,98 @@ public class Main2Activity extends AppCompatActivity
 
     protected void onResume() {
         super.onResume();
+        //SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = this.getSharedPreferences("AndroidHivePref",Context.MODE_PRIVATE);
+
+        SessionManager session = new SessionManager(this);
+
+        session.checkLogin();
+
+        // get user data from session
+        HashMap<String, String> user = session.getUserDetails();
+
+        // name
+        name = user.get(SessionManager.KEY_NAME);
+
+        // id
+        id = user.get(SessionManager.KEY_ID);
+
+
+        // token
+        Jwt_token = user.get(SessionManager.JWT_Token);
+
+
+
+
+        String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        String currentDate = sdf.format(new Date());
+        if (sharedPref.getString("LAST_LAUNCH_DATE","nodate").contains(currentDate)){
+            // Date matches. User has already Launched the app once today. So do nothing.
+            Log.i("same date", currentDate);
+        }
+        else
+        {
+            // Display dialog text here......
+            // Do all other actions for first time launch in the day...
+            Log.i("resume started 1st time", currentDate);
+            showDialog();
+
+            // Set the last Launched date to today.
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putString("LAST_LAUNCH_DATE", currentDate);
+            editor.commit();
+        }
+
+
+
+
+    }
+
+
+    private void showDialog() {
+        new AppRatingDialog.Builder()
+                .setPositiveButtonText("Submit")
+                .setNegativeButtonText("Cancel")
+                .setNeutralButtonText("Later")
+                //.setNoteDescriptions(Arrays.asList("Very Bad", "Not good", "Quite ok", "Very Good", "Excellent !!!"))
+                .setNumberOfStars(6)
+
+                .setDefaultRating(0)
+                .setTitle("How are you feeling?")
+
+                .setStarColor(R.color.starColor)
+                .setNoteDescriptionTextColor(R.color.noteDescriptionTextColor)
+                .setTitleTextColor(R.color.titleTextColor)
+                .setDescriptionTextColor(R.color.contentTextColor)
+                .setHint("Please write your comment here ...")
+                .setHintTextColor(R.color.hintTextColor)
+                .setCommentTextColor(R.color.commentTextColor)
+                .setCommentBackgroundColor(R.color.commentBackgroundColor)
+                .setWindowAnimation(R.style.MyDialogFadeAnimation)
+                .create(Main2Activity.this)
+                .show();
+    }
+
+    @Override
+    public void onPositiveButtonClicked(int i, String s) {
+
+        Log.i("rating", String.valueOf(i));
+
+        Survey survey = new Survey(i,s,Jwt_token);
+        survey.submitSurvey(this);
+
+
+    }
+
+    @Override
+    public void onNegativeButtonClicked() {
+
+    }
+
+    @Override
+    public void onNeutralButtonClicked() {
+
     }
 }
