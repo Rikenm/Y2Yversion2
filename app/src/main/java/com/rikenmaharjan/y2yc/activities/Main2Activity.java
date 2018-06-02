@@ -311,7 +311,7 @@ public class Main2Activity extends AppCompatActivity
                 //.setNoteDescriptions(Arrays.asList("Very Bad", "Not good", "Quite ok", "Very Good", "Excellent !!!"))
                 .setNumberOfStars(6)
 
-                .setDefaultRating(0)
+                .setDefaultRating(1)
                 .setTitle("How are you feeling?")
 
                 .setStarColor(R.color.starColor)
