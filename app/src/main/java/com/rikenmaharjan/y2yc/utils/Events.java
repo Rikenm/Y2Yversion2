@@ -12,13 +12,21 @@ public class Events {
     String ID;
     String description;
     Boolean isRSVP;
+    String date;
 
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
 
     public Events(){
 
     }
 
-    public Events(String title, String location, String time,String ID,String description, Boolean RSVP){
+    public Events(String title, String location, String time,String ID,String description, Boolean RSVP,String date){
 
         this.location = location;
         this.time = time;
@@ -26,6 +34,7 @@ public class Events {
         this.ID = ID;
         this.description = description;
         this.isRSVP = RSVP;
+        this.date = date;
 
 
     }

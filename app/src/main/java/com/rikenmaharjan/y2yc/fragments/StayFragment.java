@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -54,6 +55,8 @@ public class StayFragment extends BaseFragment {
     private String id;
     private String name;
     private String Jwt_Token;
+
+    private ProgressBar spinner;
 
     public StayFragment() {
         // Required empty public constructor
@@ -106,22 +109,30 @@ public class StayFragment extends BaseFragment {
 
         // data here
 
+        data = new ArrayList<>();
+
+
+
+
+
+
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View v =  inflater.inflate(R.layout.fragment_stay, container, false);
+        myRecycleView = (RecyclerView) v.findViewById(R.id.rc_stay);
+
+        spinner = (ProgressBar)  v.findViewById(R.id.progressBarStay);
+
+        data.clear();
+
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         String url = "https://y2y.herokuapp.com/detailuser/";
 
-
-        data = new ArrayList<>();
-
-        // dummy data
-//        data.add(new StayModel("bed","Pod A lower"));
-//        data.add(new StayModel("bed1","Pod A lower"));
-//        data.add(new StayModel("bed2","Pod A lower"));
-//        data.add(new StayModel("bed3","Pod A lower"));
-//        data.add(new StayModel("bed4","Pod A lower"));
-
-
-
-
+        spinner.setVisibility(View.VISIBLE);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -184,6 +195,8 @@ public class StayFragment extends BaseFragment {
                     data.add(new StayModel("NIT",apiResult.getString("NIT")));
 
                     homeRecyclerAdapter.notifyDataSetChanged();
+
+                    spinner.setVisibility(View.GONE);
                 }
                 catch (JSONException e) {
                     e.printStackTrace();
@@ -194,6 +207,7 @@ public class StayFragment extends BaseFragment {
             @Override
             public void onErrorResponse(VolleyError error){
                 Log.i("request failed", "failed");
+                spinner.setVisibility(View.GONE);
             }
         }){
 
@@ -213,21 +227,8 @@ public class StayFragment extends BaseFragment {
 
         };
 
-
-
         queue.add(stringRequest);
 
-
-
-
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View v =  inflater.inflate(R.layout.fragment_stay, container, false);
-        myRecycleView = (RecyclerView) v.findViewById(R.id.rc_stay);
         homeRecyclerAdapter = new HomeRecyclerAdapter(container.getContext(),data);
         myRecycleView.setLayoutManager(new LinearLayoutManager(getActivity()));
         myRecycleView.setAdapter(homeRecyclerAdapter);

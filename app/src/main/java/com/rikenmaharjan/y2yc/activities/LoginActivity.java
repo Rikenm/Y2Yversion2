@@ -28,9 +28,6 @@ public class LoginActivity extends BaseFragmentActivity {
 
 
 
-
-
-
     }
 
     @Override

@@ -51,11 +51,28 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     String id;
     String name;
     String Jwt_Token = new String();
+    String []array_date;
 
     public RecyclerViewAdapter(Context context, List<Events> lstEvents) {
 
         this.data = lstEvents;
         this.nContext = context;
+        array_date = new String[13];
+
+        array_date[1] = "JAN";
+        array_date[2] = "FEB";
+        array_date[3] = "MAR";
+        array_date[4] = "APR";
+        array_date[5] = "MAY";
+        array_date[6] = "JUN";
+        array_date[7] = "JUL";
+        array_date[8] = "AUG";
+        array_date[9] = "SEP";
+        array_date[10] = "OCT";
+        array_date[11] = "NOV";
+        array_date[12] = "DEC";
+        array_date[0] = "JAN";
+
 
     }
 
@@ -125,8 +142,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 Button dialog_btn_rsvp = (Button) eventDialog.findViewById(R.id.btn_rsvp);
                 Button dialog_btn_cancel = (Button) eventDialog.findViewById(R.id.btn_cancel);
                 TextView tv_description = (TextView) eventDialog.findViewById(R.id.tv_description);
+                TextView tv_title = (TextView) eventDialog.findViewById(R.id.txt_event);
 
                 tv_description.setText((CharSequence) data.get(vHolder.getAdapterPosition()).getDescription());
+
+                // CHECK
+                tv_title.setText((CharSequence) data.get(vHolder.getAdapterPosition()).getTitle());
                 eventDialog.show();
 
                 //////
@@ -172,8 +193,19 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onBindViewHolder(MyViewHolder holder, final int position) {
 
         holder.tv_location.setText(data.get(position).getLocation());
+
         holder.tv_time.setText(data.get(position).getTime());
+
         holder.tv_title.setText(data.get(position).getTitle());
+
+
+        // month and date
+        String date = data.get(position).getDate();
+        String [] arr = date.split("-");
+        String month = array_date[ Integer.parseInt(arr[0])];
+        holder.tv_month.setText(month);
+        holder.tv_day.setText(arr[1]);
+
 
         // particular cells
 
@@ -241,6 +273,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         private TextView tv_time;
         private CheckBox cb_rsvp;
         private LinearLayout event_layout;
+        private TextView tv_day;
+        private TextView tv_month;
 
 
         public MyViewHolder(View itemView) {
@@ -251,6 +285,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             tv_time = (TextView) itemView.findViewById(R.id.time);
             cb_rsvp = (CheckBox) itemView.findViewById(R.id.cb);
             event_layout = (LinearLayout) itemView.findViewById(R.id.ll_event_cell);
+
+            tv_day = (TextView) itemView.findViewById(R.id.tv_day);
+            tv_month = (TextView) itemView.findViewById(R.id.tv_month);
 
         }
 
@@ -343,7 +380,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
             }
         };
-
 
         requestQueue.add(stringRequest);
 
