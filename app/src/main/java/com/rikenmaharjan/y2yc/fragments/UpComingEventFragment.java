@@ -259,7 +259,7 @@ public class UpComingEventFragment extends Fragment {
 
                                 String ID = event.getString("ID");
                                 boolean rsvp = event.getBoolean("isRsvp'd");
-                                String description = event.getString("Description");
+                                //String description = event.getString("Description");
 
                                 JSONObject startTimeJson = event.getJSONObject("startTime");
                                 String startTime = startTimeJson.getString("time");
@@ -271,7 +271,7 @@ public class UpComingEventFragment extends Fragment {
 
 
                                 // change time
-                                lstEvents.add(new Events(eventName,Location,startTime+"-"+endTime,ID,description,rsvp,date));
+                                lstEvents.add(new Events(eventName,Location,startTime+"-"+endTime,ID,"N/A",rsvp,date));
                                 // works
 
                                 recyclerViewAdapter.notifyDataSetChanged();

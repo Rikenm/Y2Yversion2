@@ -142,8 +142,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 Button dialog_btn_rsvp = (Button) eventDialog.findViewById(R.id.btn_rsvp);
                 Button dialog_btn_cancel = (Button) eventDialog.findViewById(R.id.btn_cancel);
                 TextView tv_description = (TextView) eventDialog.findViewById(R.id.tv_description);
+                TextView tv_title = (TextView) eventDialog.findViewById(R.id.txt_event);
 
                 tv_description.setText((CharSequence) data.get(vHolder.getAdapterPosition()).getDescription());
+
+                // CHECK
+                tv_title.setText((CharSequence) data.get(vHolder.getAdapterPosition()).getTitle());
                 eventDialog.show();
 
                 //////
