@@ -21,14 +21,14 @@
             android:layout_weight="10"
             android:id="@+id/txt_dialog_title"
             android:text="Title"
-            android:textSize="12sp"
+            android:textSize="15sp"
             />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="4"
-            android:paddingRight="16dp"
+            android:paddingRight="8dp"
             android:gravity="right"
             android:id="@+id/txt_dialog_date"
             android:text="Date"

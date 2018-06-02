@@ -193,11 +193,14 @@ public class StayFragment extends BaseFragment {
                     data.add(new StayModel("Locker Combination",apiResult.getString("Locker")));
                     data.add(new StayModel("NIT",apiResult.getString("NIT")));
 
-
+////////////
                     // warning
                     int majorWarning = apiResult.getInt("Major_warning");
                     int minorWarning = apiResult.getInt("Minor_warning");
+
+                    // TODO:- REMOVE HARDCODE SUSPENSION WARNING
                     int suspensionWarning = 0;
+                    //////
                     //int suspensionWarning = apiResult.getInt("Suspension_warning");
 
                     JSONArray warningDetail = apiResult.getJSONArray("Warnings");

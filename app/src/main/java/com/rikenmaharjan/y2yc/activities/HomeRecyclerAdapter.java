@@ -135,6 +135,7 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
             final List<List<DateAndTitle>> lt = listType( );
 
             Log.i("lt",lt.get(0).size()+" "+lt.get(1).size()+""+lt.get(2).size());
+
             v = LayoutInflater.from(nContext).inflate(R.layout.warning_cell, parent, false);
             final MyViewHolder vHolder = new MyViewHolder(v);
 
@@ -167,9 +168,18 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
                             Log.i("homeAdapter","minor");
                             warningDialog.show();
 
-                            // set adapter here
-                            DialogRecycleViewAdapter rd = new DialogRecycleViewAdapter(nContext,lt.get(0));
-                            rv.setAdapter(rd);
+                            if(lt.get(0).size() > 0) {
+                                // set adapter here
+                                DialogRecycleViewAdapter rd = new DialogRecycleViewAdapter(nContext, lt.get(0));
+                                rv.setAdapter(rd);
+                            }else{
+
+                                List<DateAndTitle> lt = new ArrayList<DateAndTitle> ();
+                                DialogRecycleViewAdapter rd = new DialogRecycleViewAdapter(nContext, lt);
+                                rv.setAdapter(rd);
+
+                            }
+
 
                         }
                     }
@@ -202,8 +212,15 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
                             );
 
                             // set adapter here
-                            DialogRecycleViewAdapter rd = new DialogRecycleViewAdapter(nContext,lt.get(1));
-                            rv.setAdapter(rd);
+                            if(lt.get(1).size() > 0) {
+                                DialogRecycleViewAdapter rd = new DialogRecycleViewAdapter(nContext, lt.get(1));
+                                rv.setAdapter(rd);
+                            }
+                            else{
+                                List<DateAndTitle> lt = new ArrayList<DateAndTitle> ();
+                                DialogRecycleViewAdapter rd = new DialogRecycleViewAdapter(nContext, lt);
+                                rv.setAdapter(rd);
+                            }
                         }
                     }
             );
@@ -233,8 +250,15 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
                             );
 
                             // set adapter here
-                            DialogRecycleViewAdapter rd = new DialogRecycleViewAdapter(nContext,lt.get(2));
-                            rv.setAdapter(rd);
+                            if (lt.get(2).size() > 0) {
+                                DialogRecycleViewAdapter rd = new DialogRecycleViewAdapter(nContext, lt.get(2));
+                                rv.setAdapter(rd);
+                            }
+                            else{
+                                List<DateAndTitle> lt = new ArrayList<DateAndTitle> ();
+                                DialogRecycleViewAdapter rd = new DialogRecycleViewAdapter(nContext, lt);
+                                rv.setAdapter(rd);
+                            }
 
                         }
                     }
@@ -255,8 +279,6 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
-
-
         if (position !=0) {
             holder.tv_subtitle.setText(data.get(position).getSubtitle());
             holder.tv_title.setText(data.get(position).getTitle());
@@ -266,13 +288,15 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
         }
         else{
 
-            String minorNum = conversion((warningData.get(position).getMinorWarning()));
-            String majorNum = conversion((warningData.get(position).getMajorWarning()));
-            String suspNum = conversion((warningData.get(position).getSuspensionWarning()));
+            if (warningData.size() > 0 ) {
+                String minorNum = conversion((warningData.get(position).getMinorWarning()));
+                String majorNum = conversion((warningData.get(position).getMajorWarning()));
+                String suspNum = conversion((warningData.get(position).getSuspensionWarning()));
 
-            holder.tv_warning_minor.setText(minorNum);
-            holder.tv_warning_major.setText(majorNum);
-            holder.tv_warning_susp.setText(suspNum);
+                holder.tv_warning_minor.setText(minorNum);
+                holder.tv_warning_major.setText(majorNum);
+                holder.tv_warning_susp.setText(suspNum);
+            }
 
         }
 

@@ -1,6 +1,7 @@
 package com.rikenmaharjan.y2yc.fragments;
 
 import android.content.Context;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -13,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -57,6 +59,7 @@ public class UpComingEventFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     RecyclerViewAdapter recyclerViewAdapter;
+    int[] myImageList;
 
     // custom variable
     View v;
@@ -64,6 +67,7 @@ public class UpComingEventFragment extends Fragment {
     private List<Events> lstEvents;
     private Context context;
     private ProgressBar spinner;
+    private ImageView imgView;
 
 
     public SessionManager session;
@@ -119,6 +123,7 @@ public class UpComingEventFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        myImageList = new int[]{R.drawable.noevent};
 
         // dummy data for the recycleView
         lstEvents = new ArrayList<>();
@@ -222,6 +227,7 @@ public class UpComingEventFragment extends Fragment {
         newRecycleView = (RecyclerView) v.findViewById(R.id.events_recycleView);
         Context context = container.getContext();
         spinner = (ProgressBar)  v.findViewById(R.id.progressBar);
+        imgView = (ImageView) v.findViewById(R.id.img_noevent);
 
 
 
@@ -234,6 +240,7 @@ public class UpComingEventFragment extends Fragment {
         RequestQueue queue = Volley.newRequestQueue(getActivity());
 
         spinner.setVisibility(View.VISIBLE);
+        imgView.setVisibility(View.GONE);
         // change the url
         String url ="https://y2y.herokuapp.com/events";
 
@@ -277,10 +284,20 @@ public class UpComingEventFragment extends Fragment {
                                 recyclerViewAdapter.notifyDataSetChanged();
                             }
 
-
-
                             // hide there progress bar
                             spinner.setVisibility(View.GONE);
+
+                            // element in events
+                            if (jsonArray.length() < 1){
+                                // add image of no Events
+                                imgView.setVisibility(View.VISIBLE);
+                                imgView.setImageResource(myImageList[0]);
+
+                            }
+
+
+
+
 
                         }catch(JSONException e){
 
