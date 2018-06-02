@@ -16,6 +16,7 @@
 
 <FrameLayout
     android:layout_width="match_parent"
+    android:layout_centerVertical="true"
     android:layout_height="wrap_content">
 
 
@@ -42,7 +43,7 @@
 
 
 
-    android:layout_height="492dp"
+    android:layout_height="475dp"
     android:layout_width="match_parent"
     card_view:cardCornerRadius="3dp"
     android:layout_weight="7.3"
@@ -59,6 +60,16 @@
             />
 
 
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+
+            android:src = "@drawable/inversecircle"
+
+            android:layout_gravity="center_horizontal|bottom"
+            />
+
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -67,6 +78,20 @@
 
             android:background="#EFEFEF"
             android:id="@+id/line"
+            android:orientation="horizontal">
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_gravity = "bottom"
+            android:layout_marginBottom="70dp"
+
+
+            android:background="#EFEFEF"
+            android:id="@+id/line2"
             android:orientation="horizontal">
 
 
@@ -84,6 +109,7 @@
         <LinearLayout
         android:layout_height="match_parent"
         android:layout_width="match_parent"
+
         android:padding="30dp"
 
         android:orientation="vertical">
@@ -193,40 +219,12 @@
 
 
 
+
+
     </LinearLayout>
 
 
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="20dp"
-
-            android:src = "@drawable/barcode"
-
-            android:layout_gravity="center_horizontal|bottom"
-            android:layout_marginBottom="70dp"
-
-
-
-            />
-
-
-
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_gravity = "bottom"
-            android:layout_marginBottom="50dp"
-
-
-            android:background="#EFEFEF"
-            android:id="@+id/line2"
-            android:orientation="horizontal">
-
-
-        </LinearLayout>
 
         <ProgressBar
         android:id="@+id/loadingPanel"
