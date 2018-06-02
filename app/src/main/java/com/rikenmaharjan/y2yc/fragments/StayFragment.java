@@ -227,12 +227,7 @@ public class StayFragment extends BaseFragment {
 
         };
 
-
-
         queue.add(stringRequest);
-
-
-
 
         homeRecyclerAdapter = new HomeRecyclerAdapter(container.getContext(),data);
         myRecycleView.setLayoutManager(new LinearLayoutManager(getActivity()));
