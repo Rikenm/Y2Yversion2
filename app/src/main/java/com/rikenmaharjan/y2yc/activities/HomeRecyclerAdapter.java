@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.provider.ContactsContract;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,6 +23,7 @@ import com.rikenmaharjan.y2yc.utils.Events;
 import com.rikenmaharjan.y2yc.utils.StayModel;
 import com.rikenmaharjan.y2yc.utils.WarningModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -58,6 +60,55 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
         colors[3] = "#F4D938";
         colors[0] = "#13A89D";
         colors[4] = "#FF7C3B";
+
+
+    }
+
+    // new type
+    public class DateAndTitle{
+        public String title;
+        public String date;
+
+        public DateAndTitle(String title, String date) {
+            this.title = title;
+            this.date = date;
+        }
+    }
+
+    public List<List<DateAndTitle>> listType( ){
+
+        List <DateAndTitle>major = new ArrayList<DateAndTitle>();
+        List <DateAndTitle>minor = new ArrayList<DateAndTitle>();
+        List <DateAndTitle>sus = new ArrayList<DateAndTitle>();
+
+        List<List<DateAndTitle>> lt = new ArrayList<List<DateAndTitle>> ();
+
+        for(WarningModel value :warningData){
+
+            String type = value.getWarningType();
+            String title = value.getWarningDescription();
+            String date = value.getWarningDate();
+
+            Log.i(title+" "+type,"Check");
+
+            if (type.equals("Major Warning")){
+                DateAndTitle temp = new DateAndTitle(title,date);
+                major.add(temp);
+            }
+            else if(type.equals("Minor Warning")){
+                DateAndTitle temp = new DateAndTitle(title,date);
+                minor.add(temp);
+            }
+            else if(type.equals("Suspension")){
+                DateAndTitle temp = new DateAndTitle(title,date);
+                sus.add(temp);
+            }
+
+        }
+        lt.add(minor);
+        lt.add(major);
+        lt.add(sus);
+        return lt;
     }
 
     // returns postion for onCreateViewHolder
@@ -72,50 +123,18 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
 
         View v;
 
+
         ///////
         if (viewType !=0) {
             v = LayoutInflater.from(nContext).inflate(R.layout.yourstay_cell, parent, false);
             final MyViewHolder vHolder = new MyViewHolder(v);
-
-
-            warningDialog = new Dialog(nContext);
-            warningDialog.setContentView(R.layout.dialog_warning);
-
-
-            // ADAPTER HERE
-//            vHolder.ll_yourstay.setOnClickListener(
-//                    new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View view) {
-//
-//                            Button btn_warning_cancel = (Button) warningDialog.findViewById(R.id.btn_warning_cancel);
-//                            // set data here
-//
-//
-//                            int position = vHolder.getAdapterPosition();
-//                            if (position == 3) {
-//
-//
-//                                warningDialog.show();
-//                                btn_warning_cancel.setOnClickListener(
-//
-//                                        new View.OnClickListener() {
-//                                            @Override
-//                                            public void onClick(View view) {
-//                                                warningDialog.dismiss();
-//                                            }
-//                                        }
-//
-//                                );
-//
-//                            }
-//
-//                        }
-//                    }
-//            );
             return vHolder;
         }
         else {
+
+            final List<List<DateAndTitle>> lt = listType( );
+
+            Log.i("lt",lt.get(0).size()+" "+lt.get(1).size()+""+lt.get(2).size());
             v = LayoutInflater.from(nContext).inflate(R.layout.warning_cell, parent, false);
             final MyViewHolder vHolder = new MyViewHolder(v);
 
@@ -129,7 +148,28 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
                         @Override
                         public void onClick(View view) {
 
+                            RecyclerView rv = (RecyclerView)  warningDialog.findViewById(R.id.rv_warning);
+                            //data
+                            rv.setLayoutManager(new LinearLayoutManager(nContext));
+
+                            Button btn_warning_cancel = (Button) warningDialog.findViewById(R.id.btn_warning_cancel);
+
+                            btn_warning_cancel.setOnClickListener(
+                                    new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+
+                                            warningDialog.dismiss();
+                                        }
+                                    }
+                            );
+
                             Log.i("homeAdapter","minor");
+                            warningDialog.show();
+
+                            // set adapter here
+                            DialogRecycleViewAdapter rd = new DialogRecycleViewAdapter(nContext,lt.get(0));
+                            rv.setAdapter(rd);
 
                         }
                     }
@@ -140,9 +180,30 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                            RecyclerView rv = (RecyclerView)  warningDialog.findViewById(R.id.rv_warning);
 
+                            //data
+                            rv.setLayoutManager(new LinearLayoutManager(nContext));
 
+                            warningDialog.show();
                             Log.i("homeAdapter","major");
+
+
+                            Button btn_warning_cancel = (Button) warningDialog.findViewById(R.id.btn_warning_cancel);
+
+                            btn_warning_cancel.setOnClickListener(
+                                    new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+
+                                            warningDialog.dismiss();
+                                        }
+                                    }
+                            );
+
+                            // set adapter here
+                            DialogRecycleViewAdapter rd = new DialogRecycleViewAdapter(nContext,lt.get(1));
+                            rv.setAdapter(rd);
                         }
                     }
             );
@@ -152,8 +213,28 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                            RecyclerView rv = (RecyclerView)  warningDialog.findViewById(R.id.rv_warning);
 
+                            // data here
+                            rv.setLayoutManager(new LinearLayoutManager(nContext));
+
+                            warningDialog.show();
                             Log.i("homeAdapter","susp");
+                            Button btn_warning_cancel = (Button) warningDialog.findViewById(R.id.btn_warning_cancel);
+
+                            btn_warning_cancel.setOnClickListener(
+                                    new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+
+                                            warningDialog.dismiss();
+                                        }
+                                    }
+                            );
+
+                            // set adapter here
+                            DialogRecycleViewAdapter rd = new DialogRecycleViewAdapter(nContext,lt.get(2));
+                            rv.setAdapter(rd);
 
                         }
                     }

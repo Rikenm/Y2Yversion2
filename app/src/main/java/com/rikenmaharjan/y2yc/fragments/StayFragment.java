@@ -116,11 +116,6 @@ public class StayFragment extends BaseFragment {
         data = new ArrayList<>();
         warnings = new ArrayList<>();
 
-
-
-
-
-
     }
 
     @Override
@@ -224,8 +219,6 @@ public class StayFragment extends BaseFragment {
 
 
                     }
-
-
 
 
 
