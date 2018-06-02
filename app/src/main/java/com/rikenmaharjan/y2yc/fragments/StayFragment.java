@@ -198,10 +198,9 @@ public class StayFragment extends BaseFragment {
                     int majorWarning = apiResult.getInt("Major_warning");
                     int minorWarning = apiResult.getInt("Minor_warning");
 
-                    // TODO:- REMOVE HARDCODE SUSPENSION WARNING
-                    int suspensionWarning = 0;
+
                     //////
-                    //int suspensionWarning = apiResult.getInt("Suspension_warning");
+                    int suspensionWarning = apiResult.getInt("Suspension_warning");
 
                     JSONArray warningDetail = apiResult.getJSONArray("Warnings");
 
