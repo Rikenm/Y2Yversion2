@@ -132,7 +132,7 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
         }
         else {
 
-            final List<List<DateAndTitle>> lt = listType( );
+            final List<List<DateAndTitle>> lt = listType();
 
             Log.i("lt",lt.get(0).size()+" "+lt.get(1).size()+""+lt.get(2).size());
             v = LayoutInflater.from(nContext).inflate(R.layout.warning_cell, parent, false);
