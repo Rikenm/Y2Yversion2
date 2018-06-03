@@ -47,4 +47,8 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
+    <string name="to_do">To Do List</string>
+    <string name="title_action">Title</string>
+
+
 </resources>

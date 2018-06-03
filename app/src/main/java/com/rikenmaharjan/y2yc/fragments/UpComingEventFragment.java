@@ -1,6 +1,7 @@
 package com.rikenmaharjan.y2yc.fragments;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,11 +16,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -74,6 +77,7 @@ public class UpComingEventFragment extends Fragment {
     String id;
     String name;
     String Jwt_Token = new String();
+    private LinearLayout ll;
 
 
 
@@ -228,6 +232,7 @@ public class UpComingEventFragment extends Fragment {
         Context context = container.getContext();
         spinner = (ProgressBar)  v.findViewById(R.id.progressBar);
         imgView = (ImageView) v.findViewById(R.id.img_noevent);
+        ll = (LinearLayout)  v.findViewById(R.id.ll_background);
 
 
 
@@ -273,7 +278,7 @@ public class UpComingEventFragment extends Fragment {
                                 String date = startTimeJson.getString("date");
 
                                 JSONObject endTimeJson = event.getJSONObject("EndTime");
-                                String endTime = startTimeJson.getString("time");
+                                String endTime = endTimeJson.getString("time");
 
 
 
@@ -295,14 +300,15 @@ public class UpComingEventFragment extends Fragment {
 
                             }
 
-
-
-
-
                         }catch(JSONException e){
 
                             // hide there progress bar
                             Log.i("Error", String.valueOf(e));
+                            spinner.setVisibility(View.GONE);
+                            imgView.setVisibility(View.VISIBLE);
+                            ll.setBackgroundColor(Color.parseColor("#f7f7f7"));
+                            imgView.setImageResource(myImageList[0]);
+
                         }
 
                     }
@@ -311,6 +317,9 @@ public class UpComingEventFragment extends Fragment {
             public void onErrorResponse(VolleyError error) {
                 Log.e("Volley", ""+error);
                 spinner.setVisibility(View.GONE);
+                imgView.setVisibility(View.VISIBLE);
+                ll.setBackgroundColor(Color.WHITE);
+                imgView.setImageResource(R.drawable.error);
 
             }
         }){
@@ -329,6 +338,7 @@ public class UpComingEventFragment extends Fragment {
                 return headers;
             }
         };
+
 
         queue.add(jsonRequest);
 

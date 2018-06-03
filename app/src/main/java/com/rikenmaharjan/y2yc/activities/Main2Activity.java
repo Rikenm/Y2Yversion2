@@ -28,6 +28,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
 import com.rikenmaharjan.y2yc.R;
+import com.rikenmaharjan.y2yc.fragments.ActionFragment;
 import com.rikenmaharjan.y2yc.fragments.FeedBackSubmitFragment;
 import com.rikenmaharjan.y2yc.fragments.HandBookFragment;
 import com.rikenmaharjan.y2yc.fragments.HomeFragment;
@@ -60,6 +61,7 @@ public class Main2Activity extends AppCompatActivity
     public String name,id;
     public String sender;
     public SessionManager session;
+    public ActionFragment af;
     public ViewActionFragment ac;
     public UpComingEventFragment up;
     public HandBookFragment hb;
@@ -123,6 +125,7 @@ public class Main2Activity extends AppCompatActivity
         hb = new HandBookFragment();
         wf = new WebLotteryFragment();
         stf = new StayFragment();
+        af = new ActionFragment();
 
 
         fm = getFragmentManager();
@@ -204,10 +207,10 @@ public class Main2Activity extends AppCompatActivity
 
         // This will render the action item page
         else if (id == R.id.nav_action) {
-            if (ac == null)
-                ac = new ViewActionFragment();
+            if (af == null)
+                af = new ActionFragment();
             FragmentTransaction ft = fm.beginTransaction ();  //Create a reference to a fragment transaction.
-            ft.replace(R.id.constraintLayout, ac);
+            ft.replace(R.id.constraintLayout, af);
             ft.addToBackStack ("myFrag2");  //why do we do this?
             ft.commit();
         }

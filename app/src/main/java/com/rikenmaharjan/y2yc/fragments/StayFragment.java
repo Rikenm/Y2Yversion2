@@ -1,6 +1,7 @@
 package com.rikenmaharjan.y2yc.fragments;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -10,9 +11,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -54,6 +57,7 @@ public class StayFragment extends BaseFragment {
     private List<WarningModel> warnings;
     HomeRecyclerAdapter homeRecyclerAdapter;
     HomeRecyclerAdapter homeRecyclerAdapter2;
+    private ImageView errorImage;
 
 
     private String id;
@@ -124,8 +128,8 @@ public class StayFragment extends BaseFragment {
         // Inflate the layout for this fragment
         View v =  inflater.inflate(R.layout.fragment_stay, container, false);
         myRecycleView = (RecyclerView) v.findViewById(R.id.rc_stay);
-
         spinner = (ProgressBar)  v.findViewById(R.id.progressBarStay);
+        errorImage = (ImageView) v.findViewById(R.id.iv_error);
 
         data.clear();
         warnings.clear();
@@ -134,6 +138,8 @@ public class StayFragment extends BaseFragment {
         String url = "https://y2y.herokuapp.com/detailuser/";
 
         spinner.setVisibility(View.VISIBLE);
+        errorImage.setVisibility(View.INVISIBLE);
+
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -182,12 +188,9 @@ public class StayFragment extends BaseFragment {
 //                        nit = "Yes";
 //                    txtNITR.setText(nit);
 
-                    Log.i("StayFrag","Volley loop");
-
-
-
                     // check for null value
-                    data.add(new StayModel("Warning","Nil"));
+                    data.add(new StayModel("Warning","Nil")); // this is not used
+
                     data.add(new StayModel("Bed",apiResult.getString("Bed_name")));
                     data.add(new StayModel("Last day of Stay",apiResult.getString("Last_Day_Of_Stay")));
                     data.add(new StayModel("Locker Combination",apiResult.getString("Locker")));
@@ -197,9 +200,6 @@ public class StayFragment extends BaseFragment {
                     // warning
                     int majorWarning = apiResult.getInt("Major_warning");
                     int minorWarning = apiResult.getInt("Minor_warning");
-
-
-                    //////
                     int suspensionWarning = apiResult.getInt("Suspension_warning");
 
                     JSONArray warningDetail = apiResult.getJSONArray("Warnings");
@@ -219,16 +219,17 @@ public class StayFragment extends BaseFragment {
                         String warningDescription = warning.getString("warningDescription");
                         warnings.add(new WarningModel(warningDescription,warningType,date,suspensionStart,suspensionEnd,majorWarning,minorWarning,suspensionWarning));
 
-
                     }
-
-
 
                     homeRecyclerAdapter.notifyDataSetChanged();
                     spinner.setVisibility(View.GONE);
                 }
                 catch (JSONException e) {
                     e.printStackTrace();
+                    // web error
+                    errorImage.setVisibility(View.VISIBLE);
+                    errorImage.setImageResource(R.drawable.error);
+
                 }
 
             }
@@ -237,6 +238,9 @@ public class StayFragment extends BaseFragment {
             public void onErrorResponse(VolleyError error){
                 Log.i("request failed", "failed");
                 spinner.setVisibility(View.GONE);
+                errorImage.setVisibility(View.VISIBLE);
+
+                errorImage.setImageResource(R.drawable.error);
             }
         }){
 
@@ -249,7 +253,6 @@ public class StayFragment extends BaseFragment {
                 headers.put("Content-Type", "application/json");
                 headers.remove("Authorization");
                 headers.put("Authorization", auth);
-
                 return headers;
             }
 
