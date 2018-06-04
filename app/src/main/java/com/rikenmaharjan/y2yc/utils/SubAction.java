@@ -19,7 +19,6 @@ public class SubAction {
 
     // getter
 
-
     public String getTitle() {
         return title;
     }

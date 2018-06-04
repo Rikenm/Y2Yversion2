@@ -31,8 +31,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -82,7 +84,6 @@ public class ActionFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         data = new ArrayList<ActionModel>();
 
     }
@@ -99,7 +100,6 @@ public class ActionFragment extends BaseFragment {
         actionRecyclerAdapter = new ActionRecyclerAdapter(container.getContext(),data);
         aRecycleView.setLayoutManager(new LinearLayoutManager(getActivity()));
         aRecycleView.setAdapter(actionRecyclerAdapter);
-
         return v;
     }
 
@@ -108,7 +108,6 @@ public class ActionFragment extends BaseFragment {
         String url = "https://y2y.herokuapp.com/actionitems/";
 
         RequestQueue queue = Volley.newRequestQueue(getActivity());
-
         data.clear();
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
@@ -116,6 +115,7 @@ public class ActionFragment extends BaseFragment {
                 Log.i("request successful", response );
 
                 try{
+
                     JSONObject apiResult = new JSONObject(response);
                     int num_action_items;
                     int num_steps;
@@ -135,9 +135,11 @@ public class ActionFragment extends BaseFragment {
                     }
                     else {
                         JSONArray my_action_items = apiResult.getJSONArray("records");
-
                         int i = 0;
+                        ArrayList<SubAction> action = new ArrayList<SubAction>();
                         for(i = 0;i<my_action_items.length();i++){
+
+
 
                              JSONObject obj = my_action_items.getJSONObject(i);
                              String id_main = obj.getString("id");
@@ -147,22 +149,26 @@ public class ActionFragment extends BaseFragment {
                              JSONObject sub_obj= apiResult.getJSONObject(id_main);
                              int j = 0;
 
-                            ArrayList<SubAction> action = new ArrayList<SubAction>();
+                             ArrayList<Map.Entry<String,Map.Entry<Integer,Boolean>>> str = new  ArrayList<Map.Entry<String,Map.Entry<Integer,Boolean>>>();
+                             Map.Entry<String,Integer> v = new AbstractMap.SimpleEntry<>("Not Unique key2",2);
+
                              for (j = 0 ; j < numb_of_step; j++){
+
                                  String name = sub_obj.getString(""+j);
                                  Boolean isComplete = sub_obj.getBoolean("completed"+j);
                                  String id = sub_obj.getString("step_id"+j);
-
                                  SubAction subAction = new SubAction(name,id,isComplete);
                                  action.add(subAction);
 
-                             }
 
+                             }
                             ActionModel ad = new ActionModel(action,id_main,numb_of_step,title_main,false,false);
                             data.add(ad);
                             actionRecyclerAdapter.notifyDataSetChanged();
+                            Boolean flag = action.isEmpty();
 
                         }
+
 
                     }
 
@@ -191,7 +197,6 @@ public class ActionFragment extends BaseFragment {
                 headers.put("Content-Type", "application/json");
                 headers.remove("Authorization");
                 headers.put("Authorization", auth);
-
                 return headers;
             }
 
