@@ -1,6 +1,10 @@
 package com.rikenmaharjan.y2yc.activities;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.Color;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,8 +28,11 @@ import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.rikenmaharjan.y2yc.R;
+import com.rikenmaharjan.y2yc.fragments.ActionFragment;
 import com.rikenmaharjan.y2yc.utils.ActionModel;
 import com.rikenmaharjan.y2yc.utils.SessionManager;
+import com.stepstone.apprating.AppRatingDialog;
+import com.stepstone.apprating.listener.RatingDialogListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -40,7 +48,7 @@ import java.util.Map;
  * Created by bikenmaharjan on 6/3/18.
  */
 
-public class ActionRecyclerAdapter extends RecyclerView.Adapter<ActionRecyclerAdapter.MyViewHolder>{
+public class ActionRecyclerAdapter extends RecyclerView.Adapter<ActionRecyclerAdapter.MyViewHolder> {
     // global variables
     Context nContext;
     ArrayList<ActionModel> data;
@@ -48,7 +56,10 @@ public class ActionRecyclerAdapter extends RecyclerView.Adapter<ActionRecyclerAd
     String name;
     String Jwt_Token = new String();
     public SessionManager session;
+    public int globalPosition;
 
+    String comment;
+    private String m_Text = "";
 
     public ActionRecyclerAdapter(Context context,ArrayList<ActionModel> data){
         this.nContext = context;
@@ -57,7 +68,7 @@ public class ActionRecyclerAdapter extends RecyclerView.Adapter<ActionRecyclerAd
 
     // runs once
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MyViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
 
         View v;
         v = LayoutInflater.from(nContext).inflate(R.layout.action_cell, parent, false);
@@ -84,6 +95,52 @@ public class ActionRecyclerAdapter extends RecyclerView.Adapter<ActionRecyclerAd
                     }
                 }
         );
+/// good
+        vHolder.cb_complete.setOnCheckedChangeListener(
+                new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                        if (b){
+                            // open comment from there post request
+                            Log.i("cb_complete","open comment from there post request");
+                            data.get(vHolder.getAdapterPosition()).setComplete(true);
+                            id = data.get(vHolder.getAdapterPosition()).getId();
+                            globalPosition = vHolder.getAdapterPosition();
+                            showDialog(parent,"Completed",id,globalPosition);
+                        }
+                        else{
+                            data.get(vHolder.getAdapterPosition()).setComplete(false);
+                        }
+
+                    }
+                }
+        );
+
+        vHolder.cb_drop.setOnCheckedChangeListener(
+
+                new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+                        if (b) {
+                            Log.i("cb_drop", "open comment from there post request");
+                            data.get(vHolder.getAdapterPosition()).setDrop(true);
+                            id = data.get(vHolder.getAdapterPosition()).getId();
+                            globalPosition = vHolder.getAdapterPosition();
+                            showDialog(parent,"Dropped",id,globalPosition);
+
+
+                        }
+                        else{
+                            data.get(vHolder.getAdapterPosition()).setDrop(false);
+                        }
+                        notifyDataSetChanged();
+                    }
+
+                }
+        );
+//
+
         return vHolder;
 
     }
@@ -101,53 +158,7 @@ public class ActionRecyclerAdapter extends RecyclerView.Adapter<ActionRecyclerAd
         holder.cb_complete.setChecked(data.get(position).getComplete());
         holder.cb_drop.setChecked(data.get(position).getDrop());
 
-        holder.cb_complete.setOnCheckedChangeListener(
 
-                new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                        if (b){
-                            // open comment from there post request
-                            Log.i("cb_complete","open comment from there post request");
-                            data.get(holder.getAdapterPosition()).setComplete(true);
-                            id = data.get(holder.getAdapterPosition()).getId();
-
-                            post("Completed",id,"test");
-                            change(holder.getAdapterPosition());
-
-
-                        }
-                        else{
-                            data.get(holder.getAdapterPosition()).setComplete(false);
-                        }
-
-                    }
-                }
-        );
-
-        holder.cb_drop.setOnCheckedChangeListener(
-
-                new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-
-                        if (b) {
-                            Log.i("cb_drop", "open comment from there post request");
-                            data.get(holder.getAdapterPosition()).setDrop(true);
-                            id = data.get(holder.getAdapterPosition()).getId();
-                            change(holder.getAdapterPosition());
-                            post("Dropped",id,"test");
-                        }
-                        else{
-                            data.get(holder.getAdapterPosition()).setDrop(false);
-                        }
-
-                        notifyDataSetChanged();
-
-                    }
-
-                }
-        );
 
     }
 
@@ -156,6 +167,42 @@ public class ActionRecyclerAdapter extends RecyclerView.Adapter<ActionRecyclerAd
     public int getItemCount() {
         return data.size();
     }
+
+
+
+
+    private void showDialog(ViewGroup parent, final String type,final String id, final int position) {
+
+        View v;
+        v = LayoutInflater.from(nContext).inflate(R.layout.dialog_action, parent, false);
+        AlertDialog.Builder builder = new AlertDialog.Builder(nContext);
+        builder.setTitle("Add message");
+        final EditText input = (EditText) v.findViewById(R.id.input);
+        builder.setView(v);
+
+        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                m_Text = input.getText().toString();
+                //post(type,id,m_Text,position); // <--- here
+            }
+        });
+        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+                data.get(position).setComplete(false);
+                data.get(position).setDrop(false);
+                notifyDataSetChanged();
+
+            }
+        });
+
+        builder.show();
+
+    }
+    ///////
 
 
     // binding here from cell
@@ -181,7 +228,7 @@ public class ActionRecyclerAdapter extends RecyclerView.Adapter<ActionRecyclerAd
 
 
     // post
-    public void post(String flag, String actionId,String comment){
+    public void post(String flag, String actionId, String comment, final int position){
 
         session = new SessionManager(nContext);
 
@@ -216,6 +263,7 @@ public class ActionRecyclerAdapter extends RecyclerView.Adapter<ActionRecyclerAd
                 @Override
                 public void onResponse(String response) {
                     Log.i("VOLLEY", response.toString());
+                    change();
                 }
             }, new Response.ErrorListener() {
                 @Override
@@ -274,10 +322,10 @@ public class ActionRecyclerAdapter extends RecyclerView.Adapter<ActionRecyclerAd
 
     }
 
-    public void change(int position){
-        data.remove(position);
-        notifyItemRemoved(position);
-        notifyItemRangeChanged(position,data.size());
+    public void change(){
+        data.remove(globalPosition);
+        notifyItemRemoved(globalPosition);
+        notifyItemRangeChanged(globalPosition,data.size());
         notifyDataSetChanged();
     }
 

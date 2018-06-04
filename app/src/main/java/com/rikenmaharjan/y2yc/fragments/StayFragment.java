@@ -1,5 +1,6 @@
 package com.rikenmaharjan.y2yc.fragments;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -58,6 +59,9 @@ public class StayFragment extends BaseFragment {
     HomeRecyclerAdapter homeRecyclerAdapter;
     HomeRecyclerAdapter homeRecyclerAdapter2;
     private ImageView errorImage;
+
+    Dialog mainActionDialog;
+    Dialog subActionDialog;
 
 
     private String id;

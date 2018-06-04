@@ -160,7 +160,6 @@ public class ActionFragment extends BaseFragment {
 
                             ActionModel ad = new ActionModel(action,id_main,numb_of_step,title_main,false,false);
                             data.add(ad);
-
                             actionRecyclerAdapter.notifyDataSetChanged();
 
                         }
