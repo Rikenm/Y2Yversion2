@@ -116,6 +116,7 @@ public class ViewLotteryResultFragment extends Fragment {
             @Override
             public void onErrorResponse(VolleyError error){
                 Log.i("request failed", "failed");
+                view.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
                 Toast.makeText(getActivity(), "There is a problem, Please check your internet", Toast.LENGTH_LONG).show();
             }
         }){
