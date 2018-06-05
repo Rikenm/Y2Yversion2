@@ -1,15 +1,18 @@
 package com.rikenmaharjan.y2yc.activities;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -31,6 +34,7 @@ import com.rikenmaharjan.y2yc.R;
 import com.rikenmaharjan.y2yc.fragments.ActionFragment;
 import com.rikenmaharjan.y2yc.utils.ActionModel;
 import com.rikenmaharjan.y2yc.utils.SessionManager;
+import com.rikenmaharjan.y2yc.utils.SubAction;
 import com.stepstone.apprating.AppRatingDialog;
 import com.stepstone.apprating.listener.RatingDialogListener;
 
@@ -57,6 +61,9 @@ public class ActionRecyclerAdapter extends RecyclerView.Adapter<ActionRecyclerAd
     String Jwt_Token = new String();
     public SessionManager session;
     public int globalPosition;
+    Dialog subAction;
+
+    SubActionRAdapter sb;
 
     String comment;
     private String m_Text = "";
@@ -68,29 +75,68 @@ public class ActionRecyclerAdapter extends RecyclerView.Adapter<ActionRecyclerAd
 
     // runs once
     @Override
-    public MyViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
+    public MyViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
 
         View v;
         v = LayoutInflater.from(nContext).inflate(R.layout.action_cell, parent, false);
         final MyViewHolder vHolder = new MyViewHolder(v);
 
+        //TODO: show new dialog box that has recycle view
+
+
+        subAction = new Dialog(nContext);
+        subAction.setContentView(R.layout.dialog_subaction);
+
         vHolder.ll_action.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Log.i("ll_action","open dialog with list of sub list");
-                        // check if
-//
-//                        if (data.get(vHolder.getAdapterPosition()).getComplete()){
-//
-//                        }
-//                        else if (data.get(vHolder.getAdapterPosition()).getDrop()){
-//
-//                        }
-//                        else {
-//                            // do nothing
-//                        }
 
+
+                        //
+                        Log.i("ll_action","open dialog with list of sub list");
+                        RecyclerView rv = (RecyclerView) subAction.findViewById(R.id.rv_subAction);
+                        rv.setLayoutManager(new LinearLayoutManager(nContext));
+
+                        // find views from subActon
+                        Button btn_ok = (Button) subAction.findViewById(R.id.btn_subAction_ok);
+                        Button btn_cancel = (Button) subAction.findViewById(R.id.btn_subAction_cancel);
+                        //when ok -- change and post to the server
+
+
+
+                        // clear
+
+                        btn_ok.setOnClickListener(
+                                new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        // get values and post
+                                    }
+                                }
+                        );
+
+                        subAction.setCancelable(false);
+                        subAction.show();
+
+
+                        // when cancel -- don't change anything
+                        btn_cancel.setOnClickListener(
+                                new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        subAction.dismiss();
+                                    }
+                                }
+                        );
+                        // set adapter here // data -> data.get(viewType).getSubAction();
+                        int value = vHolder.getAdapterPosition();
+                        //ArrayList<SubAction> value1= data.get(vHolder.getAdapterPosition()).getSubAction();
+                        SubAction []sb1 = data.get(vHolder.getAdapterPosition()).getSubAction();
+                        sb = new SubActionRAdapter(nContext,data.get(vHolder.getAdapterPosition()).getSubAction());
+                        rv.setAdapter(sb);
+
+                        notifyDataSetChanged();
 
                     }
                 }
@@ -132,9 +178,9 @@ public class ActionRecyclerAdapter extends RecyclerView.Adapter<ActionRecyclerAd
 
                         }
                         else{
+                            // error here
                             data.get(vHolder.getAdapterPosition()).setDrop(false);
                         }
-                        notifyDataSetChanged();
                     }
 
                 }
@@ -199,6 +245,7 @@ public class ActionRecyclerAdapter extends RecyclerView.Adapter<ActionRecyclerAd
             }
         });
 
+       builder.setCancelable(false);
         builder.show();
 
     }
@@ -322,11 +369,26 @@ public class ActionRecyclerAdapter extends RecyclerView.Adapter<ActionRecyclerAd
 
     }
 
+    // post for subaction
+    public void postSubAction(String actionId,ArrayList<String> needTochangeType,String comment){
+
+
+
+    }
+
     public void change(){
         data.remove(globalPosition);
         notifyItemRemoved(globalPosition);
         notifyItemRangeChanged(globalPosition,data.size());
         notifyDataSetChanged();
+    }
+
+
+    public void changeSubAction(){
+
+        // poation
+        //data.get(1).getSubAction().clear();
+
     }
 
 }

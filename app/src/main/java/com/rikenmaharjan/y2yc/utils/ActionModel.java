@@ -8,17 +8,17 @@ import java.util.ArrayList;
 
 public class ActionModel {
 
-    static private ArrayList<SubAction> subAction;
+    private SubAction [] subAction;
     private String id;
     private int numOfSubAction;
     private String title;
     private Boolean isComplete;
     private Boolean isDrop;
 
-    public ActionModel(){
-    }
 
-    public ActionModel(ArrayList<SubAction> subAction, String id, int numOfSubAction, String title, Boolean isComplete, Boolean isDrop) {
+
+    public ActionModel(SubAction [] subAction, String id, int numOfSubAction, String title, Boolean isComplete, Boolean isDrop) {
+
         this.subAction = subAction;
         this.id = id;
         this.numOfSubAction = numOfSubAction;
@@ -27,9 +27,22 @@ public class ActionModel {
         this.isDrop = isDrop;
     }
 
+
+    public ActionModel(ActionModel otherAction){
+
+        this.subAction = otherAction.getSubAction();
+        this.id = otherAction.getId();
+        this.numOfSubAction = otherAction.getNumOfSubAction();
+        this.title = otherAction.getTitle();
+        this.isComplete = otherAction.getComplete();
+        this.isDrop = otherAction.getDrop();
+
+
+    }
+
     //getter
 
-    public ArrayList<SubAction> getSubAction() {
+    public SubAction [] getSubAction() {
         return subAction;
     }
 
@@ -55,7 +68,7 @@ public class ActionModel {
 
     // setter
 
-    public void setSubAction(ArrayList<SubAction> subAction) {
+    public void setSubAction(SubAction []  subAction) {
         this.subAction = subAction;
     }
 
