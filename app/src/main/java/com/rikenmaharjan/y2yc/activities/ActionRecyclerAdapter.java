@@ -91,6 +91,9 @@ public class ActionRecyclerAdapter extends RecyclerView.Adapter<ActionRecyclerAd
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+
+
+                        //
                         Log.i("ll_action","open dialog with list of sub list");
                         RecyclerView rv = (RecyclerView) subAction.findViewById(R.id.rv_subAction);
                         rv.setLayoutManager(new LinearLayoutManager(nContext));
@@ -99,6 +102,7 @@ public class ActionRecyclerAdapter extends RecyclerView.Adapter<ActionRecyclerAd
                         Button btn_ok = (Button) subAction.findViewById(R.id.btn_subAction_ok);
                         Button btn_cancel = (Button) subAction.findViewById(R.id.btn_subAction_cancel);
                         //when ok -- change and post to the server
+
 
 
                         // clear
@@ -115,6 +119,7 @@ public class ActionRecyclerAdapter extends RecyclerView.Adapter<ActionRecyclerAd
                         subAction.setCancelable(false);
                         subAction.show();
 
+
                         // when cancel -- don't change anything
                         btn_cancel.setOnClickListener(
                                 new View.OnClickListener() {
@@ -126,9 +131,13 @@ public class ActionRecyclerAdapter extends RecyclerView.Adapter<ActionRecyclerAd
                         );
                         // set adapter here // data -> data.get(viewType).getSubAction();
                         int value = vHolder.getAdapterPosition();
-                        ArrayList<SubAction> value1= data.get(vHolder.getAdapterPosition()).getSubAction();
+                        //ArrayList<SubAction> value1= data.get(vHolder.getAdapterPosition()).getSubAction();
+                        SubAction []sb1 = data.get(vHolder.getAdapterPosition()).getSubAction();
                         sb = new SubActionRAdapter(nContext,data.get(vHolder.getAdapterPosition()).getSubAction());
                         rv.setAdapter(sb);
+
+                        notifyDataSetChanged();
+
                     }
                 }
         );
@@ -378,7 +387,7 @@ public class ActionRecyclerAdapter extends RecyclerView.Adapter<ActionRecyclerAd
     public void changeSubAction(){
 
         // poation
-        data.get(1).getSubAction().clear();
+        //data.get(1).getSubAction().clear();
 
     }
 

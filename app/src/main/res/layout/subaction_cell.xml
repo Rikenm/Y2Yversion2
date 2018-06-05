@@ -25,13 +25,13 @@
                 android:textSize="18sp"
                 android:paddingLeft="8dp"
                 android:textStyle="bold"
-                android:text="Title"
+                android:text="title"
                 />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
+                android:layout_weight="0"
                 android:gravity="center"
                 android:orientation="vertical">
             <CheckBox

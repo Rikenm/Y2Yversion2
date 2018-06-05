@@ -22,9 +22,9 @@ import java.util.ArrayList;
 public class SubActionRAdapter extends RecyclerView.Adapter<SubActionRAdapter.MyViewHolder> {
 
     Context nContext;
-    ArrayList<SubAction> data;
+    SubAction []  data;
 
-    public SubActionRAdapter(Context nContext, ArrayList<SubAction> data) {
+    public SubActionRAdapter(Context nContext, SubAction []  data) {
         this.nContext = nContext;
         this.data = data;
     }
@@ -51,12 +51,15 @@ public class SubActionRAdapter extends RecyclerView.Adapter<SubActionRAdapter.My
     // many time
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        holder.tv_title.setText((CharSequence) data.get(position).getTitle());
+        holder.tv_title.setText((CharSequence) data[position].getTitle());
     }
 
     @Override
     public int getItemCount() {
-        return data.size();
+        if (data != null) {
+            return data.length;
+        }
+        else return 0;
     }
 
 

@@ -12,7 +12,9 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-    <TextView
+
+
+        <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="10"
@@ -23,6 +25,9 @@
 
     </LinearLayout>
 
+<FrameLayout
+android:layout_width="match_parent"
+android:layout_height="match_parent">
     <android.support.v7.widget.RecyclerView
         android:padding="6dp"
         android:layout_width="match_parent"
@@ -30,8 +35,16 @@
         android:id="@+id/rv_action"
         >
 
-
-
     </android.support.v7.widget.RecyclerView>
+
+
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
+        android:id="@+id/pb_action"
+        android:layout_height="wrap_content">
+    </ProgressBar>
+</FrameLayout>
 
 </LinearLayout>
