@@ -10,6 +10,7 @@ public class SubAction {
     private String title;
     private String id;
     private Boolean isComplete;
+    private Integer index;
 
 
     public SubAction(String title, String id, Boolean isComplete) {
@@ -27,6 +28,9 @@ public class SubAction {
 
     }
 
+    public Integer getIndex() {
+        return index;
+    }
 
     // getter
 
@@ -54,6 +58,10 @@ public class SubAction {
 
     public void setComplete(Boolean complete) {
         isComplete = complete;
+    }
+
+    public void setIndex(Integer index) {
+        this.index = index;
     }
 }
 /////

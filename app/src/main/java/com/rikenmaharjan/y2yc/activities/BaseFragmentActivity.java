@@ -21,7 +21,7 @@ public abstract class BaseFragmentActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        getWindow().setStatusBarColor(Color.WHITE);
+        //getWindow().setStatusBarColor(Color.WHITE);
         setContentView(R.layout.activity_fragment_base);
 
         FragmentManager fragmentManager = getFragmentManager();

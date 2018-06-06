@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -91,6 +92,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
 
         eventDialog = new Dialog(nContext);
+        eventDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         eventDialog.setContentView(R.layout.dialog_eventdetail);
 
 

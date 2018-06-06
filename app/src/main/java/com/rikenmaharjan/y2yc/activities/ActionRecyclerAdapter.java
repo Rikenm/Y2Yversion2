@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -38,6 +39,7 @@ import com.rikenmaharjan.y2yc.utils.SubAction;
 import com.stepstone.apprating.AppRatingDialog;
 import com.stepstone.apprating.listener.RatingDialogListener;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -62,6 +64,7 @@ public class ActionRecyclerAdapter extends RecyclerView.Adapter<ActionRecyclerAd
     public SessionManager session;
     public int globalPosition;
     Dialog subAction;
+    RecyclerView rv;
 
     SubActionRAdapter sb;
 
@@ -85,6 +88,7 @@ public class ActionRecyclerAdapter extends RecyclerView.Adapter<ActionRecyclerAd
 
 
         subAction = new Dialog(nContext);
+        subAction.requestWindowFeature(Window.FEATURE_NO_TITLE);
         subAction.setContentView(R.layout.dialog_subaction);
 
         vHolder.ll_action.setOnClickListener(
@@ -95,7 +99,7 @@ public class ActionRecyclerAdapter extends RecyclerView.Adapter<ActionRecyclerAd
 
                         //
                         Log.i("ll_action","open dialog with list of sub list");
-                        RecyclerView rv = (RecyclerView) subAction.findViewById(R.id.rv_subAction);
+                        rv = (RecyclerView) subAction.findViewById(R.id.rv_subAction);
                         rv.setLayoutManager(new LinearLayoutManager(nContext));
 
                         // find views from subActon
@@ -112,6 +116,21 @@ public class ActionRecyclerAdapter extends RecyclerView.Adapter<ActionRecyclerAd
                                     @Override
                                     public void onClick(View view) {
                                         // get values and post
+                                        List<String> ids = ((SubActionRAdapter) rv.getAdapter()).getId1();
+                                        List<Integer> idices = ((SubActionRAdapter) rv.getAdapter()).getIndice();
+                                        if (ids.size() > 0 && idices.size()>0) {
+                                            Log.i("ar", ids + "");
+                                            // post request
+                                            // reload the main table
+                                            String mainId = data.get(vHolder.getAdapterPosition()).getId();
+                                            postSubAction(mainId,ids,"Check");
+
+
+                                        }
+                                        else{
+                                            Toast.makeText(nContext,"You didn't select anything",Toast.LENGTH_SHORT);
+                                        }
+                                        subAction.dismiss();
                                     }
                                 }
                         );
@@ -126,6 +145,17 @@ public class ActionRecyclerAdapter extends RecyclerView.Adapter<ActionRecyclerAd
                                     @Override
                                     public void onClick(View view) {
                                         subAction.dismiss();
+                                        // manual set this
+                                        // works
+                                        //List<String> ids = ((SubActionRAdapter) rv.getAdapter()).getId1();
+                                        List<Integer> idices = ((SubActionRAdapter) rv.getAdapter()).getIndice();
+
+                                        for (int i = 0; i < idices.size();i++ ) {
+                                            int index = idices.get(i);
+                                            ((SubActionRAdapter) rv.getAdapter()).data[index].setComplete(false);
+                                        }
+
+
                                     }
                                 }
                         );
@@ -135,7 +165,6 @@ public class ActionRecyclerAdapter extends RecyclerView.Adapter<ActionRecyclerAd
                         SubAction []sb1 = data.get(vHolder.getAdapterPosition()).getSubAction();
                         sb = new SubActionRAdapter(nContext,data.get(vHolder.getAdapterPosition()).getSubAction());
                         rv.setAdapter(sb);
-
                         notifyDataSetChanged();
 
                     }
@@ -231,7 +260,7 @@ public class ActionRecyclerAdapter extends RecyclerView.Adapter<ActionRecyclerAd
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
                 m_Text = input.getText().toString();
-                //post(type,id,m_Text,position); // <--- here
+                post(type,id,m_Text,position); // <--- here
             }
         });
         builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -365,13 +394,103 @@ public class ActionRecyclerAdapter extends RecyclerView.Adapter<ActionRecyclerAd
             e.printStackTrace();
         }
 
-
-
     }
 
     // post for subaction
-    public void postSubAction(String actionId,ArrayList<String> needTochangeType,String comment){
+    public void postSubAction(String mainActionId,List<String> listOfIDS,String comment){
 
+        session = new SessionManager(nContext);
+
+        session.checkLogin();
+
+        // get user data from session
+        HashMap<String, String> user = session.getUserDetails();
+
+        // Get logged in user's user name
+        name = user.get(SessionManager.KEY_NAME);
+
+        // Get loged in user's user id
+        id = user.get(SessionManager.KEY_ID);
+
+        Jwt_Token = user.get(SessionManager.JWT_Token);
+
+        //===================
+
+        try {
+            final RequestQueue requestQueue = Volley.newRequestQueue(nContext);
+
+            String [] arr_IDS = new String[listOfIDS.size()];
+            for (int i=0;i<listOfIDS.size();i++){
+                arr_IDS[i] = listOfIDS.get(i);
+            }
+
+            Log.i("main",""+mainActionId);
+            String url = "https://y2y.herokuapp.com/actionitemstep";
+            String current_action_id = mainActionId;
+            JSONObject jo = new JSONObject();
+            jo.put("size", listOfIDS.size());
+            jo.put("actionid", current_action_id);
+            jo.put("comment", comment);
+            jo.put("records",  arr_IDS);
+            final String requestBody = jo.toString();
+            Toast.makeText(nContext, "Information Saved", Toast.LENGTH_SHORT).show();
+
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    Log.i("VOLLEY", response.toString());
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.e("VOLLEY", error.toString());
+                }
+            }) {
+                @Override
+                public String getBodyContentType() {
+                    return "application/json; charset=utf-8";
+                }
+
+                @Override
+                public Map<String,String> getHeaders() throws AuthFailureError {
+                    HashMap<String,String> headers = new HashMap<>();
+
+                    String token = Jwt_Token;
+                    String auth = "bearer "+ token;
+                    headers.put("Content-Type", "application/json");
+                    headers.remove("Authorization");
+                    headers.put("Authorization", auth);
+                    return headers;
+                }
+
+                @Override
+                public byte[] getBody() throws AuthFailureError {
+                    try {
+                        return requestBody == null ? null : requestBody.getBytes("utf-8");
+                    } catch (UnsupportedEncodingException uee) {
+                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
+                        return null;
+                    }
+                }
+
+                @Override
+                protected Response<String> parseNetworkResponse(NetworkResponse response) {
+                    String responseString = "";
+                    if (response != null) {
+                        responseString = String.valueOf(response.statusCode);
+                        // can get more details such as response.headers
+                        Log.i("response", response.toString());
+                    }
+                    return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
+                }
+            };
+
+            requestQueue.add(stringRequest);
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
 
     }

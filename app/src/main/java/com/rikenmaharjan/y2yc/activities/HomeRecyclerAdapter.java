@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -138,11 +139,11 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
 
             v = LayoutInflater.from(nContext).inflate(R.layout.warning_cell, parent, false);
             final MyViewHolder vHolder = new MyViewHolder(v);
-
             warningDialog = new Dialog(nContext);
+            // HERE DIALOG for older 19 (KIT-KAT)
+            warningDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
             warningDialog.setContentView(R.layout.dialog_warning);
-
-
             vHolder.btn_minor.setOnClickListener(
 
                     new View.OnClickListener() {
@@ -292,10 +293,13 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
                 String minorNum = conversion((warningData.get(position).getMinorWarning()));
                 String majorNum = conversion((warningData.get(position).getMajorWarning()));
                 String suspNum = conversion((warningData.get(position).getSuspensionWarning()));
-
+                holder.cv_warning.setCardBackgroundColor(Color.parseColor(colors[0]));
                 holder.tv_warning_minor.setText(minorNum);
                 holder.tv_warning_major.setText(majorNum);
                 holder.tv_warning_susp.setText(suspNum);
+                holder.btn_major.setBackgroundColor(Color.parseColor("#199dd8"));
+                holder.btn_minor.setBackgroundColor(Color.parseColor("#199dd8"));
+                holder.btn_susp.setBackgroundColor(Color.parseColor("#199dd8"));
             }
 
         }
@@ -329,6 +333,7 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
         private Button btn_minor;
         private Button btn_major;
         private Button btn_susp;
+        private CardView cv_warning;
 
 
         public MyViewHolder(View itemView) {
@@ -339,6 +344,7 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
             imageView = (ImageView) itemView.findViewById(R.id.img);
             cv_stay = (CardView) itemView.findViewById(R.id.cv_stay);
             ll_yourstay = (LinearLayout) itemView.findViewById(R.id.ll_yourstay_cell);
+            cv_warning = (CardView) itemView.findViewById(R.id.cv_warning);
 
 
             // for warning cell
