@@ -23,19 +23,19 @@
 
         <item
             android:id="@+id/nav_event"
-            android:icon = "@drawable/lottery"
+            android:icon = "@drawable/event"
             android:title="@string/Event" />
 
 
         <item
             android:id="@+id/nav_handbook"
-            android:icon = "@drawable/logout"
+            android:icon = "@drawable/handbook"
             android:title="Handbook" />
 
 
         <item
             android:id="@+id/nav_weblottery"
-            android:icon = "@drawable/feedback"
+            android:icon = "@drawable/web"
             android:title="Web Lottery" />
 
 
