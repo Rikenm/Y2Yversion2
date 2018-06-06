@@ -10,9 +10,6 @@
             android:icon = "@drawable/stay"
 
 
-
-
-
             android:title="@string/Your_stay" />
 
         <item
