@@ -14,11 +14,9 @@
         android:orientation="vertical">
 
         <ImageView
-<<<<<<< HEAD
+
             android:layout_width="120dp"
-=======
-            android:layout_width="100dp"
->>>>>>> 32d7fca1b840ad8c28f3015e3703e6dcc7b3e917
+
             android:layout_height="100dp"
             android:src="@drawable/user"
             />
