@@ -156,7 +156,9 @@ public class StoryFragment extends BaseFragment {
         }, new Response.ErrorListener(){
             @Override
             public void onErrorResponse(VolleyError error){
+                view.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
                 Log.i("request failed", "failed");
+
             }
         }){
 

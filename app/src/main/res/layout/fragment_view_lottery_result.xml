@@ -17,7 +17,7 @@
 <FrameLayout
     android:layout_width="match_parent"
     android:layout_centerVertical="true"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
 
 
 
@@ -43,7 +43,7 @@
 
 
 
-    android:layout_height="475dp"
+    android:layout_height="match_parent"
     android:layout_width="match_parent"
     card_view:cardCornerRadius="3dp"
     android:layout_weight="7.3"
@@ -71,31 +71,9 @@
 
 
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_marginTop="50dp"
-
-            android:background="#EFEFEF"
-            android:id="@+id/line"
-            android:orientation="horizontal">
 
 
-        </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_gravity = "bottom"
-            android:layout_marginBottom="70dp"
-
-
-            android:background="#EFEFEF"
-            android:id="@+id/line2"
-            android:orientation="horizontal">
-
-
-        </LinearLayout>
 
 
 
@@ -110,7 +88,7 @@
         android:layout_height="match_parent"
         android:layout_width="match_parent"
 
-        android:padding="30dp"
+        android:padding="20dp"
 
         android:orientation="vertical">
 
@@ -118,37 +96,53 @@
 
 
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginTop="30dp"
 
+                android:background="#EFEFEF"
+                android:id="@+id/line"
+                android:orientation="horizontal">
+
+
+            </LinearLayout>
 
 
 
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="0.2"
             android:fontFamily="@font/roboto"
-            android:layout_marginTop = "40dp"
+
             android:text="Lottery Result"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="#76C3D7"
-            android:textSize="15sp" />
+            android:textSize="24sp" />
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="0.2"
 
-            android:layout_marginTop="30dp"
+
             android:fontFamily="@font/roboto"
             android:text="Long Term Lottery"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="#019AD7" />
+            android:textColor="#019AD7"
+
+            />
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto"
+            android:layout_height="0dp"
             android:layout_marginTop="10dp"
+            android:layout_weight="0.2"
+            android:fontFamily="@font/roboto"
+
 
 
             android:text="Date"
@@ -159,26 +153,30 @@
         <TextView
             android:id="@+id/date1"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="0.1"
             android:layout_marginTop="10dp"
+
             android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
             android:textColor="#020202" />
 
         <TextView
             android:id="@+id/longTermLottery"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="0.2"
             android:text=""
             android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="20dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginBottom="0dp"
+            android:layout_marginTop="0dp"
             android:textColor="#020202"
             android:textSize="22sp"
             android:textStyle="bold" />
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="0.2"
             android:layout_marginTop="0dp"
             android:fontFamily="@font/roboto"
             android:text="E-bed Lottery"
@@ -186,7 +184,8 @@
             android:textColor="#019AD7" />
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="0.2"
             android:fontFamily="@font/roboto"
 
             android:layout_marginTop="10dp"
@@ -198,7 +197,8 @@
         <TextView
             android:id="@+id/date2"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="0.2"
             android:layout_marginTop="10dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
             android:textColor="#020202" />
@@ -206,7 +206,8 @@
         <TextView
             android:id="@+id/eBedLottery"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="0.2"
             android:text=""
             android:layout_gravity="center_horizontal"
 
@@ -214,6 +215,20 @@
             android:textColor="#020202"
             android:textSize="22sp"
             android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_gravity = "bottom"
+                android:layout_marginBottom="70dp"
+
+
+                android:background="#EFEFEF"
+                android:id="@+id/line2"
+                android:orientation="horizontal">
+
+
+            </LinearLayout>
 
 
 
