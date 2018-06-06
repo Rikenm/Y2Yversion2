@@ -35,7 +35,8 @@ import java.net.HttpURLConnection;
 
 import java.net.URL;
 
-import javax.net.ssl.HttpsURLConnection;
+import com.androidstudy.networkmanager.Monitor;
+import com.androidstudy.networkmanager.Tovuti;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -116,7 +117,32 @@ public class LoginFragment extends BaseFragment {
 
         if (!(mUSerNameEt.getText().toString().equals(""))&&(!(mUSerPasswordEt.getText().toString().equals("")))) {
             mLoginButton.setEnabled(false);
-            new MyAsyncTaskgetNews().execute("hello", "hello", "hello");
+
+            Tovuti.from(getActivity()).monitor(new Monitor.ConnectivityListener(){
+                @Override
+                public void onConnectivityChanged(int connectionType, boolean isConnected, boolean isFast){
+                    // TODO: Handle the connection...
+
+                    Log.i("isconnected", String.valueOf(isConnected));
+
+                    if (isConnected){
+
+                        new MyAsyncTaskgetNews().execute("hello", "hello", "hello");
+
+                    }else{
+
+                        Toast.makeText(getActivity(), "No Internet Connection", Toast.LENGTH_SHORT).show();
+                        mLoginButton.setEnabled(true);
+
+                    }
+
+
+                }
+            });
+
+
+
+
         }
         else if (mUSerNameEt.getText().toString().equals("")){
             mUSerNameEt.setError("Enter your username");
@@ -315,5 +341,12 @@ public class LoginFragment extends BaseFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+    }
+
+
+    @Override
+    public void onStop(){
+        Tovuti.from(getActivity()).stop();
+        super.onStop();
     }
 }
