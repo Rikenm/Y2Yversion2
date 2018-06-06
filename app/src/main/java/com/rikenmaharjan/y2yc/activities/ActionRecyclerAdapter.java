@@ -63,6 +63,7 @@ public class ActionRecyclerAdapter extends RecyclerView.Adapter<ActionRecyclerAd
     String Jwt_Token = new String();
     public SessionManager session;
     public int globalPosition;
+    public int globalSubPosition;
     Dialog subAction;
     RecyclerView rv;
 
@@ -70,6 +71,7 @@ public class ActionRecyclerAdapter extends RecyclerView.Adapter<ActionRecyclerAd
 
     String comment;
     private String m_Text = "";
+    private String sub_Text = "";
 
     public ActionRecyclerAdapter(Context context,ArrayList<ActionModel> data){
         this.nContext = context;
@@ -123,9 +125,8 @@ public class ActionRecyclerAdapter extends RecyclerView.Adapter<ActionRecyclerAd
                                             // post request
                                             // reload the main table
                                             String mainId = data.get(vHolder.getAdapterPosition()).getId();
-                                            postSubAction(mainId,ids,"Check");
-
-
+                                            globalSubPosition = vHolder.getAdapterPosition();
+                                            showSubActionDialog(parent,mainId,ids);
                                         }
                                         else{
                                             Toast.makeText(nContext,"You didn't select anything",Toast.LENGTH_SHORT);
@@ -150,10 +151,13 @@ public class ActionRecyclerAdapter extends RecyclerView.Adapter<ActionRecyclerAd
                                         //List<String> ids = ((SubActionRAdapter) rv.getAdapter()).getId1();
                                         List<Integer> idices = ((SubActionRAdapter) rv.getAdapter()).getIndice();
 
+
                                         for (int i = 0; i < idices.size();i++ ) {
                                             int index = idices.get(i);
                                             ((SubActionRAdapter) rv.getAdapter()).data[index].setComplete(false);
+
                                         }
+
 
 
                                     }
@@ -245,7 +249,7 @@ public class ActionRecyclerAdapter extends RecyclerView.Adapter<ActionRecyclerAd
 
 
 
-
+    // 2 Dialog box
     private void showDialog(ViewGroup parent, final String type,final String id, final int position) {
 
         View v;
@@ -278,8 +282,42 @@ public class ActionRecyclerAdapter extends RecyclerView.Adapter<ActionRecyclerAd
         builder.show();
 
     }
-    ///////
+    private void showSubActionDialog(ViewGroup parent,final String mainId,final List<String> ids) {
 
+        View v;
+        v = LayoutInflater.from(nContext).inflate(R.layout.dialog_action, parent, false);
+        AlertDialog.Builder builder = new AlertDialog.Builder(nContext);
+        builder.setTitle("Add message");
+        final EditText input = (EditText) v.findViewById(R.id.input);
+        builder.setView(v);
+
+        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                sub_Text = input.getText().toString();
+                postSubAction(mainId,ids,sub_Text);
+
+            }
+        });
+        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+                List<Integer> idices = ((SubActionRAdapter) rv.getAdapter()).getIndice();
+                for (int i = 0; i < idices.size();i++ ) {
+                    int index = idices.get(i);
+                    ((SubActionRAdapter) rv.getAdapter()).data[index].setComplete(false);
+                }
+                notifyDataSetChanged();
+
+            }
+        });
+
+        builder.setCancelable(false);
+        builder.show();
+
+    }
 
     // binding here from cell
     public static class MyViewHolder extends RecyclerView.ViewHolder {
@@ -301,7 +339,6 @@ public class ActionRecyclerAdapter extends RecyclerView.Adapter<ActionRecyclerAd
 
 
     }
-
 
     // post
     public void post(String flag, String actionId, String comment, final int position){
@@ -425,13 +462,16 @@ public class ActionRecyclerAdapter extends RecyclerView.Adapter<ActionRecyclerAd
             }
 
             Log.i("main",""+mainActionId);
+            Log.i("SIZE",""+listOfIDS.size());
+            Log.i("comment",""+comment);
+            Log.i("records", ""+ arr_IDS);
             String url = "https://y2y.herokuapp.com/actionitemstep";
             String current_action_id = mainActionId;
             JSONObject jo = new JSONObject();
             jo.put("size", listOfIDS.size());
             jo.put("actionid", current_action_id);
             jo.put("comment", comment);
-            jo.put("records",  arr_IDS);
+            jo.put("records", new JSONArray(listOfIDS));
             final String requestBody = jo.toString();
             Toast.makeText(nContext, "Information Saved", Toast.LENGTH_SHORT).show();
 
@@ -439,6 +479,7 @@ public class ActionRecyclerAdapter extends RecyclerView.Adapter<ActionRecyclerAd
                 @Override
                 public void onResponse(String response) {
                     Log.i("VOLLEY", response.toString());
+                    changeSubAction();
                 }
             }, new Response.ErrorListener() {
                 @Override
@@ -502,11 +543,26 @@ public class ActionRecyclerAdapter extends RecyclerView.Adapter<ActionRecyclerAd
         notifyDataSetChanged();
     }
 
-
     public void changeSubAction(){
 
-        // poation
-        //data.get(1).getSubAction().clear();
+        int count = 0;
+        int length = ((SubActionRAdapter) rv.getAdapter()).data.length;
+        for (int j = 0;j<length;j++){
+            Boolean flag = ((SubActionRAdapter) rv.getAdapter()).data[j].getComplete();
+            if(flag == false){
+                count++;
+            }
+
+        }
+
+        // lock
+        if (count == 0){
+            Log.i("subAction","goes in");
+            data.remove(globalSubPosition);
+            notifyItemRemoved(globalSubPosition);
+            notifyItemRangeChanged(globalSubPosition,data.size());
+            notifyDataSetChanged();
+        }
 
     }
 
