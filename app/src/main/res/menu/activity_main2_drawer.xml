@@ -8,8 +8,6 @@
         <item
             android:id="@+id/nav_stayInfo"
             android:icon = "@drawable/stay"
-
-
             android:title="@string/Your_stay" />
 
         <item
@@ -51,7 +49,6 @@
             android:id="@+id/nav_manage"
             android:icon = "@drawable/logout"
             android:title="@string/Log_Out" />
-
 
 
 
