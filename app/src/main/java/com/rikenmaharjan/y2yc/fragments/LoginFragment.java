@@ -201,7 +201,9 @@ public class LoginFragment extends BaseFragment {
                         return sb.toString();
 
                      default:
+                         Log.i("httpstatus","here");
                          return null;
+
 
 
 
