@@ -195,14 +195,16 @@ public class ViewActionFragment extends BaseFragment {
                     List<String[]> childList = new ArrayList<>();
                     num_action_items = Integer.parseInt(apiResult.getString("size"));
                     if (num_action_items == 0) {
-                        rootView.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
-                        Toast.makeText(getActivity(), "There are currently no action items planned.", Toast.LENGTH_LONG).show();
-                        StoryFragment story = new StoryFragment();
-                        FragmentManager fragmentManager = getActivity().getFragmentManager();
-                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                        fragmentTransaction.replace(getId(), story);
-                        fragmentTransaction.addToBackStack(null);
-                        fragmentTransaction.commit();
+
+                        // when no action element
+//                        rootView.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+//                        Toast.makeText(getActivity(), "There are currently no action items planned.", Toast.LENGTH_LONG).show();
+//                        StoryFragment story = new StoryFragment();
+//                        FragmentManager fragmentManager = getActivity().getFragmentManager();
+//                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                        fragmentTransaction.replace(getId(), story);
+//                        fragmentTransaction.addToBackStack(null);
+//                        fragmentTransaction.commit();
                         return;
                     }
                     JSONArray my_action_items = apiResult.getJSONArray("records");

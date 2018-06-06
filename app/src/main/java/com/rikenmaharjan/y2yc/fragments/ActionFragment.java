@@ -3,6 +3,8 @@ package com.rikenmaharjan.y2yc.fragments;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.graphics.Color;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,6 +13,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -48,8 +52,10 @@ public class ActionFragment extends BaseFragment {
     private String id;
     private String name;
     private String Jwt_Token;
+    private ImageView iv_noAction;
     private ArrayList<ActionModel> data;
     private ProgressBar pb;
+    private LinearLayout ll_action;
 
 
     public static List<String> action_item_ids = new ArrayList<>();
@@ -102,6 +108,10 @@ public class ActionFragment extends BaseFragment {
         v = inflater.inflate(R.layout.fragment_action, container, false);
         aRecycleView = (RecyclerView) v.findViewById(R.id.rv_action);
         pb = (ProgressBar) v.findViewById(R.id.pb_action);
+        iv_noAction = (ImageView) v.findViewById(R.id.iv_noAction);
+        ll_action = (LinearLayout) v.findViewById(R.id.ll_action);
+        ll_action.setBackgroundColor(Color.parseColor("#f7f7f7"));
+
         loadData();
         // send data
 
@@ -117,8 +127,10 @@ public class ActionFragment extends BaseFragment {
 
         String url = "https://y2y.herokuapp.com/actionitems/";
         pb.setVisibility(View.VISIBLE);
+        iv_noAction.setVisibility(View.GONE);
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         data.clear();
+
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -137,13 +149,10 @@ public class ActionFragment extends BaseFragment {
                     num_action_items = Integer.parseInt(apiResult.getString("size"));
 
                     if (num_action_items == 0) {
+                        pb.setVisibility(View.GONE);
                         Toast.makeText(getActivity(), "There are currently no action items planned.", Toast.LENGTH_LONG).show();
-                        StayFragment story = new StayFragment();
-                        FragmentManager fragmentManager = getActivity().getFragmentManager();
-                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                        fragmentTransaction.replace(getId(), story);
-                        fragmentTransaction.addToBackStack(null);
-                        fragmentTransaction.commit();
+                        iv_noAction.setVisibility(View.VISIBLE);
+                        iv_noAction.setImageResource(R.drawable.noevent);
                         return;
                     }
                     else {
