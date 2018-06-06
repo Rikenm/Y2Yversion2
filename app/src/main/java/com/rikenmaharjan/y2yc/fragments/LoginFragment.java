@@ -200,6 +200,9 @@ public class LoginFragment extends BaseFragment {
                         //return received string
                         return sb.toString();
 
+                     default:
+                         return null;
+
 
 
 
@@ -232,61 +235,69 @@ public class LoginFragment extends BaseFragment {
         }
         protected void onPostExecute(String  result2) {
 
-            //if (result2 == null) checks this
-
-            JSONObject reader = null;
-            String isvalid = null;
-            String id = null;
-            String name = null;
-            String token = null;
-            try {
-                reader = new JSONObject(result2);
-                isvalid = reader.getString("isValid");
-                id = reader.getString("id");
-                name = reader.getString("name");
-                token = reader.getString("token");
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            if (result2 == null){
 
 
-            //creating session
-            session.createLoginSession(name, id,token);
-
-
-
-
-            //result2 = result2.substring(0, result2.length() - 1); //removing the null char
-
-            Log.i("isValid", isvalid);
-
-
-            if (isvalid.equals("invalid")) {
-
-                Log.i("isValid", "Invalid");
-                Toast.makeText(getActivity(), "Invalid Username or Password", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Internal Server Error", Toast.LENGTH_SHORT).show();
                 mLoginButton.setEnabled(true);
 
 
-            } else if (isvalid.equals("Network Error")) {
-                Log.i("isValid", "Network Error");
-                Toast.makeText(getActivity(), "Network Error", Toast.LENGTH_SHORT).show();
-                mLoginButton.setEnabled(true);
 
-            } else {
-
-
-
-
-                Log.i("isValid", id);
-                Intent i = (new Intent(getActivity(), Main2Activity.class));
-                i.putExtra("id", id);
-                i.putExtra("name",name);
-
-                startActivity(i);
             }
+            else{
 
+                //if (result2 == null) checks this
+
+                JSONObject reader = null;
+                String isvalid = null;
+                String id = null;
+                String name = null;
+                String token = null;
+                try {
+                    reader = new JSONObject(result2);
+                    isvalid = reader.getString("isValid");
+                    id = reader.getString("id");
+                    name = reader.getString("name");
+                    token = reader.getString("token");
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+                //creating session
+                session.createLoginSession(name, id,token);
+
+
+
+
+                //result2 = result2.substring(0, result2.length() - 1); //removing the null char
+
+                Log.i("isValid", isvalid);
+
+
+                if (isvalid.equals("invalid")) {
+
+                    Log.i("isValid", "Invalid");
+                    Toast.makeText(getActivity(), "Invalid Username or Password", Toast.LENGTH_SHORT).show();
+                    mLoginButton.setEnabled(true);
+
+
+                }
+                else {
+
+
+
+
+                    Log.i("isValid", id);
+                    Intent i = (new Intent(getActivity(), Main2Activity.class));
+                    i.putExtra("id", id);
+                    i.putExtra("name",name);
+
+                    startActivity(i);
+                }
+
+            }
 
         }
     }
