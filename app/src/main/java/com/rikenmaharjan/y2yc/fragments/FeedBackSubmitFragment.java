@@ -43,7 +43,7 @@ public class FeedBackSubmitFragment extends Fragment {
 
     private EditText feedBack;
     private Button feedBackSubmit;
-    private StoryFragment sf;
+    private StayFragment sf;
     private FragmentManager fm;
 
     public SessionManager session;
@@ -171,15 +171,17 @@ public class FeedBackSubmitFragment extends Fragment {
 
                     requestQueue.add(stringRequest);
 
+                    //
                     feedBack.setText("");
-
                     // Replace to new fragment
-                    sf = new StoryFragment();
+                    sf = new StayFragment();
                     fm = getFragmentManager();
                     FragmentTransaction ft = fm.beginTransaction ();  //Create a reference to a fragment transaction.
                     ft.replace(R.id.constraintLayout, sf);
                     ft.addToBackStack ("myFrag2");  //why do we do this?
+
                     ft.commit();
+
                 }
                 catch (JSONException e) {
                     e.printStackTrace();

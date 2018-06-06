@@ -152,7 +152,8 @@ public class ActionFragment extends BaseFragment {
                         pb.setVisibility(View.GONE);
                         Toast.makeText(getActivity(), "There are currently no action items planned.", Toast.LENGTH_LONG).show();
                         iv_noAction.setVisibility(View.VISIBLE);
-                        iv_noAction.setImageResource(R.drawable.noevent);
+                        // this one
+                        iv_noAction.setImageResource(R.drawable.action);
                         return;
                     }
                     else {
