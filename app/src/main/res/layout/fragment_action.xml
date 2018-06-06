@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#f7f7f7"
+    android:id="@+id/ll_action"
+    android:background="#ffffff"
     tools:context="com.rikenmaharjan.y2yc.fragments.ActionFragment">
 
 
@@ -11,8 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-
-
 
         <TextView
         android:layout_width="wrap_content"
@@ -38,6 +37,12 @@ android:layout_height="match_parent">
     </android.support.v7.widget.RecyclerView>
 
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/iv_noAction"
+        android:layout_gravity="center"
+        />
 
     <ProgressBar
         android:layout_width="wrap_content"
