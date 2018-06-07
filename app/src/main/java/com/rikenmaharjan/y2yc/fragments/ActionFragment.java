@@ -108,7 +108,6 @@ public class ActionFragment extends BaseFragment {
         v = inflater.inflate(R.layout.fragment_action, container, false);
         aRecycleView = (RecyclerView) v.findViewById(R.id.rv_action);
         pb = (ProgressBar) v.findViewById(R.id.pb_action);
-        iv_noAction = (ImageView) v.findViewById(R.id.iv_noAction);
         ll_action = (LinearLayout) v.findViewById(R.id.ll_action);
         ll_action.setBackgroundColor(Color.parseColor("#f7f7f7"));
 
@@ -127,7 +126,6 @@ public class ActionFragment extends BaseFragment {
 
         String url = "https://y2y.herokuapp.com/actionitems/";
         pb.setVisibility(View.VISIBLE);
-        iv_noAction.setVisibility(View.GONE);
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         data.clear();
 
@@ -151,9 +149,9 @@ public class ActionFragment extends BaseFragment {
                     if (num_action_items == 0) {
                         pb.setVisibility(View.GONE);
                         Toast.makeText(getActivity(), "There are currently no action items planned.", Toast.LENGTH_LONG).show();
-                        iv_noAction.setVisibility(View.VISIBLE);
+                        //iv_noAction.setVisibility(View.VISIBLE);
                         // this one
-                        iv_noAction.setImageResource(R.drawable.action);
+                        //iv_noAction.setImageResource(R.drawable.action);
                         return;
                     }
                     else {
