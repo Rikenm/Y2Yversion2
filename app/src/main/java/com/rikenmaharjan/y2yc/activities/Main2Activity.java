@@ -79,7 +79,7 @@ public class Main2Activity extends AppCompatActivity
 
         // toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitleTextColor(Color.WHITE);
+        toolbar.setBackgroundColor(getResources().getColor(R.color.colorAccent));
         setSupportActionBar(toolbar);
 
 
