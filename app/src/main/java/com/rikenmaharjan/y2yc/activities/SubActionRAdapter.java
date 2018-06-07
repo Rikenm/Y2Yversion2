@@ -92,20 +92,22 @@ public class SubActionRAdapter extends RecyclerView.Adapter<SubActionRAdapter.My
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
-        if (data[position].getComplete()){
-            //holder.cb_complete.setChecked(data[position].getComplete());
-            holder.cb_complete.setEnabled(false);
-            holder.tv_comp.setText("Completed");
-            holder.cb_complete.setVisibility(View.GONE);
-            holder.tv_title.setText((CharSequence) data[position].getTitle());
-        }
-        else {
-            holder.cb_complete.setEnabled(true);
-            holder.cb_complete.setVisibility(View.VISIBLE);
-            holder.tv_comp.setText("Complete");
-            holder.tv_title.setText((CharSequence) data[position].getTitle());
 
-        }
+            if (data[position].getComplete()) {
+                //holder.cb_complete.setChecked(data[position].getComplete());
+                holder.cb_complete.setEnabled(false);
+                holder.tv_comp.setText("Completed");
+                holder.cb_complete.setVisibility(View.GONE);
+                holder.tv_title.setText((CharSequence) data[position].getTitle());
+            } else {
+                holder.cb_complete.setEnabled(true);
+                holder.cb_complete.setVisibility(View.VISIBLE);
+                holder.tv_comp.setText("Complete");
+                holder.tv_title.setText((CharSequence) data[position].getTitle());
+
+            }
+
+
     }
 
     @Override

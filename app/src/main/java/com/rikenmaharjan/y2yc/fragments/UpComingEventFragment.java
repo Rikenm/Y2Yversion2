@@ -328,13 +328,15 @@ public class UpComingEventFragment extends Fragment {
                                 JSONObject startTimeJson = event.getJSONObject("startTime");
                                 String startTime = startTimeJson.getString("time");
                                 String date = startTimeJson.getString("date");
+                                startTime = conversion(startTime) ;
 
                                 JSONObject endTimeJson = event.getJSONObject("EndTime");
                                 String endTime = endTimeJson.getString("time");
+                                endTime = conversion(endTime);
 
 
                                 // change time
-                                lstEvents.add(new Events(eventName,Location,startTime+"-"+endTime,ID,"N/A",rsvp,date));
+                                lstEvents.add(new Events(eventName,Location,startTime+"--"+endTime,ID,date,rsvp,date));
                                 // works
                                 swipeContainer.setRefreshing(false);
                                 recyclerViewAdapter.notifyDataSetChanged();
@@ -404,11 +406,37 @@ public class UpComingEventFragment extends Fragment {
             }
         };
 
+        jsonRequest.setRetryPolicy(new DefaultRetryPolicy(
+                7000,
+                0,
+                0));
 
         queue.add(jsonRequest);
         recyclerViewAdapter = new RecyclerViewAdapter(getActivity(),lstEvents);
         newRecycleView.setLayoutManager(new LinearLayoutManager(getActivity()));
         newRecycleView.setAdapter(recyclerViewAdapter);
+
+    }
+
+
+    // padding the time
+    public String conversion(String original){
+
+        String [] arrOfStr = original.split(":");
+
+        for (int i = 0;i < arrOfStr.length;i++){
+
+           if (Integer.valueOf(arrOfStr[i]) > 9){
+
+               arrOfStr[i] = arrOfStr[i];
+           }else{
+
+               arrOfStr[i] = "0"+arrOfStr[i];
+           }
+
+        }
+
+       return arrOfStr[0]+":"+arrOfStr[1];
 
     }
 
