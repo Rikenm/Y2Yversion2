@@ -42,11 +42,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="roboto"
-
                     android:text="Give us your feedback about Y2Y"
                     android:textAlignment="center"
                     android:textColor="#FFFFFF"
-                    android:textSize="22sp"
+                    android:textSize="27sp"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     android:typeface="normal" />
 

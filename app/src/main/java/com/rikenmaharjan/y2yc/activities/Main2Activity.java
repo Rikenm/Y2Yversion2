@@ -74,13 +74,11 @@ public class Main2Activity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
+
+        // toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-
-        setSupportActionBar(toolbar);
-
-
-        // tool-bar
         toolbar.setTitleTextColor(Color.WHITE);
+        setSupportActionBar(toolbar);
 
 
         session = new SessionManager(getApplicationContext());
@@ -90,7 +88,7 @@ public class Main2Activity extends AppCompatActivity
         HashMap<String, String> user = session.getUserDetails();
 
         name = user.get(SessionManager.KEY_NAME);
-
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
