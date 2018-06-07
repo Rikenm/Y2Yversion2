@@ -113,12 +113,24 @@
                 </android.support.design.widget.TextInputLayout>
 
 
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:background="#089BD7"
                     >
                 </View>
+                    <ProgressBar
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/pb_login"
+                        android:visibility="invisible"
+                        android:layout_gravity="center"
+                        />
+                </FrameLayout>
+
 
 
 

@@ -25,6 +25,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.rikenmaharjan.y2yc.R;
@@ -68,6 +69,7 @@ public class Main2Activity extends AppCompatActivity
     public WebLotteryFragment wf;
     public StayFragment stf;
     public String Jwt_token;
+    private ProgressBar pb_login;
 
 
     @Override
@@ -101,6 +103,7 @@ public class Main2Activity extends AppCompatActivity
 
         constraintLayout = (ConstraintLayout) findViewById(R.id.constraintLayout);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
