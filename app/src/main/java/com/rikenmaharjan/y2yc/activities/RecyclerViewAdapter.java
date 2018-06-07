@@ -301,7 +301,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void post(String flag, String ID) throws JSONException {
 
         session = new SessionManager(nContext);
-
         session.checkLogin();
 
         // get user data from session
