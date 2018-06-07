@@ -58,6 +58,10 @@ import java.util.Map;
 
 import static com.android.volley.Request.*;
 
+/**
+ * Created by bikenmaharjan on 5/29/18.
+ */
+
 public class UpComingEventFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -109,24 +113,7 @@ public class UpComingEventFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
-        session = new SessionManager(getActivity());
-
-        session.checkLogin();
-
-        // get user data from session
-        HashMap<String, String> user = session.getUserDetails();
-
-        // Get logged in user's user name
-        name = user.get(SessionManager.KEY_NAME);
-
-        // Get looged in user's user id
-        id = user.get(SessionManager.KEY_ID);
-
-        Jwt_Token = user.get(SessionManager.JWT_Token);
-
-
-
+        getSessiondata();
     }
 
     //
@@ -440,6 +427,25 @@ public class UpComingEventFragment extends Fragment {
 
     }
 
+
+    public  void getSessiondata(){
+
+        session = new SessionManager(getActivity());
+
+        session.checkLogin();
+
+        // get user data from session
+        HashMap<String, String> user = session.getUserDetails();
+
+        // Get logged in user's user name
+        name = user.get(SessionManager.KEY_NAME);
+
+        // Get looged in user's user id
+        id = user.get(SessionManager.KEY_ID);
+
+        Jwt_Token = user.get(SessionManager.JWT_Token);
+
+    }
 
 
 }

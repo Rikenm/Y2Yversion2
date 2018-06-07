@@ -174,13 +174,13 @@ public class FeedBackSubmitFragment extends Fragment {
                     //
                     feedBack.setText("");
                     // Replace to new fragment
-                    sf = new StayFragment();
-                    fm = getFragmentManager();
-                    FragmentTransaction ft = fm.beginTransaction ();  //Create a reference to a fragment transaction.
-                    ft.replace(R.id.constraintLayout, sf);
-                    ft.addToBackStack ("myFrag2");  //why do we do this?
-
-                    ft.commit();
+//                    sf = new StayFragment();
+//                    fm = getFragmentManager();
+//                    FragmentTransaction ft = fm.beginTransaction ();  //Create a reference to a fragment transaction.
+//                    ft.replace(R.id.constraintLayout, sf);
+//                    ft.addToBackStack ("myFrag2");  //why do we do this?
+//
+//                    ft.commit();
 
                 }
                 catch (JSONException e) {
@@ -192,6 +192,8 @@ public class FeedBackSubmitFragment extends Fragment {
         return view;
 
     }
+
+
 
 
 

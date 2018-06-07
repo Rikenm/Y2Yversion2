@@ -112,7 +112,6 @@ public class ActionRecyclerAdapter extends RecyclerView.Adapter<ActionRecyclerAd
 
 
                         // clear
-
                         btn_ok.setOnClickListener(
                                 new View.OnClickListener() {
                                     @Override

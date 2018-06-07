@@ -103,9 +103,7 @@ public class LoginFragment extends BaseFragment {
         session = new SessionManager(getActivity());
         View rootView = inflater.inflate(R.layout.fragment_login,container,false);
         mUnbinder = ButterKnife.bind(this,rootView);
-
         inputLayoutName = (TextInputLayout) rootView.findViewById(R.id.input_layout_name);
-
         inputLayoutusernameName = (TextInputLayout) rootView.findViewById(R.id.input_layout_username);
 
         return rootView;
@@ -164,8 +162,6 @@ public class LoginFragment extends BaseFragment {
             try {
 
                 URL url = new URL("https://y2y.herokuapp.com/login");
-
-
 
 
 
@@ -276,10 +272,6 @@ public class LoginFragment extends BaseFragment {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
-
-
-
 
 
 

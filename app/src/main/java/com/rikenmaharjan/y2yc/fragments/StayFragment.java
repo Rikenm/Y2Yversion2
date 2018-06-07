@@ -52,6 +52,9 @@ import java.util.Map;
 
 import okhttp3.internal.http2.ErrorCode;
 
+/**
+ * Created by bikenmaharjan on 6/1/18.
+ */
 
 public class StayFragment extends BaseFragment {
     // TODO: Rename parameter arguments, choose names that match
@@ -91,7 +94,7 @@ public class StayFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        getSessionData();
+
     }
 
 
@@ -129,6 +132,8 @@ public class StayFragment extends BaseFragment {
 
         spinner.setVisibility(View.VISIBLE);
 
+        // Activity and Fragment lifecycle don't sync in FIRST fragment; argo sessionData is loaded here
+        getSessionData();
 
         loadData();
         setColorSchemeReload();

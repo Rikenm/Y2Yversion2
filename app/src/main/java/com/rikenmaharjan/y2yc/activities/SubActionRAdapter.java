@@ -60,6 +60,7 @@ public class SubActionRAdapter extends RecyclerView.Adapter<SubActionRAdapter.My
     public MyViewHolder onCreateViewHolder(ViewGroup parent, final int viewType) {
 
         View v;
+
         v = LayoutInflater.from(nContext).inflate(R.layout.subaction_cell,parent,false);
         MyViewHolder view = new MyViewHolder(v);
 
@@ -112,10 +113,12 @@ public class SubActionRAdapter extends RecyclerView.Adapter<SubActionRAdapter.My
 
     @Override
     public int getItemCount() {
+
         if (data != null) {
             return data.length;
         }
         else return 0;
+
     }
 
     @Override
