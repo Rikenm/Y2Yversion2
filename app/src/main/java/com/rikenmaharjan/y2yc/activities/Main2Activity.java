@@ -257,22 +257,22 @@ public class Main2Activity extends AppCompatActivity
         //SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(Context.MODE_PRIVATE);
         SharedPreferences sharedPref = this.getSharedPreferences("AndroidHivePref",Context.MODE_PRIVATE);
 
-//        SessionManager session = new SessionManager(this);
-//
-//        session.checkLogin();
-//
-//        // get user data from session
-//        HashMap<String, String> user = session.getUserDetails();
-//
-//        // name
-//        name = user.get(SessionManager.KEY_NAME);
-//
-//        // id
-//        id = user.get(SessionManager.KEY_ID);
-//
-//
-//        // token
-//        Jwt_token = user.get(SessionManager.JWT_Token);
+        SessionManager session = new SessionManager(this);
+
+        session.checkLogin();
+
+        // get user data from session
+        HashMap<String, String> user = session.getUserDetails();
+
+        // name
+        name = user.get(SessionManager.KEY_NAME);
+
+        // id
+        id = user.get(SessionManager.KEY_ID);
+
+
+        // token
+        Jwt_token = user.get(SessionManager.JWT_Token);
 //
 
 
@@ -331,7 +331,7 @@ public class Main2Activity extends AppCompatActivity
     @Override
     public void onPositiveButtonClicked(int i, String s) {
 
-        Log.i("rating", String.valueOf(i));
+        Log.i("Jwt", Jwt_token);
 
         Survey survey = new Survey(i,s,Jwt_token);
         survey.submitSurvey(this);

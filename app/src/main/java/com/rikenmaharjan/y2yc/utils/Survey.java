@@ -20,11 +20,11 @@ import java.net.URL;
 
 public class Survey {
 
-    int _rating;
-    String _comment;
-    String Jwt_Token;
-    String response;
-    Context _context;
+    public int _rating;
+    public String _comment;
+    public String Jwt_Token;
+    public String response;
+    public Context _context;
 
     public Survey(int rating, String Comment, String Token){
         _comment = Comment;
@@ -38,7 +38,14 @@ public class Survey {
 
         _context = context;
 
-        new Survey.MyAsyncTaskget().execute("hello", "hello", "hello");
+        if (Jwt_Token != null) {
+            new Survey.MyAsyncTaskget().execute(Jwt_Token, "hello", "hello");
+        }
+        else {
+            Log.i("paramJwt",Jwt_Token);
+            Log.i("paramrating", String.valueOf(_rating));
+
+        }
 
     }
 
@@ -63,7 +70,7 @@ public class Survey {
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("POST");
 
-                urlConnection.setRequestProperty("Authorization", "bearer "+ Jwt_Token);
+                urlConnection.setRequestProperty("Authorization", "bearer "+ params[0]);
 
 
                 urlConnection.setRequestProperty("Content-Type","application/json");
@@ -100,9 +107,12 @@ public class Survey {
                         Log.i("HTTP Client", "Received String : " + sb.toString());
                         response = sb.toString();
                         Log.i("Json",(String)(sb.getClass().getName()));
+                        Log.i("resultgotten",sb.toString());
                         //return received string
                         return sb.toString();
                 }
+
+                Log.i("statuscode", String.valueOf(urlConnection.getResponseCode()));
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -116,16 +126,13 @@ public class Survey {
         }
         protected void onProgressUpdate(String... progress) {
 
-            try {
-                //display response dataken
 
-
-            } catch (Exception ex) {
-            }
 
 
         }
         protected void onPostExecute(String  result2){
+
+
 
             result2 = result2.substring(0,result2.length()-1); //removing the null char
 
