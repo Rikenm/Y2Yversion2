@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.rikenmaharjan.y2yc.R;
@@ -55,6 +56,8 @@ public class LoginFragment extends BaseFragment {
 
     //username is rikenm and password is "password1234"
 
+
+
     @BindView(R2.id.fragment_login_userName)
     EditText mUSerNameEt;
 
@@ -64,7 +67,9 @@ public class LoginFragment extends BaseFragment {
     @BindView(R2.id.fragment_login_register_button)
     Button mLoginButton;
 
+
     private Unbinder mUnbinder;
+    private ProgressBar pb_login;
 
 
 
@@ -100,13 +105,17 @@ public class LoginFragment extends BaseFragment {
 
 
 
+
+
         session = new SessionManager(getActivity());
         View rootView = inflater.inflate(R.layout.fragment_login,container,false);
         mUnbinder = ButterKnife.bind(this,rootView);
-
         inputLayoutName = (TextInputLayout) rootView.findViewById(R.id.input_layout_name);
-
         inputLayoutusernameName = (TextInputLayout) rootView.findViewById(R.id.input_layout_username);
+        pb_login = (ProgressBar) rootView.findViewById(R.id.pb_login);
+
+        pb_login.getIndeterminateDrawable().setColorFilter(0xFFcc0000,
+                android.graphics.PorterDuff.Mode.MULTIPLY);
 
         return rootView;
     }
@@ -119,8 +128,7 @@ public class LoginFragment extends BaseFragment {
             mLoginButton.setEnabled(false);
 
 
-
-
+            pb_login.setVisibility(View.VISIBLE);
             new MyAsyncTaskgetNews().execute("hello", "hello", "hello");
 
 
@@ -129,11 +137,13 @@ public class LoginFragment extends BaseFragment {
         }
         else if (mUSerNameEt.getText().toString().equals("")){
             mUSerNameEt.setError("This field cannot be empty");
+            pb_login.setVisibility(View.INVISIBLE);
 
         }
         else if(mUSerPasswordEt.getText().toString().equals("")){
 
             mUSerPasswordEt.setError("This field cannot be empty");
+            pb_login.setVisibility(View.INVISIBLE);
 
         }
 
@@ -164,8 +174,6 @@ public class LoginFragment extends BaseFragment {
             try {
 
                 URL url = new URL("https://y2y.herokuapp.com/login");
-
-
 
 
 
@@ -253,6 +261,7 @@ public class LoginFragment extends BaseFragment {
 
                 Toast.makeText(getActivity(), "Internal Server Error", Toast.LENGTH_SHORT).show();
                 mLoginButton.setEnabled(true);
+                pb_login.setVisibility(View.INVISIBLE);
 
 
 
@@ -280,10 +289,6 @@ public class LoginFragment extends BaseFragment {
 
 
 
-
-
-
-
                 //result2 = result2.substring(0, result2.length() - 1); //removing the null char
 
                 Log.i("isValid", isvalid);
@@ -294,6 +299,7 @@ public class LoginFragment extends BaseFragment {
                     Log.i("isValid", "Invalid");
                     Toast.makeText(getActivity(), "Invalid Username or Password", Toast.LENGTH_SHORT).show();
                     mLoginButton.setEnabled(true);
+                    pb_login.setVisibility(View.INVISIBLE);
 
 
                 }
