@@ -88,6 +88,10 @@ public class Main2Activity extends AppCompatActivity
         HashMap<String, String> user = session.getUserDetails();
 
         name = user.get(SessionManager.KEY_NAME);
+
+        Jwt_token = user.get(SessionManager.JWT_Token);
+
+
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);

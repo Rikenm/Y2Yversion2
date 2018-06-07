@@ -272,6 +272,7 @@ public class LoginFragment extends BaseFragment {
                     id = reader.getString("id");
                     name = reader.getString("name");
                     token = reader.getString("token");
+                    session.createLoginSession(name, id,token);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -300,7 +301,8 @@ public class LoginFragment extends BaseFragment {
 
                     Log.i("inside transition", "inside transition");
                     //creating session
-                    session.createLoginSession(name, id,token);
+                    Log.i("inside transitionjwt", token);
+
 
                     Log.i("isValid", id);
                     Intent i = (new Intent(getActivity(), Main2Activity.class));
