@@ -162,7 +162,7 @@ public class FeedBackSubmitFragment extends Fragment {
                             if (response != null) {
                                 responseString = String.valueOf(response.statusCode);
                                 // can get more details such as response.headers
-                                Log.i("response",response.toString());
+                                Log.i("response", String.valueOf(response.statusCode));
                             }
                             return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
                         }
