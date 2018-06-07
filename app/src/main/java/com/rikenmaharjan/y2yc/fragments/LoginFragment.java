@@ -118,34 +118,17 @@ public class LoginFragment extends BaseFragment {
         if (!(mUSerNameEt.getText().toString().equals(""))&&(!(mUSerPasswordEt.getText().toString().equals("")))) {
             mLoginButton.setEnabled(false);
 
-            Tovuti.from(getActivity()).monitor(new Monitor.ConnectivityListener(){
-                @Override
-                public void onConnectivityChanged(int connectionType, boolean isConnected, boolean isFast){
-                    // TODO: Handle the connection...
-
-                    Log.i("isconnected", String.valueOf(isConnected));
-
-                    if (isConnected){
-
-                        new MyAsyncTaskgetNews().execute("hello", "hello", "hello");
-
-                    }else{
-
-                        Toast.makeText(getActivity(), "No Internet Connection", Toast.LENGTH_SHORT).show();
-                        mLoginButton.setEnabled(true);
-
-                    }
 
 
-                }
-            });
+
+            new MyAsyncTaskgetNews().execute("hello", "hello", "hello");
 
 
 
 
         }
         else if (mUSerNameEt.getText().toString().equals("")){
-            mUSerNameEt.setError("Enter your username");
+            mUSerNameEt.setError("This field cannot be empty");
 
         }
         else if(mUSerPasswordEt.getText().toString().equals("")){
@@ -182,7 +165,7 @@ public class LoginFragment extends BaseFragment {
 
                 URL url = new URL("https://y2y.herokuapp.com/login");
 
-                //URL url = new URL("http://155.41.34.62:3000/login"); //computerlab ip
+
 
 
 
@@ -220,6 +203,8 @@ public class LoginFragment extends BaseFragment {
                             sb.append(line + "\n");
                         }
                         bufferedReader.close();
+
+                        Log.e("nameisvali",mUSerNameEt.getText().toString());
                         Log.i("HTTP Client", "Received String : " + sb.toString());
                         response = sb.toString();
                         Log.i("Json",(String)(sb.getClass().getName()));
@@ -293,8 +278,7 @@ public class LoginFragment extends BaseFragment {
                 }
 
 
-                //creating session
-                session.createLoginSession(name, id,token);
+
 
 
 
@@ -314,8 +298,9 @@ public class LoginFragment extends BaseFragment {
                 }
                 else {
 
-
-
+                    Log.i("inside transition", "inside transition");
+                    //creating session
+                    session.createLoginSession(name, id,token);
 
                     Log.i("isValid", id);
                     Intent i = (new Intent(getActivity(), Main2Activity.class));
