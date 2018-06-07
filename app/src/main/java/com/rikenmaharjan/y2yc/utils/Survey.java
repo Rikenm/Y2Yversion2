@@ -133,21 +133,27 @@ public class Survey {
         protected void onPostExecute(String  result2){
 
 
+            if(result2 == null){
 
-            result2 = result2.substring(0,result2.length()-1); //removing the null char
-
-            Log.i("isSuccess", result2);
-
-            if(result2.equals("success") ) {
-
-                Log.i("isSucess", "success");
-                Toast.makeText(_context, "Saved", Toast.LENGTH_SHORT).show();
-            }
-            else if (result2.equals("error")){
-
-                Log.i("isSuccess", "Error");
                 Toast.makeText(_context, "Error", Toast.LENGTH_SHORT).show();
+
+            }else{
+                result2 = result2.substring(0,result2.length()-1); //removing the null char
+
+                Log.i("isSuccess", result2);
+
+                if(result2.equals("success") ) {
+
+                    Log.i("isSucess", "success");
+                    Toast.makeText(_context, "Saved", Toast.LENGTH_SHORT).show();
+                }
+                else if (result2.equals("error")){
+
+                    Log.i("isSuccess", "Error");
+                    Toast.makeText(_context, "Error", Toast.LENGTH_SHORT).show();
+                }
             }
+
         }
     }
 
