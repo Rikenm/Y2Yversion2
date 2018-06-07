@@ -6,7 +6,9 @@ import android.app.FragmentTransaction;
 import android.graphics.Color;
 import android.media.Image;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -19,10 +21,16 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Header;
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -52,10 +60,11 @@ public class ActionFragment extends BaseFragment {
     private String id;
     private String name;
     private String Jwt_Token;
-    private ImageView iv_noAction;
+    private ImageView iv_Error;
     private ArrayList<ActionModel> data;
     private ProgressBar pb;
     private LinearLayout ll_action;
+    private SwipeRefreshLayout swipereContainer;
 
 
     public static List<String> action_item_ids = new ArrayList<>();
@@ -69,21 +78,7 @@ public class ActionFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-
-        SessionManager session = new SessionManager(getActivity());
-        session.checkLogin();
-        // get user data from session
-        HashMap<String, String> user = session.getUserDetails();
-
-        // name
-        name = user.get(SessionManager.KEY_NAME);
-
-        // id
-        id = user.get(SessionManager.KEY_ID);
-
-
-        // token
-        Jwt_Token = user.get(SessionManager.JWT_Token);
+        getSessionData();
     }
 
     public static ActionFragment newInstance(String param1, String param2) {
@@ -105,19 +100,35 @@ public class ActionFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v;
+
         v = inflater.inflate(R.layout.fragment_action, container, false);
+
         aRecycleView = (RecyclerView) v.findViewById(R.id.rv_action);
         pb = (ProgressBar) v.findViewById(R.id.pb_action);
         ll_action = (LinearLayout) v.findViewById(R.id.ll_action);
+        swipereContainer = (SwipeRefreshLayout) v.findViewById(R.id.swiperefreshAction);
         ll_action.setBackgroundColor(Color.parseColor("#f7f7f7"));
+        iv_Error = (ImageView) v.findViewById(R.id.iv_action_error);
+
+        pb.setVisibility(View.VISIBLE);
+
 
         loadData();
-        // send data
 
-        actionRecyclerAdapter = new ActionRecyclerAdapter(getActivity(),data);
-        aRecycleView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        aRecycleView.setAdapter(actionRecyclerAdapter);
-        //test();
+
+        swipereContainer.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        pb.setVisibility(View.GONE);
+                        loadData();
+
+
+                    }
+                }
+        );
+
+
 
         return v;
     }
@@ -125,9 +136,14 @@ public class ActionFragment extends BaseFragment {
     public void loadData(){
 
         String url = "https://y2y.herokuapp.com/actionitems/";
-        pb.setVisibility(View.VISIBLE);
         RequestQueue queue = Volley.newRequestQueue(getActivity());
+        iv_Error.setVisibility(View.INVISIBLE);
         data.clear();
+        ll_action.setBackgroundColor(Color.parseColor("#f7f7f7"));
+
+        if (actionRecyclerAdapter != null) {
+            actionRecyclerAdapter.notifyDataSetChanged();
+        }
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
@@ -135,7 +151,6 @@ public class ActionFragment extends BaseFragment {
                 Log.i("request successful", response );
 
                 try{
-
                     HashMap<String, List<String>> Child = new HashMap<String, List<String>>();
                     ArrayList<String> Header = new ArrayList<String>();
 
@@ -149,9 +164,13 @@ public class ActionFragment extends BaseFragment {
                     if (num_action_items == 0) {
                         pb.setVisibility(View.GONE);
                         Toast.makeText(getActivity(), "There are currently no action items planned.", Toast.LENGTH_LONG).show();
-                        //iv_noAction.setVisibility(View.VISIBLE);
-                        // this one
-                        //iv_noAction.setImageResource(R.drawable.action);
+
+                        // show image
+                        // change image
+                        iv_Error.setVisibility(View.VISIBLE);
+                        ll_action.setBackgroundColor(Color.WHITE);
+                        iv_Error.setImageResource(R.drawable.empty);
+                        swipereContainer.setRefreshing(false);
                         return;
                     }
                     else {
@@ -195,7 +214,6 @@ public class ActionFragment extends BaseFragment {
 
                              }
 
-
                             ad = new ActionModel((st == null) ? st:st.clone(),id_main,numb_of_step,title_main,false,false);
                             data.add(ad);
                             actionRecyclerAdapter.notifyDataSetChanged();
@@ -203,6 +221,7 @@ public class ActionFragment extends BaseFragment {
                         }
 
                         pb.setVisibility(View.GONE);
+                        swipereContainer.setRefreshing(false);
 
                     }
 
@@ -212,6 +231,12 @@ public class ActionFragment extends BaseFragment {
                 catch (JSONException e) {
                     e.printStackTrace();
                     pb.setVisibility(View.GONE);
+                    
+                    iv_Error.setVisibility(View.VISIBLE);
+                    iv_Error.setImageResource(R.drawable.error);
+                    ll_action.setBackgroundColor(Color.WHITE);
+                    swipereContainer.setRefreshing(false);
+                    // error here
                 }
 
             }
@@ -219,6 +244,26 @@ public class ActionFragment extends BaseFragment {
             @Override
             public void onErrorResponse(VolleyError error){
                 Log.i("request failed", "failed");
+                pb.setVisibility(View.GONE);
+
+                iv_Error.setVisibility(View.VISIBLE);
+                iv_Error.setImageResource(R.drawable.error);
+                ll_action.setBackgroundColor(Color.WHITE);
+                swipereContainer.setRefreshing(false);
+
+                if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                    Toast.makeText(getActivity(), "Time-out", Toast.LENGTH_SHORT).show();
+                } else if (error instanceof AuthFailureError) {
+                    Toast.makeText(getActivity(), "Request can't be Completed, unauthorize.", Toast.LENGTH_LONG).show();
+                } else if (error instanceof ServerError) {
+                    Toast.makeText(getActivity(), "Server Error, Please Try Again.", Toast.LENGTH_LONG).show();
+                } else if (error instanceof NetworkError) {
+                    Toast.makeText(getActivity(), "Network Error, Please Try Again.", Toast.LENGTH_LONG).show();
+                } else if (error instanceof ParseError) {
+                    Toast.makeText(getActivity(), "Parse Error, Please Try Again.", Toast.LENGTH_LONG).show();
+                }else{
+                    Toast.makeText(getActivity(), "Error, Please Try Again.", Toast.LENGTH_LONG).show();
+                }
             }
         }){
 
@@ -238,12 +283,40 @@ public class ActionFragment extends BaseFragment {
 
         };
 
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                7000,
+                0,
+                0));
+
         queue.add(stringRequest);
-        Log.i("result",queue.toString());
+
+        // rv adapter
+        actionRecyclerAdapter = new ActionRecyclerAdapter(getActivity(),data);
+        aRecycleView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        aRecycleView.setAdapter(actionRecyclerAdapter);
+
+
     }
 
+    public void getSessionData(){
+
+        SessionManager session = new SessionManager(getActivity());
+        session.checkLogin();
+        // get user data from session
+        HashMap<String, String> user = session.getUserDetails();
+
+        // name
+        name = user.get(SessionManager.KEY_NAME);
+
+        // id
+        id = user.get(SessionManager.KEY_ID);
 
 
+        // token
+        Jwt_Token = user.get(SessionManager.JWT_Token);
+
+
+    }
 
 
 }

@@ -2,10 +2,13 @@ package com.rikenmaharjan.y2yc.fragments;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 
+import android.os.Handler;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -13,13 +16,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -40,10 +50,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import okhttp3.internal.http2.ErrorCode;
+
 
 public class StayFragment extends BaseFragment {
     // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -52,22 +65,22 @@ public class StayFragment extends BaseFragment {
     private String mParam2;
 
 
-
     private RecyclerView myRecycleView;
     private List<StayModel> data;
     private List<WarningModel> warnings;
-    HomeRecyclerAdapter homeRecyclerAdapter;
-    HomeRecyclerAdapter homeRecyclerAdapter2;
+    private HomeRecyclerAdapter homeRecyclerAdapter;
+    private HomeRecyclerAdapter homeRecyclerAdapter2;
     private ImageView errorImage;
+    private SwipeRefreshLayout swipeContainer;
+    private LinearLayout fragmentLayout;
 
-    Dialog mainActionDialog;
-    Dialog subActionDialog;
+    private Dialog mainActionDialog;
+    private Dialog subActionDialog;
 
 
     private String id;
     private String name;
     private String Jwt_Token;
-
     private ProgressBar spinner;
 
     public StayFragment() {
@@ -78,33 +91,10 @@ public class StayFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-
-        SessionManager session = new SessionManager(getActivity());
-
-        session.checkLogin();
-
-        // get user data from session
-        HashMap<String, String> user = session.getUserDetails();
-
-        // name
-        name = user.get(SessionManager.KEY_NAME);
-
-        // id
-        id = user.get(SessionManager.KEY_ID);
-
-
-        // token
-        Jwt_Token = user.get(SessionManager.JWT_Token);
+        getSessionData();
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment StayFragment.
-     */
+
     // TODO: Rename and change types and number of parameters
     public static StayFragment newInstance(String param1, String param2) {
         StayFragment fragment = new StayFragment();
@@ -120,7 +110,6 @@ public class StayFragment extends BaseFragment {
         super.onCreate(savedInstanceState);
 
         // data here
-
         data = new ArrayList<>();
         warnings = new ArrayList<>();
 
@@ -129,68 +118,61 @@ public class StayFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         View v =  inflater.inflate(R.layout.fragment_stay, container, false);
         myRecycleView = (RecyclerView) v.findViewById(R.id.rc_stay);
         spinner = (ProgressBar)  v.findViewById(R.id.progressBarStay);
         errorImage = (ImageView) v.findViewById(R.id.iv_error);
+        swipeContainer = (SwipeRefreshLayout) v.findViewById(R.id.swiperefresh);
+        fragmentLayout = (LinearLayout) v.findViewById(R.id.ll_stay);
 
-        data.clear();
-        warnings.clear();
+        spinner.setVisibility(View.VISIBLE);
+
+
+        loadData();
+        setColorSchemeReload();
+
+        // data-load when pull-down
+        swipeContainer.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+
+                        spinner.setVisibility(View.GONE);
+                        // load the data
+                        loadData();
+
+
+                    }
+                }
+        );
+
+        return v;
+    }
+
+
+    // reload from the server
+    public void loadData(){
+
 
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         String url = "https://y2y.herokuapp.com/detailuser/";
 
-        spinner.setVisibility(View.VISIBLE);
+
         errorImage.setVisibility(View.INVISIBLE);
+
+        data.clear();
+        warnings.clear();
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Log.i("request sucessful", response );
                 try{
+
                     JSONObject apiResult = new JSONObject(response);
 
-//                    view.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
-//                    // get bed assignment
-//                    txtBedR.setText(apiResult.getString("Bed_name"));
-//                    //get last day of stay
-//                    String date = apiResult.getString("Last_Day_Of_Stay");
-//                    date = date.replace("-", "");
-//                    Date now = new Date();
-//                    String currentDateTimeString = DateFormat.getInstance().format(now);
-//                    String[] currentDate = currentDateTimeString.split("/");
-//                    String month = currentDate[0];
-//                    String day = currentDate[1];
-//                    if(Integer.parseInt(month) < 10)
-//                        month = "0" + month;
-//                    if(Integer.parseInt(day)<10){
-//                        day = "0" + day;
-//                    }
-//                    String cdate = "20" + currentDate[2].split(" ")[0]+ month + day;
-//                    //compare the date with the current date
-//                    if(date.equals("N/A")) {
-//                        txtDayR.setText("N/A");
-//                    }
-//                    else {
-//                        if (Integer.parseInt(cdate) > Integer.parseInt(date))
-//                            txtDayR.setText("N/A");
-//                        else
-//                            txtDayR.setText(date);
-//                    }
-//                    //get locker number
-//                    txtLockerR.setText(apiResult.getString("Locker"));
-//                    //get number of warnings
-//                    txtMinor.setText(apiResult.getString("Minor_warning")+" Minor");
-//                    txtMajor.setText(apiResult.getString("Major_warning")+" Major");
-//                    //get nit
-//                    String nit = apiResult.getString("NIT");
-//                    if(nit.equals("0")){
-//                        nit = "No";
-//                    }
-//                    else
-//                        nit = "Yes";
-//                    txtNITR.setText(nit);
 
                     // check for null value
                     data.add(new StayModel("Warning","Nil")); // this is not used
@@ -200,7 +182,6 @@ public class StayFragment extends BaseFragment {
                     data.add(new StayModel("Locker Combination",apiResult.getString("Locker")));
                     data.add(new StayModel("NIT",apiResult.getString("NIT")));
 
-////////////
                     // warning
                     int majorWarning = apiResult.getInt("Major_warning");
                     int minorWarning = apiResult.getInt("Minor_warning");
@@ -227,12 +208,16 @@ public class StayFragment extends BaseFragment {
 
                     homeRecyclerAdapter.notifyDataSetChanged();
                     spinner.setVisibility(View.GONE);
+                    swipeContainer.setRefreshing(false);
                 }
                 catch (JSONException e) {
                     e.printStackTrace();
                     // web error
+                    spinner.setVisibility(View.GONE);
                     errorImage.setVisibility(View.VISIBLE);
+                    fragmentLayout.setBackgroundColor(Color.WHITE);
                     errorImage.setImageResource(R.drawable.error);
+                    swipeContainer.setRefreshing(false);
 
                 }
 
@@ -241,10 +226,27 @@ public class StayFragment extends BaseFragment {
             @Override
             public void onErrorResponse(VolleyError error){
                 Log.i("request failed", "failed");
+
                 spinner.setVisibility(View.GONE);
                 errorImage.setVisibility(View.VISIBLE);
-
+                fragmentLayout.setBackgroundColor(Color.WHITE);
                 errorImage.setImageResource(R.drawable.error);
+                swipeContainer.setRefreshing(false);
+
+                if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                    Toast.makeText(getActivity(), "Time-out", Toast.LENGTH_SHORT).show();
+                } else if (error instanceof AuthFailureError) {
+                    Toast.makeText(getActivity(), "Request can't be Completed, Please Try Again.", Toast.LENGTH_LONG).show();
+                } else if (error instanceof ServerError) {
+                    Toast.makeText(getActivity(), "Server Error, Please Try Again.", Toast.LENGTH_LONG).show();
+                } else if (error instanceof NetworkError) {
+                    Toast.makeText(getActivity(), "Network Error, Please Try Again.", Toast.LENGTH_LONG).show();
+                } else if (error instanceof ParseError) {
+                    Toast.makeText(getActivity(), "Parse Error, Please Try Again.", Toast.LENGTH_LONG).show();
+                }else{
+                    Toast.makeText(getActivity(), "Error, Please Try Again.", Toast.LENGTH_LONG).show();
+                }
+
             }
         }){
 
@@ -263,15 +265,51 @@ public class StayFragment extends BaseFragment {
 
         };
 
-        queue.add(stringRequest);
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                7000,
+                0,
+                0));
 
-        homeRecyclerAdapter = new HomeRecyclerAdapter(container.getContext(),data,warnings);
+        queue.add(stringRequest);
+        homeRecyclerAdapter = new HomeRecyclerAdapter(getActivity(),data,warnings);
         myRecycleView.setLayoutManager(new LinearLayoutManager(getActivity()));
         myRecycleView.setAdapter(homeRecyclerAdapter);
 
-        return v;
+
     }
 
+    // get session data
+    public void getSessionData(){
+
+        SessionManager session = new SessionManager(getActivity());
+
+        session.checkLogin();
+
+        // get user data from session
+        HashMap<String, String> user = session.getUserDetails();
+
+        // name
+        name = user.get(SessionManager.KEY_NAME);
+
+        // id
+        id = user.get(SessionManager.KEY_ID);
+
+
+        // token
+        Jwt_Token = user.get(SessionManager.JWT_Token);
+
+
+    }
+
+
+    // color scheme
+    public void setColorSchemeReload(){
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_blue_dark,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+
+    }
 
 
 }

@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Layout;
@@ -23,10 +24,15 @@ import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.NetworkError;
 import com.android.volley.NetworkResponse;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.HttpHeaderParser;
@@ -71,6 +77,7 @@ public class UpComingEventFragment extends Fragment {
     private Context context;
     private ProgressBar spinner;
     private ImageView imgView;
+    private SwipeRefreshLayout swipeContainer;
 
 
     public SessionManager session;
@@ -128,8 +135,6 @@ public class UpComingEventFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         myImageList = new int[]{R.drawable.noevent};
-
-        // dummy data for the recycleView
         lstEvents = new ArrayList<>();
     }
 
@@ -225,7 +230,7 @@ public class UpComingEventFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         v =  inflater.inflate(R.layout.fragment_up_coming_event, container, false);
-        /*YOUR CODE HERE*/
+
 
         spinner = (ProgressBar)  v.findViewById(R.id.progressBar);
         newRecycleView = (RecyclerView) v.findViewById(R.id.events_recycleView);
@@ -233,124 +238,24 @@ public class UpComingEventFragment extends Fragment {
         spinner = (ProgressBar)  v.findViewById(R.id.progressBar);
         imgView = (ImageView) v.findViewById(R.id.img_noevent);
         ll = (LinearLayout)  v.findViewById(R.id.ll_background);
+        swipeContainer = (SwipeRefreshLayout) v.findViewById(R.id.swiperefresh_event);
 
-
-
-        // here
-        lstEvents.clear();
-
-        // MARK:- gets data from the server
-        //======================
-        // Instantiate the RequestQueue.
-        RequestQueue queue = Volley.newRequestQueue(getActivity());
-
+        // gets data from the server
         spinner.setVisibility(View.VISIBLE);
-        imgView.setVisibility(View.GONE);
-        // change the url
-        String url ="https://y2y.herokuapp.com/events";
+        loadData();
 
-        JsonObjectRequest jsonRequest = new JsonObjectRequest( Request.Method.GET,
-                url,
-                null,
-                new Response.Listener<JSONObject>(){
+        swipeContainer.setOnRefreshListener(
 
+                new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
-                    public void onResponse(JSONObject response) {
+                    public void onRefresh() {
 
-                        try {
-
-                            int size = response.getInt("size");
-                            JSONArray jsonArray = response.getJSONArray("records");
-
-
-                            for (int i = 0 ; i < jsonArray.length();i++){
-
-                                JSONObject event = jsonArray.getJSONObject(i);
-                                String eventName = event.getString("eventName");
-                                String Location = event.getString("Location");
-
-                                String ID = event.getString("ID");
-                                boolean rsvp = event.getBoolean("isRsvp'd");
-                                //String description = event.getString("Description");
-
-                                JSONObject startTimeJson = event.getJSONObject("startTime");
-                                String startTime = startTimeJson.getString("time");
-                                String date = startTimeJson.getString("date");
-
-                                JSONObject endTimeJson = event.getJSONObject("EndTime");
-                                String endTime = endTimeJson.getString("time");
-
-
-
-                                // change time
-                                lstEvents.add(new Events(eventName,Location,startTime+"-"+endTime,ID,"N/A",rsvp,date));
-                                // works
-
-                                recyclerViewAdapter.notifyDataSetChanged();
-                            }
-
-                            // hide there progress bar
-                            spinner.setVisibility(View.GONE);
-
-                            // element in events
-                            if (jsonArray.length() < 1){
-                                // add image of no Events
-                                imgView.setVisibility(View.VISIBLE);
-                                imgView.setImageResource(myImageList[0]);
-
-                            }
-
-                        }catch(JSONException e){
-
-                            // hide there progress bar
-                            Log.i("Error", String.valueOf(e));
-                            spinner.setVisibility(View.GONE);
-                            imgView.setVisibility(View.VISIBLE);
-                            ll.setBackgroundColor(Color.parseColor("#f7f7f7"));
-                            imgView.setImageResource(myImageList[0]);
-
-                        }
+                        loadData();
 
                     }
-                },new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e("Volley", ""+error);
-                spinner.setVisibility(View.GONE);
-                imgView.setVisibility(View.VISIBLE);
-                ll.setBackgroundColor(Color.WHITE);
-                imgView.setImageResource(R.drawable.error);
+                }
+        );
 
-            }
-        }){
-
-            // header
-            @Override
-            public Map <String,String> getHeaders() throws AuthFailureError {
-                HashMap <String,String> headers = new HashMap<>();
-
-                String token = Jwt_Token;
-                String auth = "bearer "+token;
-                headers.put("Content-Type", "application/json");
-                headers.remove("Authorization");
-                headers.put("Authorization", auth);
-
-                return headers;
-            }
-        };
-
-
-        queue.add(jsonRequest);
-
-        Log.i("Record", "Goes in ");
-
-        //======================
-
-
-
-        recyclerViewAdapter = new RecyclerViewAdapter(container.getContext(),lstEvents);
-        newRecycleView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        newRecycleView.setAdapter(recyclerViewAdapter);
 
 
         return v;
@@ -376,6 +281,163 @@ public class UpComingEventFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+
+    public void loadData(){
+
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
+        imgView.setVisibility(View.INVISIBLE);
+        lstEvents.clear();
+
+        String url ="https://y2y.herokuapp.com/events";
+        JsonObjectRequest jsonRequest = new JsonObjectRequest( Request.Method.GET,
+                url,
+                null,
+                new Response.Listener<JSONObject>(){
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+
+                            int size = response.getInt("size");
+                            JSONArray jsonArray = response.getJSONArray("records");
+
+                            // element in events
+                            if (jsonArray.length() == 0){
+                                // add image of no Events
+                                imgView.setVisibility(View.VISIBLE);
+                                imgView.setImageResource(R.drawable.empty);
+                                ll.setBackgroundColor(Color.WHITE);
+                                swipeContainer.setRefreshing(false);
+                                return;
+
+                            }
+
+
+                            for (int i = 0 ; i < jsonArray.length();i++){
+
+                                JSONObject event = jsonArray.getJSONObject(i);
+                                String eventName = event.getString("eventName");
+                                String Location = event.getString("Location");
+
+                                String ID = event.getString("ID");
+                                boolean rsvp = event.getBoolean("isRsvp'd");
+                                //String description = event.getString("Description");
+
+                                JSONObject startTimeJson = event.getJSONObject("startTime");
+                                String startTime = startTimeJson.getString("time");
+                                String date = startTimeJson.getString("date");
+                                startTime = conversion(startTime) ;
+
+                                JSONObject endTimeJson = event.getJSONObject("EndTime");
+                                String endTime = endTimeJson.getString("time");
+                                endTime = conversion(endTime);
+
+
+                                // change time
+                                lstEvents.add(new Events(eventName,Location,startTime+"--"+endTime,ID,date,rsvp,date));
+                                // works
+                                swipeContainer.setRefreshing(false);
+                                recyclerViewAdapter.notifyDataSetChanged();
+
+                            }
+
+                            // hide there progress bar
+                            spinner.setVisibility(View.GONE);
+
+
+                        }catch(JSONException e){
+
+                            // hide there progress bar
+                            Log.i("Error", String.valueOf(e));
+                            spinner.setVisibility(View.GONE);
+                            imgView.setVisibility(View.VISIBLE);
+
+                            swipeContainer.setRefreshing(false);
+                            ll.setBackgroundColor(Color.WHITE);
+                            imgView.setImageResource(R.drawable.error);
+
+
+                        }
+
+                    }
+                },new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("Volley", ""+error);
+
+                spinner.setVisibility(View.GONE);
+                imgView.setVisibility(View.VISIBLE);
+                ll.setBackgroundColor(Color.WHITE);
+                imgView.setImageResource(R.drawable.error);
+                swipeContainer.setRefreshing(false);
+
+
+                if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                    Toast.makeText(getActivity(), "Time-out", Toast.LENGTH_SHORT).show();
+                } else if (error instanceof AuthFailureError) {
+                    Toast.makeText(getActivity(), "Request can't be Completed, unauthorize.", Toast.LENGTH_LONG).show();
+                } else if (error instanceof ServerError) {
+                    Toast.makeText(getActivity(), "Server Error, Please Try Again.", Toast.LENGTH_LONG).show();
+                } else if (error instanceof NetworkError) {
+                    Toast.makeText(getActivity(), "Network Error, Please Try Again.", Toast.LENGTH_LONG).show();
+                } else if (error instanceof ParseError) {
+                    Toast.makeText(getActivity(), "Parse Error, Please Try Again.", Toast.LENGTH_LONG).show();
+                }else{
+                    Toast.makeText(getActivity(), "Error, Please Try Again.", Toast.LENGTH_LONG).show();
+                }
+
+            }
+        }){
+
+            // header
+            @Override
+            public Map <String,String> getHeaders() throws AuthFailureError {
+                HashMap <String,String> headers = new HashMap<>();
+
+                String token = Jwt_Token;
+                String auth = "bearer "+token;
+                headers.put("Content-Type", "application/json");
+                headers.remove("Authorization");
+                headers.put("Authorization", auth);
+
+                return headers;
+            }
+        };
+
+        jsonRequest.setRetryPolicy(new DefaultRetryPolicy(
+                7000,
+                0,
+                0));
+
+        queue.add(jsonRequest);
+        recyclerViewAdapter = new RecyclerViewAdapter(getActivity(),lstEvents);
+        newRecycleView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        newRecycleView.setAdapter(recyclerViewAdapter);
+
+    }
+
+
+    // padding the time
+    public String conversion(String original){
+
+        String [] arrOfStr = original.split(":");
+
+        for (int i = 0;i < arrOfStr.length;i++){
+
+           if (Integer.valueOf(arrOfStr[i]) > 9){
+
+               arrOfStr[i] = arrOfStr[i];
+           }else{
+
+               arrOfStr[i] = "0"+arrOfStr[i];
+           }
+
+        }
+
+       return arrOfStr[0]+":"+arrOfStr[1];
+
     }
 
 
