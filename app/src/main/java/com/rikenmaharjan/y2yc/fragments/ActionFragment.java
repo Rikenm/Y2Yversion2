@@ -115,8 +115,8 @@ public class ActionFragment extends BaseFragment {
         iv_Error = (ImageView) v.findViewById(R.id.iv_action_error);
 
         pb.setVisibility(View.VISIBLE);
-
-
+        
+        getSessionData();
         loadData();
 
 
