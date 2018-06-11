@@ -2,13 +2,84 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+
     tools:context="com.rikenmaharjan.y2yc.fragments.ResetFragment">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_weight="1"
+        android:layout_height="wrap_content">
+    <TextView
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:layout_weight=""
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textSize="34sp"
+        android:text="Forgot Password" />
 
     <TextView
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:layout_weight=""
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:text="Please fill up the form below"
+        />
+
+    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Sign In" />
+        android:layout_weight="3"
+        android:layout_gravity="center"
+        android:padding="10dp"
+        android:src="@drawable/sign"
+        />
+
+       <FrameLayout
+           android:layout_width="match_parent"
+           android:padding="14dp"
+           android:layout_height="wrap_content">
+
+         <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+             android:textSize="10sp"
+        android:hint="UserName"
+        />
+
+           <View
+               android:layout_width="match_parent"
+               android:background="@color/lavender"
+               android:layout_height="50dp">
+
+           </View>
+
+       </FrameLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:text="Just remembered ?"
+            />
+
+    </LinearLayout>
+
+
+
+
+    <View
+        android:layout_width="match_parent"
+        android:background="#F4E878"
+        android:layout_height="60dp">
+
+    </View>
 
 
 
