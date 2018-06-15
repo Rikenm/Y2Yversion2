@@ -168,6 +168,16 @@ public class ActionRecyclerAdapter extends RecyclerView.Adapter<ActionRecyclerAd
                         SubAction []sb1 = data.get(vHolder.getAdapterPosition()).getSubAction();
                         sb = new SubActionRAdapter(nContext,data.get(vHolder.getAdapterPosition()).getSubAction());
                         rv.setAdapter(sb);
+
+                        // removes ok button if there is no data
+                        if(data.get(vHolder.getAdapterPosition()).getSubAction() == null){
+                            btn_ok.setVisibility(View.GONE);
+                        }
+                        else{
+                            btn_ok.setVisibility(View.VISIBLE);
+                        }
+
+
                         notifyDataSetChanged();
 
                     }
@@ -254,7 +264,7 @@ public class ActionRecyclerAdapter extends RecyclerView.Adapter<ActionRecyclerAd
         View v;
         v = LayoutInflater.from(nContext).inflate(R.layout.dialog_action, parent, false);
         AlertDialog.Builder builder = new AlertDialog.Builder(nContext);
-        builder.setTitle("Add message");
+        builder.setTitle("Please Update Us!");
         final EditText input = (EditText) v.findViewById(R.id.input);
         builder.setView(v);
 
@@ -479,6 +489,7 @@ public class ActionRecyclerAdapter extends RecyclerView.Adapter<ActionRecyclerAd
                 public void onResponse(String response) {
                     Log.i("VOLLEY", response.toString());
                     changeSubAction();
+                    // progressbar
                 }
             }, new Response.ErrorListener() {
                 @Override

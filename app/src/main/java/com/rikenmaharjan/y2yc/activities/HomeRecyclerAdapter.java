@@ -293,10 +293,13 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
                 String minorNum = conversion((warningData.get(position).getMinorWarning()));
                 String majorNum = conversion((warningData.get(position).getMajorWarning()));
                 String suspNum = conversion((warningData.get(position).getSuspensionWarning()));
+
                 holder.cv_warning.setCardBackgroundColor(Color.parseColor(colors[0]));
+
                 holder.tv_warning_minor.setText(minorNum);
                 holder.tv_warning_major.setText(majorNum);
                 holder.tv_warning_susp.setText(suspNum);
+
                 holder.btn_major.setBackgroundColor(Color.parseColor("#199dd8"));
                 holder.btn_minor.setBackgroundColor(Color.parseColor("#199dd8"));
                 holder.btn_susp.setBackgroundColor(Color.parseColor("#199dd8"));

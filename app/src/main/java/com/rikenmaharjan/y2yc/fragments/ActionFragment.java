@@ -116,7 +116,7 @@ public class ActionFragment extends BaseFragment {
 
         pb.setVisibility(View.VISIBLE);
 
-
+        getSessionData();
         loadData();
 
 
@@ -124,10 +124,10 @@ public class ActionFragment extends BaseFragment {
                 new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
                     public void onRefresh() {
+
                         pb.setVisibility(View.GONE);
+
                         loadData();
-
-
                     }
                 }
         );
@@ -136,6 +136,8 @@ public class ActionFragment extends BaseFragment {
 
         return v;
     }
+
+
 
     public void loadData(){
 

@@ -93,7 +93,7 @@ public class SubActionRAdapter extends RecyclerView.Adapter<SubActionRAdapter.My
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
-
+        if (data!= null) {
             if (data[position].getComplete()) {
                 //holder.cb_complete.setChecked(data[position].getComplete());
                 holder.cb_complete.setEnabled(false);
@@ -107,6 +107,14 @@ public class SubActionRAdapter extends RecyclerView.Adapter<SubActionRAdapter.My
                 holder.tv_title.setText((CharSequence) data[position].getTitle());
 
             }
+        }
+        else{
+            // when data is empty
+            holder.cb_complete.setVisibility(View.GONE);
+            holder.tv_comp.setVisibility(View.GONE);
+            holder.tv_title.setText("No Sub-Action");
+
+        }
 
 
     }
@@ -117,7 +125,7 @@ public class SubActionRAdapter extends RecyclerView.Adapter<SubActionRAdapter.My
         if (data != null) {
             return data.length;
         }
-        else return 0;
+        else return 1;
 
     }
 

@@ -12,140 +12,83 @@
     android:layout_height="match_parent">
 
 
-
-
 <FrameLayout
     android:layout_width="match_parent"
     android:layout_centerVertical="true"
     android:layout_height="match_parent">
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     <android.support.v7.widget.CardView
     xmlns:card_view = "http://schemas.android.com/apk/res-auto"
     android:background="#ffffff"
     android:layout_centerVertical="true"
-
-
-
-
-
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     card_view:cardCornerRadius="3dp"
-    android:layout_weight="7.3"
-    android:elevation="1dp"
     >
-
-        <ImageView
-            android:layout_width="80dp"
-            android:layout_height="40dp"
-
-            android:src = "@drawable/circle"
-
-            android:layout_gravity="center_horizontal|top"
-            />
-
-
-        <ImageView
-            android:layout_width="80dp"
-            android:layout_height="40dp"
-
-            android:src = "@drawable/inversecircle"
-
-            android:layout_gravity="center_horizontal|bottom"
-            />
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
         <LinearLayout
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-
-        android:padding="20dp"
-
         android:orientation="vertical">
 
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                android:background="#56CEFF"
+                >
+            </View>
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto"
+                    android:layout_gravity="center"
+                    android:text="Lottery Result"
+                    android:textAlignment="center"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="#ffffff"
+                    android:textSize="34sp" />
+
+            </FrameLayout>
 
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:layout_marginTop="30dp"
+                android:layout_height="wrap_content"
+                android:padding="20dp"
+                android:orientation="vertical"
+                >
 
-                android:background="#EFEFEF"
-                android:id="@+id/line"
-                android:orientation="horizontal">
+                <!--//-->
 
-
-            </LinearLayout>
-
-
-
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.2"
-            android:fontFamily="@font/roboto"
-
-            android:text="Lottery Result"
-            android:textAlignment="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="#76C3D7"
-            android:textSize="24sp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="2"
+                    android:orientation="vertical"
+                    >
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="0.2"
-
-
+            android:layout_height="wrap_content"
             android:fontFamily="@font/roboto"
+            android:textSize="30sp"
             android:text="Long Term Lottery"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="#019AD7"
-
             />
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_marginTop="10dp"
-            android:layout_weight="0.2"
+            android:layout_height="wrap_content"
+            android:textSize="25dp"
             android:fontFamily="@font/roboto"
-
-
-
-            android:text="Date"
+            android:text="Date:"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="#00B9E6" />
 
@@ -153,43 +96,42 @@
         <TextView
             android:id="@+id/date1"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="0.1"
-            android:layout_marginTop="10dp"
-
+            android:layout_height="wrap_content"
+            android:textSize="22sp"
             android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
             android:textColor="#020202" />
 
         <TextView
             android:id="@+id/longTermLottery"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="0.2"
+            android:layout_height="wrap_content"
             android:text=""
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="0dp"
             android:layout_marginTop="0dp"
-            android:textColor="#020202"
-            android:textSize="22sp"
-            android:textStyle="bold" />
+            android:textColor="#004080"
+            android:textSize="32sp"
+             />
+                </LinearLayout>
+
+                <!--//-->
+
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="0.2"
-            android:layout_marginTop="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
             android:fontFamily="@font/roboto"
+            android:textSize="30sp"
             android:text="E-bed Lottery"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="#019AD7" />
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="0.2"
+            android:layout_height="wrap_content"
             android:fontFamily="@font/roboto"
-
-            android:layout_marginTop="10dp"
-            android:text="Date"
+            android:textSize="25dp"
+            android:text="Date:"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="#00B9E6" />
 
@@ -197,48 +139,21 @@
         <TextView
             android:id="@+id/date2"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="0.2"
-            android:layout_marginTop="10dp"
+            android:layout_height="wrap_content"
+            android:textSize="22sp"
             android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
             android:textColor="#020202" />
 
         <TextView
             android:id="@+id/eBedLottery"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="0.2"
+            android:layout_height="wrap_content"
             android:text=""
             android:layout_gravity="center_horizontal"
-
-            android:layout_marginTop="0dp"
-            android:textColor="#020202"
-            android:textSize="22sp"
-            android:textStyle="bold" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:layout_gravity = "bottom"
-                android:layout_marginBottom="70dp"
-
-
-                android:background="#EFEFEF"
-                android:id="@+id/line2"
-                android:orientation="horizontal">
-
-
-            </LinearLayout>
-
-
-
-
-
-
-
-    </LinearLayout>
-
-
+            android:layout_marginBottom="14dp"
+            android:textColor="#004080"
+            android:textSize="32sp"
+             />
 
 
         <ProgressBar
@@ -250,8 +165,11 @@
 
 
 
+                //<!---->
 
 
+        </LinearLayout>
+        </LinearLayout>
 
 
     </android.support.v7.widget.CardView>

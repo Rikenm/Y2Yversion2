@@ -184,8 +184,19 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 });
                 //////
 
+                // button logic.
+                if (vHolder.cb_rsvp.isChecked()){
+                    dialog_btn_rsvp.setVisibility(View.GONE);
+                }
+                else{
+                    dialog_btn_rsvp.setVisibility(View.VISIBLE);
+                }
+
+
             }
         });
+
+
 
         return vHolder;
 
@@ -249,6 +260,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
             }
         });
+
 
         //vHolder.cb_rsvp.setChecked(true);
         Log.i("Info","goes");

@@ -1,6 +1,7 @@
 package com.rikenmaharjan.y2yc.fragments;
 
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -14,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rikenmaharjan.y2yc.R;
@@ -49,13 +51,14 @@ import butterknife.Unbinder;
  * Created by Riken on 3/18/18.
  */
 
-public class LoginFragment extends BaseFragment {
+public class  LoginFragment extends BaseFragment {
 
 
+
+    TextView btn_newPassword;
     // using butterknife to make binding buttons easy.
 
     //username is rikenm and password is "password1234"
-
 
 
     @BindView(R2.id.fragment_login_userName)
@@ -72,12 +75,8 @@ public class LoginFragment extends BaseFragment {
     private ProgressBar pb_login;
 
 
-
-
     // Session Manager Class
     SessionManager session;
-
-
     String response;
 
     TextInputLayout inputLayoutName;
@@ -90,11 +89,9 @@ public class LoginFragment extends BaseFragment {
     }
 
 
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
 
     }
@@ -104,18 +101,33 @@ public class LoginFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
 
 
-
-
-
         session = new SessionManager(getActivity());
         View rootView = inflater.inflate(R.layout.fragment_login,container,false);
         mUnbinder = ButterKnife.bind(this,rootView);
         inputLayoutName = (TextInputLayout) rootView.findViewById(R.id.input_layout_name);
         inputLayoutusernameName = (TextInputLayout) rootView.findViewById(R.id.input_layout_username);
         pb_login = (ProgressBar) rootView.findViewById(R.id.pb_login);
+        btn_newPassword = (TextView) rootView.findViewById(R.id.fragment_forget_textView);
 
         pb_login.getIndeterminateDrawable().setColorFilter(0xFFcc0000,
                 android.graphics.PorterDuff.Mode.MULTIPLY);
+
+
+
+        btn_newPassword.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        //ResetFragment rf = new ResetFragment();
+                        replaceFragment(ResetFragment.newInstance());
+
+                    }
+                }
+        );
+
+
+
 
         return rootView;
     }
@@ -247,12 +259,6 @@ public class LoginFragment extends BaseFragment {
 
 
 
-
-
-
-
-
-
         }
         protected void onPostExecute(String  result2) {
 
@@ -342,4 +348,18 @@ public class LoginFragment extends BaseFragment {
         Tovuti.from(getActivity()).stop();
         super.onStop();
     }
+
+
+    // Replace Fragment
+    public void replaceFragment(Fragment someFragment) {
+
+
+        //FragmentManager fragmentManager = getFragmentManager(); // static variable
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.activity_fragment_base_fragmentContainer, someFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+
+    }
+
 }
