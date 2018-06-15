@@ -17,7 +17,7 @@
             android:padding="8dp"
             android:layout_height="wrap_content"
             android:id="@+id/txt_subAction_title"
-            android:text="Sub-Action"
+            android:text="Action Steps"
             android:textColor="@color/black"
             android:gravity="center"
             android:textStyle="bold"
@@ -44,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:background="@color/colorAccent"
                 android:textColor="@color/white"
-                android:text="Send"
+                android:text="Update"
                 />
 
             <Button

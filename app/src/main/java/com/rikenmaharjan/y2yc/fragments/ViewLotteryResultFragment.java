@@ -103,9 +103,26 @@ public class ViewLotteryResultFragment extends Fragment {
                     JSONObject apiResult = new JSONObject(response);
                     view.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
 
-                    // Take out the information form the JSON
-                    eBedLottery.setText(apiResult.getString("e-bed"));
-                    longTermLottery.setText(apiResult.getString("Long Term"));
+                    /////
+                    if ((apiResult.getString("e-bed")).equals("N/A")){
+
+                        eBedLottery.setText("No Winners");
+
+
+                    }else {
+                        // Take out the information form the JSON
+                        eBedLottery.setText(apiResult.getString("e-bed"));
+                    }
+
+
+                    if ((apiResult.getString("Long Term")).equals("N/A")){
+                        longTermLottery.setText("No Winners");
+                    }
+                    else{
+                        longTermLottery.setText(apiResult.getString("Long Term"));
+                    }
+                    //////
+
                 }
                 catch (JSONException e) {
                     e.printStackTrace();

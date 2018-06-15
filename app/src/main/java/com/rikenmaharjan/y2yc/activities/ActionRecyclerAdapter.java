@@ -264,7 +264,7 @@ public class ActionRecyclerAdapter extends RecyclerView.Adapter<ActionRecyclerAd
         View v;
         v = LayoutInflater.from(nContext).inflate(R.layout.dialog_action, parent, false);
         AlertDialog.Builder builder = new AlertDialog.Builder(nContext);
-        builder.setTitle("Add message");
+        builder.setTitle("Please Update Us!");
         final EditText input = (EditText) v.findViewById(R.id.input);
         builder.setView(v);
 

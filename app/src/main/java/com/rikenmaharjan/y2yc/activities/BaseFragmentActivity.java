@@ -24,7 +24,8 @@ public abstract class BaseFragmentActivity extends AppCompatActivity {
         //getWindow().setStatusBarColor(Color.WHITE);
         setContentView(R.layout.activity_fragment_base);
 
-        FragmentManager fragmentManager = getFragmentManager();
+        FragmentManager fragmentManager = getFragmentManager(); // static variable
+
         Fragment fragment = fragmentManager.findFragmentById(R.id.activity_fragment_base_fragmentContainer);
 
         if(fragment == null){
@@ -32,4 +33,6 @@ public abstract class BaseFragmentActivity extends AppCompatActivity {
             fragmentManager.beginTransaction().add(R.id.activity_fragment_base_fragmentContainer,fragment).commit();
         }
     }
+
+
 }
