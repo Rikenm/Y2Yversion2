@@ -5,6 +5,7 @@ package com.rikenmaharjan.y2yc.fragments;
  */
 
 import android.app.Fragment;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,6 +21,7 @@ import com.rikenmaharjan.y2yc.activities.Main2Activity;
 import com.rikenmaharjan.y2yc.utils.SessionManager;
 import com.shockwave.pdfium.PdfDocument;
 
+import java.net.URI;
 import java.util.List;
 
 public class HandBookFragment extends Fragment implements OnPageChangeListener,OnLoadCompleteListener{
@@ -57,7 +59,8 @@ public class HandBookFragment extends Fragment implements OnPageChangeListener,O
     private void displayFromAsset(String assetFileName) {
         pdfFileName = assetFileName;
 
-        pdfView.fromAsset(SAMPLE_FILE)
+        //pdfView.fromAsset(SAMPLE_FILE)
+        pdfView.fromUri(Uri.parse("https://s3.us-east-2.amazonaws.com/y2ydemo1/Guest-Handbook.pdf"))
                 .defaultPage(pageNumber)
                 .enableSwipe(true)
 
@@ -76,9 +79,11 @@ public class HandBookFragment extends Fragment implements OnPageChangeListener,O
         //setTitle(String.format("%s %s / %s", pdfFileName, page + 1, pageCount));
     }
 
-
+    //TODO: add progress bar in the layout
     @Override
     public void loadComplete(int nbPages) {
+
+
         PdfDocument.Meta meta = pdfView.getDocumentMeta();
         printBookmarksTree(pdfView.getTableOfContents(), "-");
 

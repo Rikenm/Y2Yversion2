@@ -90,6 +90,10 @@ public class Main2Activity extends AppCompatActivity
         HashMap<String, String> user = session.getUserDetails();
 
         name = user.get(SessionManager.KEY_NAME);
+
+        Jwt_token = user.get(SessionManager.JWT_Token);
+
+
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -257,6 +261,9 @@ public class Main2Activity extends AppCompatActivity
 
     protected void onResume() {
         super.onResume();
+
+        Log.e("mainactivity","sdsds");
+
         //SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(Context.MODE_PRIVATE);
         SharedPreferences sharedPref = this.getSharedPreferences("AndroidHivePref",Context.MODE_PRIVATE);
 
@@ -315,7 +322,7 @@ public class Main2Activity extends AppCompatActivity
                 //.setNoteDescriptions(Arrays.asList("Very Bad", "Not good", "Quite ok", "Very Good", "Excellent !!!"))
                 .setNumberOfStars(6)
 
-                .setDefaultRating(1)
+                .setDefaultRating(3)
                 .setTitle("How are you feeling?")
 
                 .setStarColor(R.color.starColor)
