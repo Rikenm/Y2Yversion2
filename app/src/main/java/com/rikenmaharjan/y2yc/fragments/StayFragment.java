@@ -207,6 +207,8 @@ public class StayFragment extends BaseFragment {
                         JSONObject warningDate = warning.getJSONObject("warningDate");
                         String date = warningDate.getString("date");
                         String warningDescription = warning.getString("warningDescription");
+
+
                         warnings.add(new WarningModel(warningDescription,warningType,date,suspensionStart,suspensionEnd,majorWarning,minorWarning,suspensionWarning));
 
                     }

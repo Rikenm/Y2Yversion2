@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -54,6 +55,8 @@ import butterknife.Unbinder;
 public class  LoginFragment extends BaseFragment {
 
 
+    //TODO:- change this when Y2Y buys the domain
+    final String URL = "https://y2yweb.herokuapp.com";
 
     TextView btn_newPassword;
     // using butterknife to make binding buttons easy.
@@ -114,13 +117,17 @@ public class  LoginFragment extends BaseFragment {
 
 
 
+        // segue
         btn_newPassword.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
 
                         //ResetFragment rf = new ResetFragment();
-                        replaceFragment(ResetFragment.newInstance());
+                        //replaceFragment(ResetFragment.newInstance());
+                        Intent i =  new Intent(Intent.ACTION_VIEW);
+                        i.setData(Uri.parse(URL));
+                        startActivity(i);
 
                     }
                 }

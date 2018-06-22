@@ -40,12 +40,20 @@ public class DialogRecycleViewAdapter extends RecyclerView.Adapter<DialogRecycle
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
+        holder.tv_endDate.setVisibility(View.GONE);
+
         if (data.size() > 0) {
             holder.title.setText(data.get(position).title);
             holder.date.setText(data.get(position).date);
+            // add code here // conditional
+
+           if ( !(data.get(position).endDate).equals("null")){
+               holder.tv_endDate.setVisibility(View.VISIBLE);
+               holder.tv_endDate.setText(data.get(position).endDate);
+           }
+
         }
         else{
-
             holder.title.setText("No Warning");
             holder.date.setText("N/A");
         }
@@ -69,12 +77,14 @@ public class DialogRecycleViewAdapter extends RecyclerView.Adapter<DialogRecycle
 
         TextView title;
         TextView date;
+        TextView tv_endDate;
 
         public MyViewHolder(View itemView) {
             super(itemView);
 
             title = itemView.findViewById(R.id.txt_dialog_title);
             date = itemView.findViewById(R.id.txt_dialog_date);
+            tv_endDate = itemView.findViewById(R.id.txt_dialog_end_date);
 
         }
     }
