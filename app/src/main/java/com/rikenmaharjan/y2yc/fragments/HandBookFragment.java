@@ -59,8 +59,8 @@ public class HandBookFragment extends Fragment implements OnPageChangeListener,O
     private void displayFromAsset(String assetFileName) {
         pdfFileName = assetFileName;
 
-        //pdfView.fromAsset(SAMPLE_FILE)
-        pdfView.fromUri(Uri.parse("https://s3.us-east-2.amazonaws.com/y2ydemo1/Guest-Handbook.pdf"))
+        pdfView.fromAsset(SAMPLE_FILE)
+        //pdfView.fromUri(Uri.parse("https://s3.us-east-2.amazonaws.com/y2ydemo1/Guest-Handbook.pdf"))
                 .defaultPage(pageNumber)
                 .enableSwipe(true)
 
