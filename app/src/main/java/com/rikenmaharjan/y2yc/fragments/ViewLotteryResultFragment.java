@@ -74,6 +74,7 @@ public class ViewLotteryResultFragment extends Fragment {
         Jwt_Token = user.get(SessionManager.JWT_Token);
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -84,11 +85,10 @@ public class ViewLotteryResultFragment extends Fragment {
         longTermLottery = (TextView) view.findViewById(R.id.longTermLottery);
         eBedLottery = (TextView) view.findViewById(R.id.eBedLottery);
 
-        // Get the current date from the android system
+        // Get the current date from the android systemdate2.setText(currentDateTimeString);
         String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
 
-        date1.setText(currentDateTimeString);
-        date2.setText(currentDateTimeString);
+
 
         // Use the Volley package to make the Http get request
         RequestQueue queue = Volley.newRequestQueue(getActivity());
@@ -103,11 +103,14 @@ public class ViewLotteryResultFragment extends Fragment {
                     JSONObject apiResult = new JSONObject(response);
                     view.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
 
+                    String date = apiResult.getString("e-bed date");
+                    String dateLong =apiResult.getString("Long term date");
+
+
                     /////
                     if ((apiResult.getString("e-bed")).equals("N/A")){
 
                         eBedLottery.setText("No Winners");
-
 
                     }else {
                         // Take out the information form the JSON
@@ -121,6 +124,22 @@ public class ViewLotteryResultFragment extends Fragment {
                     else{
                         longTermLottery.setText(apiResult.getString("Long Term"));
                     }
+
+                    if(date.equals("N/A")){
+                        date1.setText(date);
+                    }
+                    else{
+                        date1.setText("No Lottery time");
+                    }
+
+                    if(dateLong.equals("N/A")){
+                        date2.setText(dateLong);
+                    }
+                    else{
+                        date2.setText("No Lottery time");
+                    }
+
+
                     //////
 
                 }

@@ -69,10 +69,12 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
     public class DateAndTitle{
         public String title;
         public String date;
+        public String endDate;
 
-        public DateAndTitle(String title, String date) {
+        public DateAndTitle(String title, String date, String endDate) {
             this.title = title;
             this.date = date;
+            this.endDate = endDate;
         }
     }
 
@@ -89,19 +91,22 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
             String type = value.getWarningType();
             String title = value.getWarningDescription();
             String date = value.getWarningDate();
+            String endDate = value.getSuspensionEnd();
 
             Log.i(title+" "+type,"Check");
 
             if (type.equals("Major Warning")){
-                DateAndTitle temp = new DateAndTitle(title,date);
+                DateAndTitle temp = new DateAndTitle(title,date,endDate);
                 major.add(temp);
             }
             else if(type.equals("Minor Warning")){
-                DateAndTitle temp = new DateAndTitle(title,date);
+                DateAndTitle temp = new DateAndTitle(title,date,endDate);
                 minor.add(temp);
             }
             else if(type.equals("Suspension")){
-                DateAndTitle temp = new DateAndTitle(title,date);
+                String startDate =  value.getSuspensionStart();
+                String end_Date = value.getSuspensionEnd();
+                DateAndTitle temp = new DateAndTitle(title,startDate,end_Date);
                 sus.add(temp);
             }
 
