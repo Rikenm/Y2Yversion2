@@ -125,14 +125,15 @@ public class ViewLotteryResultFragment extends Fragment {
                         longTermLottery.setText(apiResult.getString("Long Term"));
                     }
 
-                    if(date.equals("N/A")){
+                    if(!date.equals("N/A")){
                         date1.setText(date);
                     }
                     else{
                         date1.setText("No Lottery time");
                     }
 
-                    if(dateLong.equals("N/A")){
+
+                    if(!dateLong.equals("N/A")){
                         date2.setText(dateLong);
                     }
                     else{
@@ -153,7 +154,7 @@ public class ViewLotteryResultFragment extends Fragment {
             public void onErrorResponse(VolleyError error){
                 Log.i("request failed", "failed");
                 view.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
-                Toast.makeText(getActivity(), "There is a problem, Please check your internet", Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "Error occured", Toast.LENGTH_LONG).show();
             }
         }){
 

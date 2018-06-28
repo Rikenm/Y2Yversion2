@@ -86,59 +86,65 @@ public class Main2Activity extends AppCompatActivity
         session = new SessionManager(getApplicationContext());
         session.checkLogin();
 
-        // get user data from session
-        HashMap<String, String> user = session.getUserDetails();
-
-        name = user.get(SessionManager.KEY_NAME);
-
-        Jwt_token = user.get(SessionManager.JWT_Token);
+        if(session.isLoggedIn()) {
 
 
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+            // get user data from session
+            HashMap<String, String> user = session.getUserDetails();
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                session.logoutUser();
+            name = user.get(SessionManager.KEY_NAME);
 
-            }
-        });
-
-        constraintLayout = (ConstraintLayout) findViewById(R.id.constraintLayout);
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
-        View headerView = navigationView.getHeaderView(0);
-        navUsername = (TextView) headerView.findViewById(R.id.navUsername);
-        navUsername.setText("Hello, "+ name);
+            Jwt_token = user.get(SessionManager.JWT_Token);
 
 
-        fbsf = new FeedBackSubmitFragment();
-        vlrf = new ViewLotteryResultFragment();
-        sf = new StoryFragment();
-        hm = new HomeFragment();
-        ac = new ViewActionFragment();
-        up = new UpComingEventFragment();
-        hb = new HandBookFragment();
-        wf = new WebLotteryFragment();
-        stf = new StayFragment();
-        af = new ActionFragment();
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    session.logoutUser();
+
+                }
+            });
+
+            constraintLayout = (ConstraintLayout) findViewById(R.id.constraintLayout);
+            drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                    this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+            drawer.addDrawerListener(toggle);
+            toggle.syncState();
+
+            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+            navigationView.setNavigationItemSelectedListener(this);
+
+            View headerView = navigationView.getHeaderView(0);
+            navUsername = (TextView) headerView.findViewById(R.id.navUsername);
+            navUsername.setText("Hello, " + name);
 
 
-        fm = getFragmentManager();
+            fbsf = new FeedBackSubmitFragment();
+            vlrf = new ViewLotteryResultFragment();
+            sf = new StoryFragment();
+            hm = new HomeFragment();
+            ac = new ViewActionFragment();
+            up = new UpComingEventFragment();
+            hb = new HandBookFragment();
+            wf = new WebLotteryFragment();
+            stf = new StayFragment();
+            af = new ActionFragment();
 
-        FragmentTransaction ft = fm.beginTransaction ();
-        ft.add(R.id.constraintLayout, stf, "tag1");
-        ft.addToBackStack ("myFrag1");
-        ft.commit ();
+
+            fm = getFragmentManager();
+
+            FragmentTransaction ft = fm.beginTransaction();
+            ft.add(R.id.constraintLayout, stf, "tag1");
+            ft.addToBackStack("myFrag1");
+            ft.commit();
+
+        }
+
 
     }
 
@@ -320,16 +326,16 @@ public class Main2Activity extends AppCompatActivity
                 .setNegativeButtonText("Cancel")
                 .setNeutralButtonText("Later")
                 //.setNoteDescriptions(Arrays.asList("Very Bad", "Not good", "Quite ok", "Very Good", "Excellent !!!"))
-                .setNumberOfStars(6)
+                .setNumberOfStars(5)
 
                 .setDefaultRating(3)
-                .setTitle("How are you feeling?")
+                .setTitle("How is Y2Y today?")
 
                 .setStarColor(R.color.starColor)
                 .setNoteDescriptionTextColor(R.color.noteDescriptionTextColor)
                 .setTitleTextColor(R.color.titleTextColor)
                 .setDescriptionTextColor(R.color.contentTextColor)
-                .setHint("Please write your comment here ...")
+                .setHint("Please comment to confirm your submission ...")
                 .setHintTextColor(R.color.hintTextColor)
                 .setCommentTextColor(R.color.commentTextColor)
                 .setCommentBackgroundColor(R.color.commentBackgroundColor)

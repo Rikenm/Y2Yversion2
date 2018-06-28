@@ -123,7 +123,7 @@ public class FeedBackSubmitFragment extends Fragment {
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             Log.e("VOLLEY", error.toString());
-                            Toast.makeText(getActivity(), "There is a problem, Please check your internet", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getActivity(), "Error occured", Toast.LENGTH_LONG).show();
                         }
                     }) {
                         @Override

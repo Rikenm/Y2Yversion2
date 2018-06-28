@@ -61,7 +61,7 @@ public class  LoginFragment extends BaseFragment {
     TextView btn_newPassword;
     // using butterknife to make binding buttons easy.
 
-    //username is rikenm and password is "password1234"
+
 
 
     @BindView(R2.id.fragment_login_userName)
@@ -231,10 +231,9 @@ public class  LoginFragment extends BaseFragment {
                         }
                         bufferedReader.close();
 
-                        Log.e("nameisvali",mUSerNameEt.getText().toString());
-                        Log.i("HTTP Client", "Received String : " + sb.toString());
+
                         response = sb.toString();
-                        Log.i("Json",(String)(sb.getClass().getName()));
+
                         //return received string
                         return sb.toString();
 
