@@ -50,7 +50,6 @@ public class HandBookFragment extends Fragment implements OnPageChangeListener,O
 
 
         session = new SessionManager(getActivity());
-
         session.checkLogin();
     }
 

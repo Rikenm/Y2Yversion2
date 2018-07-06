@@ -12,6 +12,8 @@ import android.webkit.WebViewClient;
 import com.rikenmaharjan.y2yc.R;
 import com.rikenmaharjan.y2yc.utils.SessionManager;
 
+import java.util.HashMap;
+
 /**
  * Created by Riken on 5/28/18.
  */
@@ -19,7 +21,9 @@ import com.rikenmaharjan.y2yc.utils.SessionManager;
 public class WebLotteryFragment extends Fragment {
 
     public SessionManager session;
-
+    String id;
+    String name;
+    String Jwt_Token = new String();
 
    public WebView webview;
 
@@ -27,11 +31,7 @@ public class WebLotteryFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
-
-        session = new SessionManager(getActivity());
-
-        session.checkLogin();
+        getSessiondata();
 
 
     }
@@ -44,6 +44,7 @@ public class WebLotteryFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_weblottery, container, false);
         webview = (WebView) view.findViewById(R.id.web);
 
+        getSessiondata();
         webview.getSettings().setJavaScriptEnabled(true);
         webview.loadUrl("https://www.tfaforms.com/4638535");
 
@@ -61,6 +62,25 @@ public class WebLotteryFragment extends Fragment {
 
 
         return view;
+    }
+
+    public  void getSessiondata(){
+
+        session = new SessionManager(getActivity());
+
+        session.checkLogin();
+
+        // get user data from session
+        HashMap<String, String> user = session.getUserDetails();
+
+        // Get logged in user's user name
+        name = user.get(SessionManager.KEY_NAME);
+
+        // Get looged in user's user id
+        id = user.get(SessionManager.KEY_ID);
+
+        Jwt_Token = user.get(SessionManager.JWT_Token);
+
     }
 
 

@@ -85,6 +85,9 @@ public class ViewLotteryResultFragment extends Fragment {
         longTermLottery = (TextView) view.findViewById(R.id.longTermLottery);
         eBedLottery = (TextView) view.findViewById(R.id.eBedLottery);
 
+
+        getSessiondata();
+
         // Get the current date from the android systemdate2.setText(currentDateTimeString);
         String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
 
@@ -180,4 +183,26 @@ public class ViewLotteryResultFragment extends Fragment {
         return view;
 
     }
+
+    public  void getSessiondata(){
+
+        session = new SessionManager(getActivity());
+
+        session.checkLogin();
+
+        // get user data from session
+        HashMap<String, String> user = session.getUserDetails();
+
+        // Get logged in user's user name
+        name = user.get(SessionManager.KEY_NAME);
+
+        // Get looged in user's user id
+        id = user.get(SessionManager.KEY_ID);
+
+        Jwt_Token = user.get(SessionManager.JWT_Token);
+
+    }
+
+
+
 }

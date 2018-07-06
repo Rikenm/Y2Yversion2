@@ -95,6 +95,7 @@ public class FeedBackSubmitFragment extends Fragment {
         feedBack = (EditText) view.findViewById(R.id.feedBack);
         feedBackSubmit = (Button) view.findViewById(R.id.feedBackSubmit);
 
+        getSessiondata();
         feedBackSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -194,6 +195,24 @@ public class FeedBackSubmitFragment extends Fragment {
     }
 
 
+    public  void getSessiondata(){
+
+        session = new SessionManager(getActivity());
+
+        session.checkLogin();
+
+        // get user data from session
+        HashMap<String, String> user = session.getUserDetails();
+
+        // Get logged in user's user name
+        name = user.get(SessionManager.KEY_NAME);
+
+        // Get looged in user's user id
+        id = user.get(SessionManager.KEY_ID);
+
+        Jwt_Token = user.get(SessionManager.JWT_Token);
+
+    }
 
 
 

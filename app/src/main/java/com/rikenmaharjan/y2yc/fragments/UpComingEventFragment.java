@@ -233,6 +233,7 @@ public class UpComingEventFragment extends Fragment {
         v =  inflater.inflate(R.layout.fragment_up_coming_event, container, false);
 
 
+        getSessiondata();
         spinner = (ProgressBar)  v.findViewById(R.id.progressBar);
         newRecycleView = (RecyclerView) v.findViewById(R.id.events_recycleView);
         Context context = container.getContext();
