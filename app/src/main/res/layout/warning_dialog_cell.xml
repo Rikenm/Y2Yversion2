@@ -24,39 +24,49 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="10"
+            android:layout_weight="1"
             android:id="@+id/txt_dialog_title"
             android:text="Title"
             android:textSize="15sp"
             />
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="4"
-            android:paddingRight="8dp"
+            android:layout_weight="0"
+            android:textColor="@color/black"
+            android:paddingRight="6dp"
+            android:paddingLeft="18dp"
+            android:textStyle="bold"
             android:gravity="right"
             android:id="@+id/txt_dialog_date"
             android:text="Date"
             android:textSize="16sp"
             />
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:paddingRight="6dp"
+                    android:layout_gravity="right"
+                    android:textColor="@color/black"
+                    android:id="@+id/txt_dialog_end_date"
+                    android:text="Date"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:visibility="gone"
+                    />
+            </LinearLayout>
+
 
         </LinearLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0"
 
-                android:paddingRight="12dp"
-                android:layout_gravity="right"
-                android:id="@+id/txt_dialog_end_date"
-                android:text="Date"
-                android:textSize="16sp"
-
-                android:visibility="gone"
-                />
 
         </LinearLayout>
 
