@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,6 +49,8 @@ public class ViewLotteryResultFragment extends Fragment {
     private TextView longTermLottery;
     private TextView eBedLottery;
     public SessionManager session;
+    private ProgressBar pbLoading;
+    private Button btnReferesh;
     String id;
     String name;
     String Jwt_Token;
@@ -80,10 +84,13 @@ public class ViewLotteryResultFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view =  inflater.inflate(R.layout.fragment_view_lottery_result, container, false);
+
         date1 = (TextView) view.findViewById(R.id.date1);
         date2 = (TextView) view.findViewById(R.id.date2);
         longTermLottery = (TextView) view.findViewById(R.id.longTermLottery);
         eBedLottery = (TextView) view.findViewById(R.id.eBedLottery);
+        pbLoading = (ProgressBar) view.findViewById(R.id.loadingPanel);
+        btnReferesh =(Button) view.findViewById(R.id.btnReferesh);
 
 
         getSessiondata();
@@ -91,8 +98,44 @@ public class ViewLotteryResultFragment extends Fragment {
         // Get the current date from the android systemdate2.setText(currentDateTimeString);
         String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
 
+        btnReferesh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                pbLoading.setVisibility(View.VISIBLE);
+                loadData();
+
+            }
+        });
 
 
+        loadData();
+        return view;
+
+    }
+
+    public  void getSessiondata(){
+
+        session = new SessionManager(getActivity());
+
+        session.checkLogin();
+
+        // get user data from session
+        HashMap<String, String> user = session.getUserDetails();
+
+        // Get logged in user's user name
+        name = user.get(SessionManager.KEY_NAME);
+
+        // Get looged in user's user id
+        id = user.get(SessionManager.KEY_ID);
+
+        Jwt_Token = user.get(SessionManager.JWT_Token);
+
+    }
+
+    public void loadData(){
+
+
+        /* YOUR CODE HERE*/
         // Use the Volley package to make the Http get request
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         String url = "https://y2y.herokuapp.com/lottery";
@@ -104,11 +147,10 @@ public class ViewLotteryResultFragment extends Fragment {
                 Log.i("request sucessful", response );
                 try{
                     JSONObject apiResult = new JSONObject(response);
-                    view.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+                    pbLoading.setVisibility(View.GONE);
 
                     String date = apiResult.getString("e-bed date");
                     String dateLong =apiResult.getString("Long term date");
-
 
                     /////
                     if ((apiResult.getString("e-bed")).equals("N/A")){
@@ -156,7 +198,7 @@ public class ViewLotteryResultFragment extends Fragment {
             @Override
             public void onErrorResponse(VolleyError error){
                 Log.i("request failed", "failed");
-                view.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+                pbLoading.setVisibility(View.GONE);
                 Toast.makeText(getActivity(), "Error occured", Toast.LENGTH_LONG).show();
             }
         }){
@@ -179,28 +221,6 @@ public class ViewLotteryResultFragment extends Fragment {
 
         queue.add(stringRequest);
         Log.i("result",queue.toString());
-
-        return view;
-
-    }
-
-    public  void getSessiondata(){
-
-        session = new SessionManager(getActivity());
-
-        session.checkLogin();
-
-        // get user data from session
-        HashMap<String, String> user = session.getUserDetails();
-
-        // Get logged in user's user name
-        name = user.get(SessionManager.KEY_NAME);
-
-        // Get looged in user's user id
-        id = user.get(SessionManager.KEY_ID);
-
-        Jwt_Token = user.get(SessionManager.JWT_Token);
-
     }
 
 
